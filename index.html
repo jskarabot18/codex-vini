@@ -245,20 +245,20 @@ footer a:hover{color:var(--bordeaux-dark)}
         <input type="text" id="search" placeholder="Producer, wine, region…"/>
       </div>
       <div class="filter-section">
-        <div class="filter-label">Rating</div>
-        <div class="chip-grid" id="rating-chips"></div>
-      </div>
-      <div class="filter-section">
-        <div class="filter-label">Colour</div>
-        <div class="chip-grid" id="color-chips"></div>
-      </div>
-      <div class="filter-section">
         <div class="filter-label">Country</div>
         <div class="chip-grid" id="country-chips"></div>
       </div>
       <div class="filter-section">
         <div class="filter-label">Grape / Category</div>
         <div class="chip-grid" id="grape-chips"></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Colour</div>
+        <div class="chip-grid" id="color-chips"></div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Rating</div>
+        <div class="chip-grid" id="rating-chips"></div>
       </div>
     </aside>
     <div id="map-container"><div id="map"></div></div>
@@ -319,31 +319,31 @@ footer a:hover{color:var(--bordeaux-dark)}
 
   <div class="chart-card-tall">
     <h3>All countries</h3>
-    <div class="chart-sub">every country represented in the codex</div>
+    <div class="chart-sub">every country in the codex, ordered by count</div>
     <div class="chart-wrap"><canvas id="chart-countries-all"></canvas></div>
   </div>
 
   <div class="chart-card-tall">
     <h3>All regions</h3>
-    <div class="chart-sub">every region represented in the codex</div>
+    <div class="chart-sub">every region, colored by <span style="color:#5B1A2D;font-weight:600">Old World</span> / <span style="color:#A37B3D;font-weight:600">New World</span></div>
     <div class="chart-wrap"><canvas id="chart-regions-all"></canvas></div>
   </div>
 
   <div class="chart-card-tall">
     <h3>All grape categories</h3>
-    <div class="chart-sub">every grape variety and named-wine category</div>
+    <div class="chart-sub">every grape or named category, colored by <span style="color:#7B1E2D;font-weight:600">red</span> / <span style="color:#B8860B;font-weight:600">white</span> / <span style="color:#E5C04D;font-weight:600">sparkling</span> / <span style="color:#E89A9E;font-weight:600">rosé</span></div>
     <div class="chart-wrap"><canvas id="chart-grapes-all"></canvas></div>
   </div>
 
   <div class="chart-card-tall">
-    <h3>Average rating by country</h3>
-    <div class="chart-sub">mean score per country, highest to lowest</div>
+    <h3>Average rating by country <span style="font-size:12px;font-weight:400;color:var(--ink-faint);font-style:italic">— shrinkage-adjusted</span></h3>
+    <div class="chart-sub">Bayesian-shrunk mean (m=5) to reduce small-sample bias — hover a bar for the raw score</div>
     <div class="chart-wrap"><canvas id="chart-rating-country"></canvas></div>
   </div>
 
   <div class="chart-card-tall">
-    <h3>Average rating by grape / category</h3>
-    <div class="chart-sub">mean score per grape or named-wine category</div>
+    <h3>Average rating by grape / category <span style="font-size:12px;font-weight:400;color:var(--ink-faint);font-style:italic">— shrinkage-adjusted</span></h3>
+    <div class="chart-sub">Bayesian-shrunk mean (m=5) — small-n categories get pulled toward the global mean</div>
     <div class="chart-wrap"><canvas id="chart-rating-grape"></canvas></div>
   </div>
 </section>
@@ -414,14 +414,20 @@ let state = {
   sort: { field: "date_tasted", dir: "desc" },
 };
 
+let REGION_CLASS = {};    // region name -> {world, country}
+let GRAPE_TYPE = {};      // grape category -> 'red' | 'white' | 'sparkling' | 'rosé'
+
 async function loadData(){
   try {
-    const [w, gp, rp] = await Promise.all([
+    const [w, gp, rp, rc, gt] = await Promise.all([
       fetch('wines.json').then(r=>r.json()),
       fetch('grape_profiles.json').then(r=>r.json()).catch(()=>[]),
       fetch('region_profiles.json').then(r=>r.json()).catch(()=>[]),
+      fetch('region_classifications.json').then(r=>r.json()).catch(()=>({})),
+      fetch('grape_type_map.json').then(r=>r.json()).catch(()=>({})),
     ]);
     WINES = w; GRAPE_PROFILES = gp; REGION_PROFILES = rp;
+    REGION_CLASS = rc; GRAPE_TYPE = gt;
   } catch(e) { console.error('Data load failed:', e); WINES = []; }
   init();
 }
@@ -454,6 +460,31 @@ function renderStats(){
 const CHART_FONT = { family: 'DM Sans', size: 11 };
 const TICK_MONO = { family: 'JetBrains Mono', size: 10 };
 
+// Per-chart palette — each bar chart has its own distinctive color
+const CHART_COLORS = {
+  ratings:   '#5B1A2D',   // deep bordeaux
+  vintage:   '#6B2737',   // darker red-purple
+  countries: '#A37B3D',   // gold
+  regionsOld:'#5B1A2D',   // deep bordeaux (Old World)
+  regionsNew:'#A37B3D',   // gold (New World)
+  grapesRed:   '#7B1E2D', // red wine
+  grapesWhite: '#B8860B', // white wine (goldenrod)
+  grapesSparkling: '#E5C04D',
+  grapesRose:  '#E89A9E',
+  ratingCountry: '#3D5A5F', // teal-slate (distinct)
+  ratingGrape:   '#6B4A2D', // chocolate-brown (distinct)
+};
+
+// Bayesian shrinkage: pulls averages toward the global mean using weight m=5
+const SHRINKAGE_M = 5;
+function shrinkageAdjust(ratings, globalMean){
+  const n = ratings.length;
+  if (!n) return { raw: 0, adj: 0, n: 0 };
+  const raw = ratings.reduce((s,r)=>s+r,0) / n;
+  const adj = (n * raw + SHRINKAGE_M * globalMean) / (n + SHRINKAGE_M);
+  return { raw, adj, n };
+}
+
 function renderCharts(){
   // Rating distribution — DESCENDING (10.0 leftmost)
   const ratings = {};
@@ -462,17 +493,7 @@ function renderCharts(){
   const rData = rLabels.map(l => ratings[l]);
   new Chart(document.getElementById('chart-ratings'), {
     type: 'bar',
-    data: {
-      labels: rLabels,
-      datasets: [{
-        data: rData,
-        backgroundColor: rLabels.map(r =>
-          parseFloat(r) >= 9.8 ? '#5B1A2D' :
-          parseFloat(r) >= 9.5 ? '#7B1E2D' :
-          parseFloat(r) >= 9.2 ? '#A0432D' : '#C9A35B'),
-        borderRadius: 1,
-      }]
-    },
+    data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: CHART_COLORS.ratings, borderRadius: 1 }]},
     options: {
       maintainAspectRatio: false, responsive: true,
       plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }}},
@@ -483,7 +504,7 @@ function renderCharts(){
     }
   });
 
-  // Color share donut
+  // Color share donut — keep existing multi-color palette
   const cc = {};
   WINES.forEach(w => { cc[w.color] = (cc[w.color]||0) + 1; });
   const colorKeys = Object.keys(cc);
@@ -515,7 +536,7 @@ function renderCharts(){
   });
   new Chart(document.getElementById('chart-vintage'), {
     type: 'bar',
-    data: { labels: vLabels, datasets: [{ data: vLabels.map(l=>vc[l]), backgroundColor:'#7B1E2D', borderRadius:1 }]},
+    data: { labels: vLabels, datasets: [{ data: vLabels.map(l=>vc[l]), backgroundColor: CHART_COLORS.vintage, borderRadius:1 }]},
     options: {
       maintainAspectRatio: false, responsive: true,
       plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }}},
@@ -526,56 +547,109 @@ function renderCharts(){
     }
   });
 
-  renderTallBar('chart-countries-all', 'country', null, '#5B1A2D', false);
-  renderTallBar('chart-regions-all',   'region',  null, '#7B1E2D', false);
-  renderTallBar('chart-grapes-all',    'grape',   null, null, true);
-  renderTallBar('chart-rating-country','country', 'rating', '#5B1A2D', false);
-  renderTallBar('chart-rating-grape',  'grape',   'rating', null, true);
+  // Global mean for shrinkage
+  const globalMean = WINES.reduce((s,w)=>s+w.rating, 0) / WINES.length;
+
+  // All countries — single uniform color (gold)
+  renderCountBar('chart-countries-all', 'country', CHART_COLORS.countries);
+
+  // All regions — split by Old/New World
+  renderCountBar('chart-regions-all', 'region', null, (regionName) => {
+    const cls = REGION_CLASS[regionName];
+    return (cls && cls.world === 'New World') ? CHART_COLORS.regionsNew : CHART_COLORS.regionsOld;
+  });
+
+  // All grape categories — split by red/white/sparkling/rosé
+  renderCountBar('chart-grapes-all', 'grape', null, (grapeName) => {
+    const t = GRAPE_TYPE[grapeName];
+    if (t === 'white') return CHART_COLORS.grapesWhite;
+    if (t === 'sparkling') return CHART_COLORS.grapesSparkling;
+    if (t === 'rosé') return CHART_COLORS.grapesRose;
+    return CHART_COLORS.grapesRed;  // default red
+  });
+
+  // Avg rating by country — shrinkage-adjusted
+  renderShrinkageBar('chart-rating-country', 'country', globalMean, CHART_COLORS.ratingCountry);
+
+  // Avg rating by grape — shrinkage-adjusted
+  renderShrinkageBar('chart-rating-grape', 'grape', globalMean, CHART_COLORS.ratingGrape);
 }
 
-function renderTallBar(canvasId, field, metric, bgColor, useGrapeColors){
-  const buckets = {};
-  WINES.forEach(w => {
-    const k = w[field];
-    if (!buckets[k]) buckets[k] = { count: 0, sum: 0 };
-    buckets[k].count += 1;
-    buckets[k].sum += w.rating;
-  });
-  let entries;
-  if (metric === 'rating'){
-    entries = Object.entries(buckets).map(([k,v]) => [k, v.sum / v.count, v.count]);
-    entries.sort((a,b) => b[1] - a[1]);
-  } else {
-    entries = Object.entries(buckets).map(([k,v]) => [k, v.count, v.count]);
-    entries.sort((a,b) => b[1] - a[1]);
-  }
+// Count-based horizontal bar chart (no shrinkage; just sort by count)
+// colorFn: optional function that returns a color for a given label (for split coloring)
+function renderCountBar(canvasId, field, fixedColor, colorFn){
+  const counts = {};
+  WINES.forEach(w => { counts[w[field]] = (counts[w[field]]||0) + 1; });
+  const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
   const labels = entries.map(e => e[0]);
-  const data = entries.map(e => e[1]);
-  const counts = entries.map(e => e[2]);
-  let bg = bgColor;
-  if (useGrapeColors) bg = labels.map(l => GRAPE_COLORS[l] || '#888');
+  const data   = entries.map(e => e[1]);
+  const bg     = colorFn ? labels.map(l => colorFn(l)) : fixedColor;
 
   const rowHeight = 22, minHeight = 240;
   const chartHeight = Math.max(minHeight, labels.length * rowHeight + 40);
   const canvas = document.getElementById(canvasId);
   canvas.parentElement.style.height = chartHeight + 'px';
 
-  const tooltipCallback = metric === 'rating'
-    ? { label: ctx => `avg ${ctx.parsed.x.toFixed(2)} · ${counts[ctx.dataIndex]} wine${counts[ctx.dataIndex]===1?'':'s'}` }
-    : { label: ctx => `${ctx.parsed.x} wine${ctx.parsed.x===1?'':'s'}` };
-
   new Chart(canvas, {
     type: 'bar',
     data: { labels, datasets: [{ data, backgroundColor: bg, borderRadius: 1, barThickness: 14 }]},
     options: {
       indexAxis: 'y', maintainAspectRatio: false, responsive: true,
-      plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks: tooltipCallback }},
+      plugins: { legend:{display:false}, tooltip:{
+        backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10,
+        callbacks: { label: ctx => `${ctx.parsed.x} wine${ctx.parsed.x===1?'':'s'}` }
+      }},
+      scales: {
+        x: { grid:{color:'#F0E8DB'}, beginAtZero:true, ticks:{color:'#8A837C', font:TICK_MONO}},
+        y: { grid:{display:false}, ticks:{color:'#55504A', font:{family:'DM Sans', size:11, weight:'500'}}},
+      }
+    }
+  });
+}
+
+// Shrinkage-adjusted average-rating horizontal bar chart
+// Sorted by adjusted average descending. Tooltip shows both adjusted + raw + n.
+function renderShrinkageBar(canvasId, field, globalMean, color){
+  const buckets = {};
+  WINES.forEach(w => {
+    if (!buckets[w[field]]) buckets[w[field]] = [];
+    buckets[w[field]].push(w.rating);
+  });
+  const rows = Object.entries(buckets).map(([k, arr]) => {
+    const { raw, adj, n } = shrinkageAdjust(arr, globalMean);
+    return { label: k, raw, adj, n };
+  }).sort((a,b) => b.adj - a.adj);
+
+  const labels = rows.map(r => r.label);
+  const data   = rows.map(r => r.adj);
+
+  const rowHeight = 22, minHeight = 240;
+  const chartHeight = Math.max(minHeight, labels.length * rowHeight + 40);
+  const canvas = document.getElementById(canvasId);
+  canvas.parentElement.style.height = chartHeight + 'px';
+
+  new Chart(canvas, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: color, borderRadius: 1, barThickness: 14 }]},
+    options: {
+      indexAxis: 'y', maintainAspectRatio: false, responsive: true,
+      plugins: { legend:{display:false}, tooltip:{
+        backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10,
+        callbacks: {
+          label: ctx => {
+            const r = rows[ctx.dataIndex];
+            return [
+              `adjusted: ${r.adj.toFixed(2)}`,
+              `raw avg:  ${r.raw.toFixed(2)}  (n=${r.n})`,
+            ];
+          }
+        }
+      }},
       scales: {
         x: {
-          grid: { color: '#F0E8DB' }, beginAtZero: metric !== 'rating',
-          ticks: { color:'#8A837C', font:TICK_MONO, callback: metric==='rating' ? v=>v.toFixed(1) : v=>v },
-          suggestedMin: metric === 'rating' ? 8.8 : 0,
-          suggestedMax: metric === 'rating' ? 10 : undefined,
+          grid:{color:'#F0E8DB'}, beginAtZero:false,
+          suggestedMin: 9.0, suggestedMax: 10,
+          ticks:{color:'#8A837C', font:TICK_MONO, callback: v => v.toFixed(1)}
         },
         y: { grid:{display:false}, ticks:{color:'#55504A', font:{family:'DM Sans', size:11, weight:'500'}}},
       }
@@ -871,6 +945,12 @@ function renderAbout(){
     <p>The codex currently holds <strong>${WINES.length} wines</strong> across <strong>${new Set(WINES.map(w=>w.country)).size} countries</strong>, <strong>${new Set(WINES.map(w=>w.region)).size} regions</strong>, and <strong>${new Set(WINES.map(w=>w.grape)).size} grape categories</strong>. It grows by a few wines each week.</p>
     <p>Every entry includes: producer, wine name, vintage, country, region, grape/category, wine colour, rating, date tasted, and geographic coordinates for map placement.</p>
 
+    <h3>The rating-adjustment used in The Collection</h3>
+    <p>Two charts in The Collection — average rating by country, and average rating by grape — use a statistical adjustment called <strong>Bayesian shrinkage</strong>. The problem it solves: if a country has only one wine rated 10.0, its naïve average is 10.0, and it looks better than a country with 30 wines averaging 9.5 — even though we know almost nothing about the first and a lot about the second.</p>
+    <p>The fix is to pull every average toward the global mean (currently ${(WINES.reduce((s,w)=>s+w.rating,0) / WINES.length).toFixed(2)}) by a weight <code>m = 5</code>. A country with one wine gets pulled most of the way to the mean; a country with thirty wines barely moves. The formula is:</p>
+    <p><code style="display:block;padding:10px;background:#F5E8EB;color:#5B1A2D;font-size:12px;white-space:pre-wrap">adjusted = (n · country_avg + m · global_avg) / (n + m)</code></p>
+    <p>This is the same technique behind the IMDb Top 250. The raw averages and sample counts are still shown in each tooltip — hover any bar to see them.</p>
+
     <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
   `;
 }
@@ -949,12 +1029,13 @@ function renderGrapes(){
   if (!GRAPE_PROFILES.length){
     return `<p><em>Grape profiles unavailable. Make sure <code>grape_profiles.json</code> is in the repo.</em></p>`;
   }
-  const reds = GRAPE_PROFILES.filter(p => p.color === 'red');
-  const whites = GRAPE_PROFILES.filter(p => p.color === 'white');
-  let html = `<p class="section-note">One-paragraph profiles for 101 grape varieties. Drawn from the TasteRank Grape Variety Reference (April 2026). Organised red, then white, alphabetically within each group. Named-wine categories such as Barolo, Brunello, Bordeaux Blend, and Champagne are not single varieties and are not listed here — see the Regions reference and About documents for more on the taxonomy.</p>`;
-  html += `<h3 id="grapes-red">Red grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${reds.length})</span></h3>`;
+  // Whites first, then reds — each alphabetical
+  const whites = GRAPE_PROFILES.filter(p => p.color === 'white').sort((a,b) => a.name.localeCompare(b.name));
+  const reds   = GRAPE_PROFILES.filter(p => p.color === 'red').sort((a,b) => a.name.localeCompare(b.name));
+  let html = `<p class="section-note">One-paragraph profiles for 101 grape varieties. Drawn from the TasteRank Grape Variety Reference (April 2026). Organised whites first, then reds — alphabetical within each group. Named-wine categories such as Barolo, Brunello, Bordeaux Blend, and Champagne are not single varieties and are not listed here — see the Regions reference and About documents for more on the taxonomy.</p>`;
+  html += `<h3 id="grapes-white">White grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${whites.length})</span></h3>`;
   html += `<div class="profile-list">`;
-  reds.forEach(p => {
+  whites.forEach(p => {
     html += `<div class="profile" id="grape-${slugify(p.name)}">
       <div class="profile-name">${esc(p.name)}</div>
       <div class="profile-origin">${esc(p.origin)}</div>
@@ -962,9 +1043,9 @@ function renderGrapes(){
     </div>`;
   });
   html += `</div>`;
-  html += `<h3 id="grapes-white">White grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${whites.length})</span></h3>`;
+  html += `<h3 id="grapes-red">Red grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${reds.length})</span></h3>`;
   html += `<div class="profile-list">`;
-  whites.forEach(p => {
+  reds.forEach(p => {
     html += `<div class="profile" id="grape-${slugify(p.name)}">
       <div class="profile-name">${esc(p.name)}</div>
       <div class="profile-origin">${esc(p.origin)}</div>
@@ -979,7 +1060,7 @@ function renderGrapeNav(){
   const nav = document.getElementById('modal-nav');
   const reds = GRAPE_PROFILES.filter(p=>p.color==='red').length;
   const whites = GRAPE_PROFILES.filter(p=>p.color==='white').length;
-  nav.innerHTML = `<a data-jump="grapes-red">Reds (${reds})</a> <a data-jump="grapes-white">Whites (${whites})</a>`;
+  nav.innerHTML = `<a data-jump="grapes-white">Whites (${whites})</a> <a data-jump="grapes-red">Reds (${reds})</a>`;
   nav.style.display = 'flex';
   nav.querySelectorAll('a[data-jump]').forEach(a => a.addEventListener('click', () => {
     const target = document.getElementById(a.dataset.jump);
@@ -991,44 +1072,48 @@ function renderRegions(){
   if (!REGION_PROFILES.length){
     return `<p><em>Region profiles unavailable. Make sure <code>region_profiles.json</code> is in the repo.</em></p>`;
   }
-  let html = `<p class="section-note">Terroir profiles for ${REGION_PROFILES.length} of the world's significant wine regions — climate, soils, principal varieties, winemaking, and historical position. Drawn from the Soul of Wine region-profiles document. The profile list does not completely match the regions represented in the codex; profiles not yet written are noted when you encounter a wine from such a region.</p>`;
-  html += `<div class="profile-list">`;
-  const sorted = [...REGION_PROFILES].sort((a,b) => a.name.localeCompare(b.name));
-  sorted.forEach(p => {
-    html += `<div class="profile" id="region-${slugify(p.name)}">
-      <div class="profile-name">${esc(p.name)} <em>— ${esc(p.epithet || '')}</em></div>
-      <div class="profile-origin">${esc(p.identity || '')}</div>`;
-    const fields = ['Climate', 'Soils', 'Principal Varieties', 'Winemaking', 'Production Structure', 'Historical Position'];
-    fields.forEach(f => {
-      if (p[f]){
-        html += `<div class="profile-field">
-          <div class="profile-field-label">${f}</div>
-          <div class="profile-field-body">${esc(p[f])}</div>
-        </div>`;
-      }
-    });
-    html += `</div>`;
+  // Group by world → country → regions
+  const byWorld = { 'Old World': {}, 'New World': {} };
+  REGION_PROFILES.forEach(p => {
+    if (!p.world || !p.country) return;
+    if (!byWorld[p.world][p.country]) byWorld[p.world][p.country] = [];
+    byWorld[p.world][p.country].push(p);
   });
-  html += `</div>`;
+
+  let html = `<p class="section-note">Terroir profiles for ${REGION_PROFILES.length} of the world's significant wine regions — climate, soils, principal varieties, winemaking, and historical position. Drawn from the Soul of Wine region-profiles document. Organised by Old World / New World, then by country alphabetically, with regions sorted alphabetically within each country. Note: the profile list does not completely match the regions represented in the codex — some codex regions (e.g. Crozes-Hermitage, Central Otago, Trentino) do not yet have profiles here.</p>`;
+
+  ['Old World', 'New World'].forEach(world => {
+    const countries = Object.keys(byWorld[world]).sort();
+    if (!countries.length) return;
+    html += `<h3 id="regions-${slugify(world)}">${world} <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${countries.length} countries · ${Object.values(byWorld[world]).reduce((s,a)=>s+a.length,0)} regions)</span></h3>`;
+    countries.forEach(country => {
+      const regions = byWorld[world][country].sort((a,b) => a.name.localeCompare(b.name));
+      html += `<h4 id="country-${slugify(country)}">${esc(country)}</h4>`;
+      html += `<div class="profile-list">`;
+      regions.forEach(p => {
+        html += `<div class="profile" id="region-${slugify(p.name)}">
+          <div class="profile-name">${esc(p.name)} <em>— ${esc(p.epithet || '')}</em></div>
+          <div class="profile-origin">${esc(p.identity || '')}</div>`;
+        const fields = ['Climate', 'Soils', 'Principal Varieties', 'Winemaking', 'Production Structure', 'Historical Position'];
+        fields.forEach(f => {
+          if (p[f]){
+            html += `<div class="profile-field">
+              <div class="profile-field-label">${f}</div>
+              <div class="profile-field-body">${esc(p[f])}</div>
+            </div>`;
+          }
+        });
+        html += `</div>`;
+      });
+      html += `</div>`;
+    });
+  });
   return html;
 }
 
 function renderRegionNav(){
   const nav = document.getElementById('modal-nav');
-  const sorted = [...REGION_PROFILES].sort((a,b) => a.name.localeCompare(b.name));
-  const buckets = [
-    { label: 'A–G', test: n => n <= 'H' },
-    { label: 'H–N', test: n => n >= 'H' && n <= 'O' },
-    { label: 'O–Z', test: n => n >= 'O' },
-  ];
-  const firsts = {};
-  buckets.forEach(b => {
-    const first = sorted.find(p => b.test(p.name[0].toUpperCase()));
-    if (first) firsts[b.label] = slugify(first.name);
-  });
-  nav.innerHTML = Object.entries(firsts).map(([lab, slug]) =>
-    `<a data-jump="region-${slug}">${lab}</a>`
-  ).join(' ');
+  nav.innerHTML = `<a data-jump="regions-old-world">Old World</a> <a data-jump="regions-new-world">New World</a>`;
   nav.style.display = 'flex';
   nav.querySelectorAll('a[data-jump]').forEach(a => a.addEventListener('click', () => {
     const target = document.getElementById(a.dataset.jump);
