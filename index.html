@@ -332,7 +332,7 @@ footer a:hover{color:var(--bordeaux-dark)}
 
   <div class="chart-card-tall">
     <h3>All grape categories</h3>
-    <div class="chart-sub"><span style="color:#5B1A2D;font-weight:600">Red grapes</span> in deep bordeaux · <span style="color:#8B3A4D;font-weight:600">white grapes</span> in lighter bordeaux · <span style="color:#C9A35B;font-weight:600">sparkling</span> · <span style="color:#C17A8A;font-weight:600">rosé</span></div>
+    <div class="chart-sub"><span style="color:#5B1A2D;font-weight:600">red grapes</span> in deep bordeaux · <span style="color:#8B3A4D;font-weight:600">white grapes</span> in lighter bordeaux · <span style="color:#C9A35B;font-weight:600">sparkling</span> · <span style="color:#C17A8A;font-weight:600">rosé</span></div>
     <div class="chart-wrap"><canvas id="chart-grapes-all"></canvas></div>
   </div>
 
@@ -366,7 +366,7 @@ footer a:hover{color:var(--bordeaux-dark)}
 <footer>
   <div class="cite">Codex Vini · <em>in vino veritas</em></div>
   <div>
-    <a href="README.md">About</a> ·
+    <a href="#" id="footer-about">About</a> ·
     <a href="https://jskarabot18.github.io/grand-cru-atlas/">The Grand Cru Atlas</a>
   </div>
 </footer>
@@ -868,6 +868,9 @@ function wireModal(){
   menu.querySelectorAll('a[data-doc]').forEach(a => a.addEventListener('click', e => {
     e.preventDefault(); menu.classList.remove('open'); openDoc(a.dataset.doc);
   }));
+  // Footer "About" link — open the in-page About document
+  const footerAbout = document.getElementById('footer-about');
+  if (footerAbout) footerAbout.addEventListener('click', e => { e.preventDefault(); openDoc('about'); });
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('modal-backdrop').addEventListener('click', e => {
     if (e.target.id === 'modal-backdrop') closeModal();
