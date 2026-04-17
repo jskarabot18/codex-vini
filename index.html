@@ -464,11 +464,14 @@ const TICK_MONO = { family: 'JetBrains Mono', size: 10 };
 // Per-chart palette — deep Bordeaux is the house color.
 // Split charts pair deep Bordeaux with a lighter matching tone in the same family.
 const CHART_COLORS = {
-  bordeauxDeep:  '#5B1A2D',   // house color — all single-color bar charts
+  bordeauxDeep:  '#5B1A2D',   // house color — count-based bar charts
   bordeauxLight: '#8B3A4D',   // lighter matching tone for secondary group in split charts
   // For the grape chart (up to 4 splits) we extend with two more tones from the same family
   rose:          '#C17A8A',   // pale rose — for rosé grapes
-  champagneGold: '#C9A35B',   // warm gold — for sparkling grapes (complements the bordeaux palette)
+  champagneGold: '#C9A35B',   // warm gold — for sparkling grapes
+  // Average-rating charts — distinct colors to visually separate them from count charts
+  ratingCountry: '#3D5A5F',   // teal-slate
+  ratingGrape:   '#6B4A2D',   // chocolate-brown
 };
 
 // Bayesian shrinkage: pulls averages toward the global mean using weight m=5
@@ -564,11 +567,11 @@ function renderCharts(){
     return CHART_COLORS.bordeauxDeep;  // red (default)
   });
 
-  // Avg rating by country — shrinkage-adjusted; single deep Bordeaux
-  renderShrinkageBar('chart-rating-country', 'country', globalMean, CHART_COLORS.bordeauxDeep);
+  // Avg rating by country — shrinkage-adjusted; teal-slate
+  renderShrinkageBar('chart-rating-country', 'country', globalMean, CHART_COLORS.ratingCountry);
 
-  // Avg rating by grape — shrinkage-adjusted; single deep Bordeaux
-  renderShrinkageBar('chart-rating-grape', 'grape', globalMean, CHART_COLORS.bordeauxDeep);
+  // Avg rating by grape — shrinkage-adjusted; chocolate-brown
+  renderShrinkageBar('chart-rating-grape', 'grape', globalMean, CHART_COLORS.ratingGrape);
 }
 
 // Count-based horizontal bar chart (no shrinkage; just sort by count)
