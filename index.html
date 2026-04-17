@@ -14,469 +14,182 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ═══════════════════════════════════════════════════════════════════════════
-   CODEX VINI — Design System
-   ═══════════════════════════════════════════════════════════════════════════ */
 :root{
-  /* Colors */
-  --bordeaux:       #5B1A2D;       /* Deep Bordeaux — accent */
-  --bordeaux-dark:  #3A1019;       /* deeper, for hover */
-  --bordeaux-tint:  #F5E8EB;       /* soft Bordeaux wash */
-  --ink:            #1C1A18;       /* near-black text */
-  --ink-soft:       #55504A;       /* softer body text */
-  --ink-faint:      #8A837C;       /* muted labels */
-  --paper:          #FAF6EF;       /* warm cream background */
-  --paper-raised:   #FFFDF8;       /* elevated surfaces (cards, panels) */
-  --rule:           #E6DED1;       /* horizontal rules */
-  --rule-soft:      #F0E8DB;       /* very subtle dividers */
-  --gold:           #A37B3D;       /* secondary accent (rarely used) */
-
-  /* Typography */
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --sans:  'DM Sans', system-ui, sans-serif;
-  --mono:  'JetBrains Mono', ui-monospace, monospace;
+  --bordeaux:#5B1A2D;--bordeaux-dark:#3A1019;--bordeaux-tint:#F5E8EB;
+  --ink:#1C1A18;--ink-soft:#55504A;--ink-faint:#8A837C;
+  --paper:#FAF6EF;--paper-raised:#FFFDF8;
+  --rule:#E6DED1;--rule-soft:#F0E8DB;--gold:#A37B3D;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{
-  font-family:var(--sans);
-  background:var(--paper);
-  color:var(--ink);
-  font-size:14px;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* Faint paper texture */
-body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(163,123,61,0.015) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(91,26,45,0.012) 0%, transparent 40%);
-  opacity:0.6;
-}
+html,body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background-image:radial-gradient(circle at 20% 30%,rgba(163,123,61,0.015) 0%,transparent 40%),radial-gradient(circle at 80% 70%,rgba(91,26,45,0.012) 0%,transparent 40%);opacity:0.6}
 #app{position:relative;z-index:2;max-width:1440px;margin:0 auto;padding:0 32px 60px}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════════════════════════════════════════ */
 header{padding:40px 0 28px;border-bottom:1px solid var(--rule)}
 .title-row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
-h1.title{
-  font-family:var(--serif);
-  font-size:54px;
-  font-weight:500;
-  color:var(--bordeaux);
-  letter-spacing:-0.02em;
-  line-height:1;
-}
+.brand{display:flex;flex-direction:column;gap:8px}
+h1.title{font-family:var(--serif);font-size:54px;font-weight:500;color:var(--bordeaux);letter-spacing:-0.02em;line-height:1}
 h1.title em{font-style:italic;font-weight:400}
-.subtitle{font-size:13px;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-top:10px}
-.author{font-size:12px;color:var(--ink-soft);font-family:var(--serif);font-style:italic;font-size:15px}
+.subtitle{font-size:13px;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;font-weight:500}
+.meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.author{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft)}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   STAT STRIP
-   ═══════════════════════════════════════════════════════════════════════════ */
-.stats{
-  display:grid;
-  grid-template-columns:repeat(5, 1fr);
-  gap:1px;
-  background:var(--rule);
-  margin:36px 0;
-  border-top:1px solid var(--rule);
-  border-bottom:1px solid var(--rule);
-}
-.stat{
-  background:var(--paper);
-  padding:22px 24px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.stat-value{
-  font-family:var(--serif);
-  font-size:38px;
-  font-weight:500;
-  color:var(--bordeaux);
-  line-height:1;
-  letter-spacing:-0.02em;
-}
-.stat-label{
-  font-size:10.5px;
-  color:var(--ink-faint);
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  font-weight:500;
-  margin-top:6px;
-}
+.docs-wrap{position:relative}
+.docs-btn{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--bordeaux);background:transparent;color:var(--bordeaux);cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:8px}
+.docs-btn:hover{background:var(--bordeaux);color:#fff}
+.docs-btn .chev{font-size:10px}
+.docs-menu{position:absolute;top:calc(100% + 4px);right:0;z-index:1000;min-width:260px;background:var(--paper-raised);border:1px solid var(--rule);box-shadow:0 4px 20px rgba(0,0,0,0.08);padding:6px 0;display:none}
+.docs-menu.open{display:block}
+.docs-menu a{display:block;padding:11px 18px;font-size:13px;color:var(--ink);text-decoration:none;cursor:pointer;border-bottom:1px solid var(--rule-soft);transition:background .1s}
+.docs-menu a:last-child{border-bottom:none}
+.docs-menu a:hover{background:var(--bordeaux-tint);color:var(--bordeaux)}
+.docs-menu a .docs-sub{display:block;font-size:11px;color:var(--ink-faint);margin-top:2px;font-style:italic}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SECTION HEADINGS
-   ═══════════════════════════════════════════════════════════════════════════ */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);margin:36px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat{background:var(--paper);padding:22px 24px;display:flex;flex-direction:column;gap:4px}
+.stat-value{font-family:var(--serif);font-size:38px;font-weight:500;color:var(--bordeaux);line-height:1;letter-spacing:-0.02em}
+.stat-label{font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.12em;font-weight:500;margin-top:6px}
+
 .section{margin-top:48px}
-.section-head{
-  display:flex;
-  align-items:baseline;
-  gap:16px;
-  padding-bottom:14px;
-  margin-bottom:20px;
-  border-bottom:1px solid var(--rule);
-}
-.section-head h2{
-  font-family:var(--serif);
-  font-size:28px;
-  font-weight:500;
-  color:var(--ink);
-  letter-spacing:-0.01em;
-}
+.section-head{display:flex;align-items:baseline;gap:16px;padding-bottom:14px;margin-bottom:20px;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.section-head h2{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink);letter-spacing:-0.01em}
 .section-head h2 em{font-style:italic;color:var(--bordeaux)}
 .section-head .section-sub{font-size:12px;color:var(--ink-faint);font-style:italic}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CHARTS ROW
-   ═══════════════════════════════════════════════════════════════════════════ */
-.charts{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.chart-card{
-  background:var(--paper-raised);
-  border:1px solid var(--rule);
-  padding:22px 24px;
-  position:relative;
-}
-.chart-card h3{
-  font-family:var(--serif);
-  font-size:18px;
-  font-weight:500;
-  color:var(--ink);
-  margin-bottom:2px;
-}
-.chart-card .chart-sub{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin-bottom:16px}
-.chart-wrap{position:relative;height:220px}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   EXPLORE (FILTERS + MAP)
-   ═══════════════════════════════════════════════════════════════════════════ */
-.explore{
-  display:grid;
-  grid-template-columns:280px 1fr;
-  gap:24px;
-  height:640px;
-}
-.filter-panel{
-  background:var(--paper-raised);
-  border:1px solid var(--rule);
-  overflow-y:auto;
-  padding:0;
-}
+.explore{display:grid;grid-template-columns:280px 1fr;gap:24px;height:680px}
+.filter-panel{background:var(--paper-raised);border:1px solid var(--rule);overflow-y:auto}
 .filter-panel::-webkit-scrollbar{width:6px}
 .filter-panel::-webkit-scrollbar-thumb{background:var(--rule);border-radius:3px}
-
 .filter-section{padding:18px 22px;border-bottom:1px solid var(--rule-soft)}
 .filter-section:last-child{border-bottom:none}
-.filter-label{
-  font-size:10px;
-  color:var(--ink-faint);
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  font-weight:600;
-  margin-bottom:12px;
-}
+.filter-label{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;margin-bottom:12px}
 
-/* Search */
-#search{
-  width:100%;
-  padding:10px 12px;
-  border:1px solid var(--rule);
-  background:var(--paper);
-  font-family:var(--sans);
-  font-size:13px;
-  color:var(--ink);
-  outline:none;
-  transition:border-color .15s;
-}
+#search{width:100%;padding:10px 12px;border:1px solid var(--rule);background:var(--paper);font-family:var(--sans);font-size:13px;color:var(--ink);outline:none;transition:border-color .15s}
 #search:focus{border-color:var(--bordeaux)}
 #search::placeholder{color:var(--ink-faint)}
 
-/* Chips */
 .chip-grid{display:flex;flex-wrap:wrap;gap:5px}
-.chip{
-  padding:4px 10px;
-  border:1px solid var(--rule);
-  background:var(--paper);
-  font-family:var(--sans);
-  font-size:11.5px;
-  color:var(--ink-soft);
-  cursor:pointer;
-  transition:all .12s;
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  user-select:none;
-  line-height:1.4;
-}
+.chip{padding:4px 10px;border:1px solid var(--rule);background:var(--paper);font-family:var(--sans);font-size:11.5px;color:var(--ink-soft);cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:5px;user-select:none;line-height:1.4}
 .chip:hover{border-color:var(--bordeaux);color:var(--bordeaux)}
 .chip.active{background:var(--bordeaux);border-color:var(--bordeaux);color:#fff}
 .chip-count{font-size:10px;opacity:0.7;font-variant-numeric:tabular-nums}
 .chip .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.rating-chip{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;min-width:42px;justify-content:center}
 
-/* Rating slider */
-.slider-wrap{display:flex;flex-direction:column;gap:8px}
-.slider-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-faint);font-variant-numeric:tabular-nums}
-.slider-val{color:var(--bordeaux);font-weight:600}
-input[type=range]{
-  -webkit-appearance:none;
-  width:100%;
-  height:2px;
-  background:var(--rule);
-  outline:none;
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:14px;height:14px;
-  border-radius:50%;
-  background:var(--bordeaux);
-  cursor:pointer;
-  border:2px solid var(--paper-raised);
-  box-shadow:0 0 0 1px var(--bordeaux);
-}
-input[type=range]::-moz-range-thumb{
-  width:14px;height:14px;
-  border-radius:50%;
-  background:var(--bordeaux);
-  cursor:pointer;
-  border:2px solid var(--paper-raised);
-}
+.reset-bar{padding:12px 22px;background:var(--bordeaux-tint);border-bottom:1px solid var(--rule-soft);display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--bordeaux)}
+.btn-reset{font-family:var(--sans);background:none;border:1px solid var(--bordeaux);color:var(--bordeaux);padding:3px 10px;cursor:pointer;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;transition:all .12s}
+.btn-reset:hover{background:var(--bordeaux);color:#fff}
 
-/* Reset bar */
-.reset-bar{
-  padding:12px 22px;
-  background:var(--bordeaux-tint);
-  border-bottom:1px solid var(--rule-soft);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:11.5px;
-  color:var(--bordeaux);
-}
-#reset-btn{
-  font-family:var(--sans);
-  background:none;
-  border:1px solid var(--bordeaux);
-  color:var(--bordeaux);
-  padding:3px 10px;
-  cursor:pointer;
-  font-size:10.5px;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
-  font-weight:600;
-  transition:all .12s;
-}
-#reset-btn:hover{background:var(--bordeaux);color:#fff}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MAP
-   ═══════════════════════════════════════════════════════════════════════════ */
-#map-container{
-  background:var(--paper-raised);
-  border:1px solid var(--rule);
-  overflow:hidden;
-  position:relative;
-}
+#map-container{background:var(--paper-raised);border:1px solid var(--rule);overflow:hidden;position:relative}
 #map{width:100%;height:100%}
 
-.wine-pin{
-  border-radius:50%;
-  border:1.5px solid rgba(255,253,248,0.95);
-  box-shadow:0 1px 4px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(28,26,24,0.3);
-  transition:transform .15s, box-shadow .15s;
-  cursor:pointer;
-}
-.wine-pin:hover{
-  transform:scale(1.35);
-  box-shadow:0 3px 10px rgba(0,0,0,0.35), 0 0 0 2px var(--bordeaux);
-  z-index:9999!important;
-}
-.wine-pin.dimmed{opacity:0.08;transform:scale(0.6)}
+.wine-pin{border-radius:50%;border:1.5px solid rgba(255,253,248,0.95);box-shadow:0 1px 4px rgba(0,0,0,0.25),0 0 0 0.5px rgba(28,26,24,0.3);transition:transform .15s,box-shadow .15s;cursor:pointer}
+.wine-pin:hover{transform:scale(1.35);box-shadow:0 3px 10px rgba(0,0,0,0.35),0 0 0 2px var(--bordeaux);z-index:9999!important}
 
-.leaflet-popup-content-wrapper{
-  border-radius:2px;
-  font-family:var(--sans);
-  background:var(--paper-raised);
-  box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  border:1px solid var(--rule);
-  padding:0;
-}
+.leaflet-popup-content-wrapper{border-radius:2px;font-family:var(--sans);background:var(--paper-raised);box-shadow:0 4px 20px rgba(0,0,0,0.15);border:1px solid var(--rule);padding:0}
 .leaflet-popup-tip{background:var(--paper-raised);border:1px solid var(--rule)}
 .leaflet-popup-content{margin:0;min-width:240px;line-height:1.45}
 .popup{padding:14px 18px}
-.popup-producer{
-  font-family:var(--serif);
-  font-size:17px;
-  font-weight:600;
-  color:var(--bordeaux);
-  line-height:1.1;
-  margin-bottom:4px;
-}
-.popup-wine{
-  font-family:var(--serif);
-  font-size:15px;
-  font-style:italic;
-  color:var(--ink);
-  line-height:1.2;
-  margin-bottom:8px;
-}
+.popup-producer{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--bordeaux);line-height:1.1;margin-bottom:4px}
+.popup-wine{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:8px}
 .popup-meta{font-size:11px;color:var(--ink-faint);display:flex;gap:8px;align-items:center;margin-bottom:4px}
 .popup-meta .sep{opacity:0.4}
-.popup-rating{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid var(--rule);
-  font-size:12px;
-  color:var(--ink-soft);
-}
+.popup-rating{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-soft)}
 .popup-rating strong{font-family:var(--serif);font-size:18px;color:var(--bordeaux);font-weight:600}
 
-/* Marker cluster */
-.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large{
-  background:rgba(91,26,45,0.15);
-}
-.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div{
-  background:var(--bordeaux);
-  color:#fff;
-  font-family:var(--sans);
-  font-weight:600;
-  font-size:11px;
-  line-height:28px;
-}
+.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(91,26,45,0.15)}
+.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:var(--bordeaux);color:#fff;font-family:var(--sans);font-weight:600;font-size:11px;line-height:28px}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TABLE
-   ═══════════════════════════════════════════════════════════════════════════ */
-.table-wrap{
-  background:var(--paper-raised);
-  border:1px solid var(--rule);
-  overflow-x:auto;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px;
-}
-thead{
-  background:var(--paper);
-  border-bottom:1.5px solid var(--rule);
-}
-th{
-  text-align:left;
-  padding:14px 18px;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  font-weight:600;
-  color:var(--ink-faint);
-  cursor:pointer;
-  user-select:none;
-  white-space:nowrap;
-  transition:color .12s;
-  position:relative;
-}
-th:hover{color:var(--bordeaux)}
-th.sorted{color:var(--bordeaux)}
-th.sorted::after{content:attr(data-arrow);margin-left:5px;font-size:9px}
-th.rating-col, td.rating-col{text-align:right}
-
-tbody tr{
-  border-bottom:1px solid var(--rule-soft);
-  transition:background .1s;
-  cursor:pointer;
-}
-tbody tr:hover{background:var(--bordeaux-tint)}
-tbody tr:last-child{border-bottom:none}
-td{
-  padding:12px 18px;
-  vertical-align:middle;
-}
-td.producer-cell{
-  font-family:var(--serif);
-  font-size:15px;
-  font-weight:500;
-  color:var(--ink);
-  white-space:nowrap;
-  max-width:220px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-td.wine-cell{
-  font-family:var(--serif);
-  font-style:italic;
-  color:var(--ink-soft);
-  max-width:260px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-td.vintage-cell{
-  font-family:var(--mono);
-  font-size:11.5px;
-  color:var(--ink-faint);
-  font-variant-numeric:tabular-nums;
-}
-td.region-cell{color:var(--ink-soft);white-space:nowrap;font-size:12.5px}
-td.country-cell{color:var(--ink-faint);font-size:11.5px;font-style:italic}
-td.grape-cell{font-size:12px;display:flex;align-items:center;gap:7px;white-space:nowrap}
-td.grape-cell .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-td.rating-cell{
-  font-family:var(--serif);
-  font-size:17px;
-  font-weight:600;
-  color:var(--bordeaux);
-  font-variant-numeric:tabular-nums;
-}
-td.date-cell{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-variant-numeric:tabular-nums;white-space:nowrap}
-
-.empty-state{padding:60px 30px;text-align:center;color:var(--ink-faint);font-style:italic}
-.empty-state em{font-family:var(--serif);font-size:15px;color:var(--ink-soft)}
-
-/* Results count */
-.table-head-bar{
-  display:flex;justify-content:space-between;align-items:baseline;
-  padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:20px;
-}
+.table-head-bar{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:20px;gap:16px;flex-wrap:wrap}
 .results-count{font-size:11.5px;color:var(--ink-faint);font-variant-numeric:tabular-nums}
 .results-count strong{font-family:var(--serif);font-size:14px;color:var(--bordeaux);font-weight:600}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   FOOTER
-   ═══════════════════════════════════════════════════════════════════════════ */
-footer{
-  margin-top:60px;
-  padding-top:24px;
-  border-top:1px solid var(--rule);
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  font-size:11px;
-  color:var(--ink-faint);
-  gap:20px;
-  flex-wrap:wrap;
-}
+.table-wrap{background:var(--paper-raised);border:1px solid var(--rule);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:var(--paper);border-bottom:1.5px solid var(--rule)}
+th{text-align:left;padding:14px 18px;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;color:var(--ink-faint);cursor:pointer;user-select:none;white-space:nowrap;transition:color .12s;position:relative}
+th:hover{color:var(--bordeaux)}
+th.sorted{color:var(--bordeaux)}
+th.sorted::after{content:attr(data-arrow);margin-left:5px;font-size:9px}
+th.rating-col,td.rating-col{text-align:right}
+tbody tr{border-bottom:1px solid var(--rule-soft);transition:background .1s;cursor:pointer}
+tbody tr:hover{background:var(--bordeaux-tint)}
+tbody tr:last-child{border-bottom:none}
+td{padding:12px 18px;vertical-align:middle}
+td.producer-cell{font-family:var(--serif);font-size:15px;font-weight:500;color:var(--ink);white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+td.wine-cell{font-family:var(--serif);font-style:italic;color:var(--ink-soft);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+td.vintage-cell{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+td.region-cell{color:var(--ink-soft);white-space:nowrap;font-size:12.5px}
+td.country-cell{color:var(--ink-faint);font-size:11.5px;font-style:italic}
+td.grape-cell{font-size:12px}
+td.grape-cell .grape-wrap{display:flex;align-items:center;gap:7px;white-space:nowrap}
+td.grape-cell .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+td.rating-cell{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--bordeaux);font-variant-numeric:tabular-nums}
+td.date-cell{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty-state{padding:60px 30px;text-align:center;color:var(--ink-faint);font-style:italic}
+.empty-state em{font-family:var(--serif);font-size:15px;color:var(--ink-soft)}
+
+.chart-hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:24px}
+.chart-card{background:var(--paper-raised);border:1px solid var(--rule);padding:22px 24px;position:relative}
+.chart-card h3{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.chart-card .chart-sub{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin-bottom:16px}
+.chart-wrap{position:relative;height:220px}
+.chart-card-tall{background:var(--paper-raised);border:1px solid var(--rule);padding:22px 24px;margin-bottom:24px}
+.chart-card-tall .chart-wrap{height:auto;min-height:240px}
+
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(28,26,24,0.6);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--paper-raised);border:1px solid var(--rule);max-width:820px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.25);position:relative}
+.modal-head{padding:26px 32px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;justify-content:space-between;gap:20px}
+.modal-head h2{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink);letter-spacing:-0.01em}
+.modal-head h2 em{font-style:italic;color:var(--bordeaux)}
+.modal-head .modal-sub{font-size:11px;color:var(--ink-faint);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;margin-top:4px}
+.modal-close{background:none;border:none;font-size:22px;color:var(--ink-faint);cursor:pointer;line-height:1;padding:0 0 0 10px;transition:color .1s}
+.modal-close:hover{color:var(--bordeaux)}
+.modal-body{padding:24px 32px 32px;max-height:72vh;overflow-y:auto;line-height:1.7}
+.modal-body h3{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--bordeaux);margin:24px 0 10px;letter-spacing:-0.01em}
+.modal-body h3:first-child{margin-top:0}
+.modal-body h4{font-family:var(--serif);font-style:italic;font-size:17px;font-weight:500;color:var(--ink);margin:18px 0 6px}
+.modal-body p{margin-bottom:14px;color:var(--ink-soft);font-size:14px}
+.modal-body .section-note{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin-bottom:16px}
+.modal-body code{font-family:var(--mono);font-size:12px;background:var(--bordeaux-tint);padding:1px 5px;color:var(--bordeaux)}
+.modal-body ol,.modal-body ul{margin:10px 0 16px 22px;color:var(--ink-soft)}
+.modal-body li{margin-bottom:6px}
+.modal-body strong{color:var(--ink);font-weight:600}
+.modal-body a{color:var(--bordeaux);border-bottom:1px dotted var(--bordeaux);text-decoration:none}
+.modal-body kbd{font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--rule);padding:1px 6px;border-radius:2px}
+
+.profile-list{display:flex;flex-direction:column;gap:28px}
+.profile{border-bottom:1px solid var(--rule-soft);padding-bottom:24px}
+.profile:last-child{border-bottom:none}
+.profile-name{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--bordeaux);line-height:1.1;letter-spacing:-0.01em}
+.profile-name em{font-style:italic;font-weight:400;color:var(--ink)}
+.profile-origin{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin:3px 0 10px;letter-spacing:0.04em}
+.profile-text{color:var(--ink-soft);font-size:13.5px;line-height:1.65}
+.profile-field{margin-top:8px}
+.profile-field-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.12em;color:var(--bordeaux);font-weight:600;margin-bottom:3px}
+.profile-field-body{color:var(--ink-soft);font-size:13px;line-height:1.6;margin-bottom:8px}
+.modal-nav{padding:14px 32px;background:var(--paper);border-bottom:1px solid var(--rule-soft);display:flex;gap:6px;flex-wrap:wrap;font-size:11px}
+.modal-nav a{color:var(--ink-soft);text-decoration:none;padding:4px 9px;border:1px solid var(--rule);cursor:pointer;transition:all .1s}
+.modal-nav a:hover{color:var(--bordeaux);border-color:var(--bordeaux)}
+
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--ink-faint);gap:20px;flex-wrap:wrap}
 footer .cite{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-soft)}
 footer a{color:var(--bordeaux);text-decoration:none;border-bottom:1px dotted var(--bordeaux)}
 footer a:hover{color:var(--bordeaux-dark)}
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════════════════════ */
-@media (max-width: 1100px){
+@media(max-width:1100px){
   .stats{grid-template-columns:repeat(3,1fr)}
-  .charts{grid-template-columns:1fr}
+  .chart-hero{grid-template-columns:1fr}
   .explore{grid-template-columns:1fr;height:auto}
-  .filter-panel{max-height:400px}
+  .filter-panel{max-height:500px}
   #map-container{height:500px}
 }
-@media (max-width: 700px){
+@media(max-width:700px){
   #app{padding:0 18px 40px}
   h1.title{font-size:38px}
   .stats{grid-template-columns:repeat(2,1fr)}
@@ -484,118 +197,83 @@ footer a:hover{color:var(--bordeaux-dark)}
   th,td{padding:10px 12px}
   td.producer-cell{font-size:13.5px;max-width:140px}
   td.wine-cell{max-width:160px}
+  .modal{margin:0}
+  .modal-head{padding:18px 22px 14px}
+  .modal-body{padding:18px 22px 24px}
 }
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<!-- HEADER                                                                  -->
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
 <header>
   <div class="title-row">
-    <div>
+    <div class="brand">
       <h1 class="title">Codex <em>Vini</em></h1>
       <div class="subtitle">A Personal Wine Atlas</div>
     </div>
-    <div class="author">Jure Skarabot · New York</div>
+    <div class="meta">
+      <div class="author">Jure Skarabot · New York</div>
+      <div class="docs-wrap">
+        <button class="docs-btn" id="docs-btn">Documents <span class="chev">▾</span></button>
+        <div class="docs-menu" id="docs-menu">
+          <a data-doc="about">About Codex Vini<span class="docs-sub">project overview &amp; rating scale</span></a>
+          <a data-doc="howto">How to navigate &amp; update<span class="docs-sub">adding new wines to the codex</span></a>
+          <a data-doc="grapes">Grape varieties<span class="docs-sub">the 101 TasteRank reference</span></a>
+          <a data-doc="regions">Regions reference<span class="docs-sub">terroir profiles from Soul of Wine</span></a>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<!-- STAT STRIP                                                              -->
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
 <div class="stats" id="stats"></div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<!-- CHARTS                                                                  -->
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
 <section class="section">
   <div class="section-head">
-    <h2>Collection in <em>brief</em></h2>
-    <div class="section-sub">— ratings and geographic distribution</div>
-  </div>
-  <div class="charts">
-    <div class="chart-card">
-      <h3>Rating distribution</h3>
-      <div class="chart-sub">count of wines at each score</div>
-      <div class="chart-wrap"><canvas id="chart-ratings"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h3>Top countries</h3>
-      <div class="chart-sub">wines tasted by country of origin</div>
-      <div class="chart-wrap"><canvas id="chart-countries"></canvas></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<!-- EXPLORE (FILTERS + MAP)                                                 -->
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<section class="section">
-  <div class="section-head">
-    <h2>Explore the <em>atlas</em></h2>
+    <h2>The <em>atlas</em></h2>
     <div class="section-sub">— filter by country, grape, colour, or rating</div>
   </div>
   <div class="explore">
-
     <aside class="filter-panel">
       <div class="reset-bar" id="reset-bar" style="display:none">
         <span id="filter-summary"></span>
-        <button id="reset-btn">Reset</button>
+        <button class="btn-reset" id="btn-reset-atlas">Reset</button>
       </div>
-
       <div class="filter-section">
         <div class="filter-label">Search</div>
         <input type="text" id="search" placeholder="Producer, wine, region…"/>
       </div>
-
+      <div class="filter-section">
+        <div class="filter-label">Rating</div>
+        <div class="chip-grid" id="rating-chips"></div>
+      </div>
       <div class="filter-section">
         <div class="filter-label">Colour</div>
         <div class="chip-grid" id="color-chips"></div>
       </div>
-
       <div class="filter-section">
         <div class="filter-label">Country</div>
         <div class="chip-grid" id="country-chips"></div>
       </div>
-
       <div class="filter-section">
         <div class="filter-label">Grape / Category</div>
         <div class="chip-grid" id="grape-chips"></div>
       </div>
-
-      <div class="filter-section">
-        <div class="filter-label">Minimum rating</div>
-        <div class="slider-wrap">
-          <input type="range" id="rating-slider" min="8.9" max="10.0" step="0.1" value="8.9"/>
-          <div class="slider-labels">
-            <span>8.9</span>
-            <span class="slider-val" id="rating-val">any</span>
-            <span>10.0</span>
-          </div>
-        </div>
-      </div>
     </aside>
-
     <div id="map-container"><div id="map"></div></div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<!-- TABLE                                                                    -->
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
 <section class="section">
   <div class="section-head">
-    <h2>The <em>ledger</em></h2>
+    <h2>The <em>book</em></h2>
     <div class="section-sub">— every wine, every tasting</div>
   </div>
-
   <div class="table-head-bar">
     <div class="results-count" id="results-count"></div>
+    <button class="btn-reset" id="btn-reset-book" style="display:none">Reset filters</button>
   </div>
-
   <div class="table-wrap">
     <table id="wine-table">
       <thead>
@@ -615,9 +293,75 @@ footer a:hover{color:var(--bordeaux-dark)}
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
-<!-- FOOTER                                                                  -->
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <h2>The <em>collection</em></h2>
+    <div class="section-sub">— ratings, origins, and patterns</div>
+  </div>
+
+  <div class="chart-hero">
+    <div class="chart-card">
+      <h3>Rating distribution</h3>
+      <div class="chart-sub">highest on the left, descending</div>
+      <div class="chart-wrap"><canvas id="chart-ratings"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>By colour</h3>
+      <div class="chart-sub">share of wines by style</div>
+      <div class="chart-wrap"><canvas id="chart-color"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Vintage distribution</h3>
+      <div class="chart-sub">tasted wines by harvest year</div>
+      <div class="chart-wrap"><canvas id="chart-vintage"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-card-tall">
+    <h3>All countries</h3>
+    <div class="chart-sub">every country represented in the codex</div>
+    <div class="chart-wrap"><canvas id="chart-countries-all"></canvas></div>
+  </div>
+
+  <div class="chart-card-tall">
+    <h3>All regions</h3>
+    <div class="chart-sub">every region represented in the codex</div>
+    <div class="chart-wrap"><canvas id="chart-regions-all"></canvas></div>
+  </div>
+
+  <div class="chart-card-tall">
+    <h3>All grape categories</h3>
+    <div class="chart-sub">every grape variety and named-wine category</div>
+    <div class="chart-wrap"><canvas id="chart-grapes-all"></canvas></div>
+  </div>
+
+  <div class="chart-card-tall">
+    <h3>Average rating by country</h3>
+    <div class="chart-sub">mean score per country, highest to lowest</div>
+    <div class="chart-wrap"><canvas id="chart-rating-country"></canvas></div>
+  </div>
+
+  <div class="chart-card-tall">
+    <h3>Average rating by grape / category</h3>
+    <div class="chart-sub">mean score per grape or named-wine category</div>
+    <div class="chart-wrap"><canvas id="chart-rating-grape"></canvas></div>
+  </div>
+</section>
+
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h2 id="modal-title">—</h2>
+        <div class="modal-sub" id="modal-sub">—</div>
+      </div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-nav" id="modal-nav" style="display:none"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <footer>
   <div class="cite">Codex Vini · <em>in vino veritas</em></div>
   <div>
@@ -629,11 +373,6 @@ footer a:hover{color:var(--bordeaux-dark)}
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════════════════
-// DATA — loaded from wines.json + grapes.json at runtime
-// ═══════════════════════════════════════════════════════════════════════════
-
-// Grape → pin color map (all 41 categories in current data plus room to grow)
 const GRAPE_COLORS = {
   "Cabernet Sauvignon":"#3D1A2E","Cabernet Franc":"#6B2737","Merlot":"#7B1E2D",
   "Bordeaux Blend":"#3D1A2E","Nebbiolo":"#8B3A2D","Barolo":"#8B3A2D",
@@ -651,39 +390,39 @@ const GRAPE_COLORS = {
   "Sémillon":"#D4A74A","Chenin Blanc":"#2E7D5B",
   "Champagne / Sparkling":"#E5C04D","Rosé":"#E89A9E"
 };
-
-// Color → wine-color family (for the color filter chips)
-const COLOR_FAMILIES = {
-  "red":"#7B1E2D","white":"#C9A227","sparkling":"#E5C04D","rosé":"#E89A9E"
-};
+const COLOR_FAMILIES = {"red":"#7B1E2D","white":"#C9A227","sparkling":"#E5C04D","rosé":"#E89A9E"};
 const COLOR_LABELS = {"red":"Red","white":"White","sparkling":"Sparkling","rosé":"Rosé"};
+const EUROPE_VIEW = { center: [48, 9], zoom: 4 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════════════════
-let WINES = [];
+const RATING_BUCKETS = [
+  { key:"10.0", label:"10.0" },{ key:"9.9",  label:"9.9" },
+  { key:"9.8",  label:"9.8" },{ key:"9.7",  label:"9.7" },
+  { key:"9.6",  label:"9.6" },{ key:"9.5",  label:"9.5" },
+  { key:"9.4",  label:"9.4" },{ key:"9.3",  label:"9.3" },
+  { key:"9.2",  label:"9.2" },{ key:"under",label:"≤ 9.1" },
+];
+function ratingBucketOf(rating){
+  const r = Math.round(rating * 10) / 10;
+  if (r >= 9.2) return r.toFixed(1);
+  return "under";
+}
+
+let WINES = [], GRAPE_PROFILES = [], REGION_PROFILES = [];
 let state = {
   search: "",
-  countries: new Set(),
-  grapes: new Set(),
-  colors: new Set(),
-  minRating: 8.9,
+  countries: new Set(), grapes: new Set(), colors: new Set(), ratings: new Set(),
   sort: { field: "date_tasted", dir: "desc" },
 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-// LOAD
-// ═══════════════════════════════════════════════════════════════════════════
 async function loadData(){
   try {
-    const resp = await fetch('wines.json');
-    WINES = await resp.json();
-  } catch(e) {
-    // For development: fall back to embedded sample if fetch fails
-    // (GitHub Pages will serve wines.json fine)
-    console.error('Could not load wines.json', e);
-    WINES = [];
-  }
+    const [w, gp, rp] = await Promise.all([
+      fetch('wines.json').then(r=>r.json()),
+      fetch('grape_profiles.json').then(r=>r.json()).catch(()=>[]),
+      fetch('region_profiles.json').then(r=>r.json()).catch(()=>[]),
+    ]);
+    WINES = w; GRAPE_PROFILES = gp; REGION_PROFILES = rp;
+  } catch(e) { console.error('Data load failed:', e); WINES = []; }
   init();
 }
 
@@ -693,40 +432,35 @@ function init(){
   renderFilters();
   renderMap();
   applyFilters();
+  wireModal();
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// STATS
-// ═══════════════════════════════════════════════════════════════════════════
 function renderStats(){
-  const countries = new Set(WINES.map(w => w.country)).size;
-  const regions = new Set(WINES.map(w => w.region)).size;
-  const grapes = new Set(WINES.map(w => w.grape)).size;
-  const avg = WINES.reduce((s,w)=>s+w.rating,0) / WINES.length;
+  const countries = new Set(WINES.map(w=>w.country)).size;
+  const regions = new Set(WINES.map(w=>w.region)).size;
+  const grapes = new Set(WINES.map(w=>w.grape)).size;
+  const avg = WINES.length ? WINES.reduce((s,w)=>s+w.rating,0) / WINES.length : 0;
   const stats = [
     {value: WINES.length, label: "wines tasted"},
-    {value: countries,    label: "countries"},
-    {value: regions,      label: "regions"},
-    {value: grapes,       label: "grape categories"},
+    {value: countries, label: "countries"},
+    {value: regions, label: "regions"},
+    {value: grapes, label: "grape categories"},
     {value: avg.toFixed(2), label: "average rating"},
   ];
   document.getElementById('stats').innerHTML =
-    stats.map(s => `<div class="stat"><div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('');
+    stats.map(s=>`<div class="stat"><div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('');
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// CHARTS
-// ═══════════════════════════════════════════════════════════════════════════
-let ratingChart, countryChart;
-function renderCharts(){
-  // Rating distribution
-  const ratings = {};
-  for (let r = 8.9; r <= 10.05; r = Math.round((r+0.1)*10)/10) ratings[r.toFixed(1)] = 0;
-  WINES.forEach(w => { ratings[w.rating.toFixed(1)] = (ratings[w.rating.toFixed(1)]||0) + 1; });
-  const rLabels = Object.keys(ratings);
-  const rData = Object.values(ratings);
+const CHART_FONT = { family: 'DM Sans', size: 11 };
+const TICK_MONO = { family: 'JetBrains Mono', size: 10 };
 
-  ratingChart = new Chart(document.getElementById('chart-ratings'), {
+function renderCharts(){
+  // Rating distribution — DESCENDING (10.0 leftmost)
+  const ratings = {};
+  WINES.forEach(w => { ratings[w.rating.toFixed(1)] = (ratings[w.rating.toFixed(1)]||0) + 1; });
+  const rLabels = Object.keys(ratings).sort((a,b)=>parseFloat(b)-parseFloat(a));
+  const rData = rLabels.map(l => ratings[l]);
+  new Chart(document.getElementById('chart-ratings'), {
     type: 'bar',
     data: {
       labels: rLabels,
@@ -735,57 +469,128 @@ function renderCharts(){
         backgroundColor: rLabels.map(r =>
           parseFloat(r) >= 9.8 ? '#5B1A2D' :
           parseFloat(r) >= 9.5 ? '#7B1E2D' :
-          parseFloat(r) >= 9.2 ? '#A0432D' :
-                                 '#C9A35B'
-        ),
+          parseFloat(r) >= 9.2 ? '#A0432D' : '#C9A35B'),
         borderRadius: 1,
       }]
     },
     options: {
-      plugins: { legend: { display: false }, tooltip: {
-        backgroundColor: '#1C1A18', titleFont: {family: 'DM Sans', size: 12},
-        bodyFont: {family: 'DM Sans', size: 12}, padding: 10,
-        callbacks: { label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }
-      }},
-      scales: {
-        x: { grid: { display: false }, ticks: { color: '#8A837C', font: {family: 'JetBrains Mono', size: 10}}},
-        y: { grid: { color: '#F0E8DB' }, ticks: { color: '#8A837C', font: {family: 'JetBrains Mono', size: 10}, stepSize: 5, precision: 0 }, beginAtZero: true },
-      },
       maintainAspectRatio: false, responsive: true,
+      plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }}},
+      scales: {
+        x: { grid:{display:false}, ticks:{color:'#8A837C', font:TICK_MONO}},
+        y: { grid:{color:'#F0E8DB'}, ticks:{color:'#8A837C', font:TICK_MONO, stepSize:5, precision:0}, beginAtZero:true },
+      }
     }
   });
 
-  // Top countries
-  const ctry = {};
-  WINES.forEach(w => { ctry[w.country] = (ctry[w.country]||0) + 1; });
-  const ctrySorted = Object.entries(ctry).sort((a,b)=>b[1]-a[1]).slice(0, 10);
-  countryChart = new Chart(document.getElementById('chart-countries'), {
-    type: 'bar',
+  // Color share donut
+  const cc = {};
+  WINES.forEach(w => { cc[w.color] = (cc[w.color]||0) + 1; });
+  const colorKeys = Object.keys(cc);
+  new Chart(document.getElementById('chart-color'), {
+    type: 'doughnut',
     data: {
-      labels: ctrySorted.map(c => c[0]),
-      datasets: [{ data: ctrySorted.map(c => c[1]), backgroundColor: '#5B1A2D', borderRadius: 1 }]
+      labels: colorKeys.map(c => COLOR_LABELS[c] || c),
+      datasets: [{
+        data: Object.values(cc),
+        backgroundColor: colorKeys.map(c => COLOR_FAMILIES[c] || '#888'),
+        borderColor: '#FFFDF8', borderWidth: 2,
+      }]
     },
     options: {
-      indexAxis: 'y',
-      plugins: { legend: { display: false }, tooltip: {
-        backgroundColor: '#1C1A18', titleFont: {family: 'DM Sans', size: 12},
-        bodyFont: {family: 'DM Sans', size: 12}, padding: 10,
-        callbacks: { label: ctx => `${ctx.parsed.x} wine${ctx.parsed.x===1?'':'s'}` }
-      }},
-      scales: {
-        x: { grid: { color: '#F0E8DB' }, ticks: { color: '#8A837C', font: {family: 'JetBrains Mono', size: 10}, stepSize: 5, precision: 0 }, beginAtZero: true },
-        y: { grid: { display: false }, ticks: { color: '#55504A', font: {family: 'DM Sans', size: 11, weight: '500'}}},
-      },
+      maintainAspectRatio: false, responsive: true, cutout: '62%',
+      plugins: {
+        legend:{ position:'bottom', labels:{color:'#55504A', font:CHART_FONT, padding:10, boxWidth:10, boxHeight:10}},
+        tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed} wine${ctx.parsed===1?'':'s'}` }}
+      }
+    }
+  });
+
+  // Vintage distribution
+  const vc = {};
+  WINES.forEach(w => { vc[w.vintage] = (vc[w.vintage]||0) + 1; });
+  const vLabels = Object.keys(vc).sort((a,b) => {
+    if (a === 'NV') return 1; if (b === 'NV') return -1;
+    return parseInt(a) - parseInt(b);
+  });
+  new Chart(document.getElementById('chart-vintage'), {
+    type: 'bar',
+    data: { labels: vLabels, datasets: [{ data: vLabels.map(l=>vc[l]), backgroundColor:'#7B1E2D', borderRadius:1 }]},
+    options: {
       maintainAspectRatio: false, responsive: true,
+      plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }}},
+      scales: {
+        x: { grid:{display:false}, ticks:{color:'#8A837C', font:TICK_MONO, autoSkip:true, maxRotation:0}},
+        y: { grid:{color:'#F0E8DB'}, ticks:{color:'#8A837C', font:TICK_MONO, stepSize:2, precision:0}, beginAtZero:true },
+      }
+    }
+  });
+
+  renderTallBar('chart-countries-all', 'country', null, '#5B1A2D', false);
+  renderTallBar('chart-regions-all',   'region',  null, '#7B1E2D', false);
+  renderTallBar('chart-grapes-all',    'grape',   null, null, true);
+  renderTallBar('chart-rating-country','country', 'rating', '#5B1A2D', false);
+  renderTallBar('chart-rating-grape',  'grape',   'rating', null, true);
+}
+
+function renderTallBar(canvasId, field, metric, bgColor, useGrapeColors){
+  const buckets = {};
+  WINES.forEach(w => {
+    const k = w[field];
+    if (!buckets[k]) buckets[k] = { count: 0, sum: 0 };
+    buckets[k].count += 1;
+    buckets[k].sum += w.rating;
+  });
+  let entries;
+  if (metric === 'rating'){
+    entries = Object.entries(buckets).map(([k,v]) => [k, v.sum / v.count, v.count]);
+    entries.sort((a,b) => b[1] - a[1]);
+  } else {
+    entries = Object.entries(buckets).map(([k,v]) => [k, v.count, v.count]);
+    entries.sort((a,b) => b[1] - a[1]);
+  }
+  const labels = entries.map(e => e[0]);
+  const data = entries.map(e => e[1]);
+  const counts = entries.map(e => e[2]);
+  let bg = bgColor;
+  if (useGrapeColors) bg = labels.map(l => GRAPE_COLORS[l] || '#888');
+
+  const rowHeight = 22, minHeight = 240;
+  const chartHeight = Math.max(minHeight, labels.length * rowHeight + 40);
+  const canvas = document.getElementById(canvasId);
+  canvas.parentElement.style.height = chartHeight + 'px';
+
+  const tooltipCallback = metric === 'rating'
+    ? { label: ctx => `avg ${ctx.parsed.x.toFixed(2)} · ${counts[ctx.dataIndex]} wine${counts[ctx.dataIndex]===1?'':'s'}` }
+    : { label: ctx => `${ctx.parsed.x} wine${ctx.parsed.x===1?'':'s'}` };
+
+  new Chart(canvas, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: bg, borderRadius: 1, barThickness: 14 }]},
+    options: {
+      indexAxis: 'y', maintainAspectRatio: false, responsive: true,
+      plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks: tooltipCallback }},
+      scales: {
+        x: {
+          grid: { color: '#F0E8DB' }, beginAtZero: metric !== 'rating',
+          ticks: { color:'#8A837C', font:TICK_MONO, callback: metric==='rating' ? v=>v.toFixed(1) : v=>v },
+          suggestedMin: metric === 'rating' ? 8.8 : 0,
+          suggestedMax: metric === 'rating' ? 10 : undefined,
+        },
+        y: { grid:{display:false}, ticks:{color:'#55504A', font:{family:'DM Sans', size:11, weight:'500'}}},
+      }
     }
   });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// FILTERS
-// ═══════════════════════════════════════════════════════════════════════════
 function renderFilters(){
-  // Colors
+  const ratingCounts = {};
+  WINES.forEach(w => { const b = ratingBucketOf(w.rating); ratingCounts[b] = (ratingCounts[b]||0) + 1; });
+  document.getElementById('rating-chips').innerHTML =
+    RATING_BUCKETS.map(b =>
+      `<div class="chip rating-chip" data-rating="${b.key}">${b.label}<span class="chip-count">${ratingCounts[b.key]||0}</span></div>`
+    ).join('');
+
   const colors = ["red","white","sparkling","rosé"];
   const colorCounts = {};
   WINES.forEach(w => { colorCounts[w.color] = (colorCounts[w.color]||0) + 1; });
@@ -794,83 +599,63 @@ function renderFilters(){
       `<div class="chip" data-color="${c}"><span class="dot" style="background:${COLOR_FAMILIES[c]}"></span>${COLOR_LABELS[c]}<span class="chip-count">${colorCounts[c]}</span></div>`
     ).join('');
 
-  // Countries
   const ctryCounts = {};
   WINES.forEach(w => { ctryCounts[w.country] = (ctryCounts[w.country]||0) + 1; });
-  const countries = Object.keys(ctryCounts).sort((a,b)=>ctryCounts[b]-ctryCounts[a]);
   document.getElementById('country-chips').innerHTML =
-    countries.map(c => `<div class="chip" data-country="${c}">${c}<span class="chip-count">${ctryCounts[c]}</span></div>`).join('');
+    Object.keys(ctryCounts).sort((a,b)=>ctryCounts[b]-ctryCounts[a])
+      .map(c => `<div class="chip" data-country="${c}">${c}<span class="chip-count">${ctryCounts[c]}</span></div>`).join('');
 
-  // Grapes
   const grapeCounts = {};
   WINES.forEach(w => { grapeCounts[w.grape] = (grapeCounts[w.grape]||0) + 1; });
-  const grapes = Object.keys(grapeCounts).sort((a,b)=>grapeCounts[b]-grapeCounts[a] || a.localeCompare(b));
   document.getElementById('grape-chips').innerHTML =
-    grapes.map(g => `<div class="chip" data-grape="${g}"><span class="dot" style="background:${GRAPE_COLORS[g]||'#888'}"></span>${g}<span class="chip-count">${grapeCounts[g]}</span></div>`).join('');
+    Object.keys(grapeCounts).sort((a,b)=>grapeCounts[b]-grapeCounts[a] || a.localeCompare(b))
+      .map(g => `<div class="chip" data-grape="${g}"><span class="dot" style="background:${GRAPE_COLORS[g]||'#888'}"></span>${g}<span class="chip-count">${grapeCounts[g]}</span></div>`).join('');
 
-  // Wire up chips
+  document.querySelectorAll('#rating-chips .chip').forEach(el => el.addEventListener('click', () => {
+    const r = el.dataset.rating; if (state.ratings.has(r)) state.ratings.delete(r); else state.ratings.add(r);
+    applyFilters();
+  }));
   document.querySelectorAll('#color-chips .chip').forEach(el => el.addEventListener('click', () => {
-    const c = el.dataset.color;
-    if (state.colors.has(c)) state.colors.delete(c); else state.colors.add(c);
+    const c = el.dataset.color; if (state.colors.has(c)) state.colors.delete(c); else state.colors.add(c);
     applyFilters();
   }));
   document.querySelectorAll('#country-chips .chip').forEach(el => el.addEventListener('click', () => {
-    const c = el.dataset.country;
-    if (state.countries.has(c)) state.countries.delete(c); else state.countries.add(c);
+    const c = el.dataset.country; if (state.countries.has(c)) state.countries.delete(c); else state.countries.add(c);
     applyFilters();
   }));
   document.querySelectorAll('#grape-chips .chip').forEach(el => el.addEventListener('click', () => {
-    const g = el.dataset.grape;
-    if (state.grapes.has(g)) state.grapes.delete(g); else state.grapes.add(g);
+    const g = el.dataset.grape; if (state.grapes.has(g)) state.grapes.delete(g); else state.grapes.add(g);
     applyFilters();
   }));
 
-  // Search
   document.getElementById('search').addEventListener('input', e => {
-    state.search = e.target.value.toLowerCase().trim();
-    applyFilters();
+    state.search = e.target.value.toLowerCase().trim(); applyFilters();
   });
 
-  // Rating slider
-  const slider = document.getElementById('rating-slider');
-  const val = document.getElementById('rating-val');
-  slider.addEventListener('input', e => {
-    state.minRating = parseFloat(e.target.value);
-    val.textContent = state.minRating <= 8.9 ? 'any' : `≥ ${state.minRating.toFixed(1)}`;
-    applyFilters();
+  document.getElementById('btn-reset-atlas').addEventListener('click', resetAll);
+  document.getElementById('btn-reset-book').addEventListener('click', resetAll);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !document.getElementById('modal-backdrop').classList.contains('open')) resetAll();
   });
 
-  // Reset
-  document.getElementById('reset-btn').addEventListener('click', resetAll);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') resetAll(); });
-
-  // Table sort headers
   document.querySelectorAll('th[data-sort]').forEach(th => th.addEventListener('click', () => {
     const f = th.dataset.sort;
     if (state.sort.field === f) state.sort.dir = state.sort.dir === 'asc' ? 'desc' : 'asc';
-    else { state.sort.field = f; state.sort.dir = (f === 'rating' || f === 'date_tasted' || f === 'vintage') ? 'desc' : 'asc'; }
+    else { state.sort.field = f; state.sort.dir = (f==='rating'||f==='date_tasted'||f==='vintage') ? 'desc' : 'asc'; }
     renderTable();
   }));
 }
 
 function resetAll(){
-  state.search = "";
-  state.countries.clear();
-  state.grapes.clear();
-  state.colors.clear();
-  state.minRating = 8.9;
+  state.search = ""; state.countries.clear(); state.grapes.clear(); state.colors.clear(); state.ratings.clear();
   document.getElementById('search').value = "";
-  document.getElementById('rating-slider').value = 8.9;
-  document.getElementById('rating-val').textContent = 'any';
   applyFilters();
+  if (map) map.flyTo(EUROPE_VIEW.center, EUROPE_VIEW.zoom, { duration: 0.8 });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// APPLY FILTERS (the core pipeline: state → filtered wines → UI updates)
-// ═══════════════════════════════════════════════════════════════════════════
 function getFiltered(){
   return WINES.filter(w => {
-    if (state.minRating > 8.9 && w.rating < state.minRating) return false;
+    if (state.ratings.size){ if (!state.ratings.has(ratingBucketOf(w.rating))) return false; }
     if (state.colors.size && !state.colors.has(w.color)) return false;
     if (state.countries.size && !state.countries.has(w.country)) return false;
     if (state.grapes.size && !state.grapes.has(w.grape)) return false;
@@ -884,71 +669,58 @@ function getFiltered(){
 
 function applyFilters(){
   const filtered = getFiltered();
-
-  // Update chip active states
+  document.querySelectorAll('#rating-chips .chip').forEach(el => el.classList.toggle('active', state.ratings.has(el.dataset.rating)));
   document.querySelectorAll('#color-chips .chip').forEach(el => el.classList.toggle('active', state.colors.has(el.dataset.color)));
   document.querySelectorAll('#country-chips .chip').forEach(el => el.classList.toggle('active', state.countries.has(el.dataset.country)));
   document.querySelectorAll('#grape-chips .chip').forEach(el => el.classList.toggle('active', state.grapes.has(el.dataset.grape)));
 
-  // Reset bar
-  const anyFilter = state.search || state.countries.size || state.grapes.size || state.colors.size || state.minRating > 8.9;
+  const anyFilter = state.search || state.countries.size || state.grapes.size || state.colors.size || state.ratings.size;
   const bar = document.getElementById('reset-bar');
+  const bookBtn = document.getElementById('btn-reset-book');
   if (anyFilter){
     bar.style.display = 'flex';
+    bookBtn.style.display = '';
     const parts = [];
     if (state.search) parts.push(`"${state.search}"`);
+    if (state.ratings.size) parts.push(`${state.ratings.size} rating${state.ratings.size>1?'s':''}`);
     if (state.colors.size) parts.push(`${state.colors.size} colour${state.colors.size>1?'s':''}`);
     if (state.countries.size) parts.push(`${state.countries.size} countr${state.countries.size>1?'ies':'y'}`);
     if (state.grapes.size) parts.push(`${state.grapes.size} grape${state.grapes.size>1?'s':''}`);
-    if (state.minRating > 8.9) parts.push(`rating ≥ ${state.minRating.toFixed(1)}`);
     document.getElementById('filter-summary').textContent = `${filtered.length} of ${WINES.length} · ${parts.join(' · ')}`;
   } else {
-    bar.style.display = 'none';
+    bar.style.display = 'none'; bookBtn.style.display = 'none';
   }
-
   updateMap(filtered);
   renderTable();
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// MAP
-// ═══════════════════════════════════════════════════════════════════════════
 let map, clusterGroup, markers = {};
-
 function renderMap(){
-  map = L.map('map', { zoomControl: true, worldCopyJump: true }).setView([40, 10], 3);
+  map = L.map('map', { zoomControl: true, worldCopyJump: true }).setView(EUROPE_VIEW.center, EUROPE_VIEW.zoom);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
-    maxZoom: 18,
+    attribution:'&copy; <a href="https://carto.com/">CARTO</a>', maxZoom:18,
   }).addTo(map);
-
   clusterGroup = L.markerClusterGroup({
-    maxClusterRadius: 45,
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    iconCreateFunction: (cluster) => {
+    maxClusterRadius: 45, spiderfyOnMaxZoom: true, showCoverageOnHover: false,
+    iconCreateFunction: cluster => {
       const n = cluster.getChildCount();
       const size = n < 10 ? 30 : n < 30 ? 36 : 42;
       return L.divIcon({
         html: `<div style="background:#5B1A2D;color:#fff;border-radius:50%;width:${size}px;height:${size}px;line-height:${size}px;text-align:center;font-family:'DM Sans';font-weight:600;font-size:12px;border:2px solid #FFFDF8;box-shadow:0 2px 8px rgba(0,0,0,0.25)">${n}</div>`,
-        className: 'wine-cluster',
-        iconSize: [size, size],
+        className: 'wine-cluster', iconSize: [size, size],
       });
     },
   });
   map.addLayer(clusterGroup);
 
-  // Create markers for all wines (will be filtered in updateMap)
   WINES.forEach(w => {
-    const size = 10 + (w.rating - 8.9) * 5;   // 10 (8.9) → 15.5 (10.0)
+    const size = 10 + (w.rating - 8.9) * 5;
     const color = GRAPE_COLORS[w.grape] || '#888';
     const icon = L.divIcon({
       className: '',
       html: `<div class="wine-pin" style="width:${size}px;height:${size}px;background:${color}"></div>`,
-      iconSize: [size, size],
-      iconAnchor: [size/2, size/2],
+      iconSize: [size, size], iconAnchor: [size/2, size/2],
     });
-    // Small random jitter so overlapping pins at the same region don't hide each other
     const jitter = () => (Math.random() - 0.5) * 0.15;
     const m = L.marker([w.lat + jitter(), w.lng + jitter()], { icon });
     m.bindPopup(`<div class="popup">
@@ -967,35 +739,25 @@ function updateMap(filtered){
   filtered.forEach(w => { clusterGroup.addLayer(markers[w.id]); });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// TABLE
-// ═══════════════════════════════════════════════════════════════════════════
 function renderTable(){
   const filtered = getFiltered();
-
-  // Sort
   const { field, dir } = state.sort;
   filtered.sort((a,b) => {
     let av = a[field], bv = b[field];
-    if (field === 'rating') { av = +av; bv = +bv; }
-    else if (field === 'vintage') { av = av === 'NV' ? 0 : +av; bv = bv === 'NV' ? 0 : +bv; }
-    else { av = String(av || ''); bv = String(bv || ''); }
-    if (av < bv) return dir === 'asc' ? -1 : 1;
-    if (av > bv) return dir === 'asc' ? 1 : -1;
+    if (field==='rating'){av=+av;bv=+bv;}
+    else if (field==='vintage'){av=av==='NV'?0:+av;bv=bv==='NV'?0:+bv;}
+    else {av=String(av||'');bv=String(bv||'');}
+    if (av < bv) return dir==='asc' ? -1 : 1;
+    if (av > bv) return dir==='asc' ? 1 : -1;
     return 0;
   });
 
-  // Update sort indicators
   document.querySelectorAll('th[data-sort]').forEach(th => {
     th.classList.toggle('sorted', th.dataset.sort === field);
-    th.setAttribute('data-arrow', th.dataset.sort === field ? (dir === 'asc' ? '↑' : '↓') : '');
+    th.setAttribute('data-arrow', th.dataset.sort === field ? (dir==='asc'?'↑':'↓') : '');
   });
 
-  // Results count
-  document.getElementById('results-count').innerHTML =
-    `<strong>${filtered.length}</strong> of ${WINES.length} wine${WINES.length===1?'':'s'}`;
-
-  // Render rows
+  document.getElementById('results-count').innerHTML = `<strong>${filtered.length}</strong> of ${WINES.length} wine${WINES.length===1?'':'s'}`;
   const tbody = document.getElementById('wine-tbody');
   if (filtered.length === 0){
     tbody.innerHTML = `<tr><td colspan="8" class="empty-state"><em>No wines match the current filters.</em><br>Try broadening your search, or press <kbd>Esc</kbd> to reset.</td></tr>`;
@@ -1008,30 +770,272 @@ function renderTable(){
       <td class="vintage-cell">${w.vintage}</td>
       <td class="region-cell">${w.region}</td>
       <td class="country-cell">${w.country}</td>
-      <td><div class="grape-cell"><span class="dot" style="background:${GRAPE_COLORS[w.grape]||'#888'}"></span>${w.grape}</div></td>
+      <td class="grape-cell"><div class="grape-wrap"><span class="dot" style="background:${GRAPE_COLORS[w.grape]||'#888'}"></span>${w.grape}</div></td>
       <td class="rating-cell rating-col">${w.rating.toFixed(1)}</td>
       <td class="date-cell">${w.date_tasted || '—'}</td>
     </tr>
   `).join('');
 
-  // Row clicks → fly to pin
   tbody.querySelectorAll('tr[data-id]').forEach(tr => tr.addEventListener('click', () => {
     const wine = WINES.find(w => w.id === tr.dataset.id);
     if (wine){
       map.flyTo([wine.lat, wine.lng], 7, { duration: 0.8 });
       setTimeout(() => {
-        if (markers[wine.id]){
-          // If clustered, zoom in to reveal
-          clusterGroup.zoomToShowLayer(markers[wine.id], () => markers[wine.id].openPopup());
-        }
+        if (markers[wine.id]) clusterGroup.zoomToShowLayer(markers[wine.id], () => markers[wine.id].openPopup());
       }, 900);
+      document.querySelector('.section').scrollIntoView({ behavior:'smooth', block:'start' });
     }
   }));
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// BOOT
-// ═══════════════════════════════════════════════════════════════════════════
+function wireModal(){
+  const btn = document.getElementById('docs-btn'), menu = document.getElementById('docs-menu');
+  btn.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('open'); });
+  document.addEventListener('click', e => { if (!menu.contains(e.target) && e.target !== btn) menu.classList.remove('open'); });
+  menu.querySelectorAll('a[data-doc]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); menu.classList.remove('open'); openDoc(a.dataset.doc);
+  }));
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', e => {
+    if (e.target.id === 'modal-backdrop') closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.getElementById('modal-backdrop').classList.contains('open')) closeModal();
+  });
+}
+
+function openDoc(which){
+  const backdrop = document.getElementById('modal-backdrop');
+  const title = document.getElementById('modal-title');
+  const sub = document.getElementById('modal-sub');
+  const body = document.getElementById('modal-body');
+  const nav = document.getElementById('modal-nav');
+  nav.innerHTML = ''; nav.style.display = 'none'; body.scrollTop = 0;
+
+  if (which === 'about'){
+    title.innerHTML = 'About Codex <em>Vini</em>';
+    sub.textContent = 'project overview · rating scale · data structure';
+    body.innerHTML = renderAbout();
+  } else if (which === 'howto'){
+    title.innerHTML = 'How to <em>navigate</em> & update';
+    sub.textContent = 'using the atlas, adding new wines';
+    body.innerHTML = renderHowto();
+  } else if (which === 'grapes'){
+    title.innerHTML = '<em>Grape</em> varieties';
+    sub.textContent = '101 TasteRank profiles · Jure Skarabot, 2026';
+    body.innerHTML = renderGrapes();
+    renderGrapeNav();
+  } else if (which === 'regions'){
+    title.innerHTML = 'Regions <em>reference</em>';
+    sub.textContent = 'Soul of Wine · terroir profiles';
+    body.innerHTML = renderRegions();
+    renderRegionNav();
+  }
+  backdrop.classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-backdrop').classList.remove('open'); }
+function esc(s){ return String(s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function slugify(s){ return String(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+function renderAbout(){
+  return `
+    <h3>The project</h3>
+    <p><em>Codex Vini</em> — the book of wine — is a personal atlas of wines I have tasted, with my ratings attached. It is a reference tool, not a commercial site. The goal is to make the collection legible to myself: to see where I've tasted, what I've gravitated toward, and what remains unexplored.</p>
+    <p>This project is a sibling to <a href="https://jskarabot18.github.io/grand-cru-atlas/" target="_blank" rel="noreferrer">The Grand Cru Atlas</a>, which maps the world's classified vineyard sites. Where the Atlas is historical and aspirational, Codex Vini is personal and cumulative — a record of what has actually crossed my palate.</p>
+
+    <h3>Rating scale</h3>
+    <p>Wines are scored on a 0–10 scale with one decimal of precision. The practical range in this codex runs from <strong>8.9</strong> to <strong>10.0</strong>, because the collection records only wines I considered worth noting. Lower-rated wines are omitted.</p>
+    <p>Rough interpretive bands:</p>
+    <ul>
+      <li><strong>10.0</strong> — transcendent; among the finest wines I have ever tasted</li>
+      <li><strong>9.8–9.9</strong> — extraordinary; consistent, memorable, benchmark examples</li>
+      <li><strong>9.5–9.7</strong> — excellent; distinctive, complete wines with few flaws</li>
+      <li><strong>9.2–9.4</strong> — very good; well-made wines with real character</li>
+      <li><strong>below 9.0</strong> — noteworthy but with reservations</li>
+    </ul>
+    <p class="section-note">Ratings are subjective, contextual (bottle condition, food, mood), and drift over time as one's palate develops. They are a snapshot of an impression, not an objective verdict.</p>
+
+    <h3>Dynamic structure</h3>
+    <p>Every wine lives as a single JSON entry in <code>wines.json</code>, stored in the GitHub repository that powers this site. Adding a new wine means committing one new object to that file; the site updates automatically within a minute.</p>
+    <p>This design choice — a flat JSON file in a git repository, instead of a database or spreadsheet — is deliberate. Git provides version history and backup. There's no server to run, no database to maintain, no authentication to manage. The atlas is self-contained, portable, and will outlive most web stacks.</p>
+
+    <h3>Taxonomy</h3>
+    <p>Wines are categorized by a <strong>single grape/category field</strong>. Grape varieties (Cabernet Sauvignon, Nebbiolo, Riesling) and named-wine categories (Barolo, Brunello di Montalcino, Champagne, Bordeaux Blend) sit as peers. A Châteauneuf-du-Pape is tagged <em>Châteauneuf-du-Pape Blend</em>, not decomposed into its lead grape Grenache. A varietal Grenache from another region is tagged <em>Grenache</em>. This matches how sommeliers and retail actually organize wine — by the identity on the label.</p>
+    <p>The reference lists draw on:</p>
+    <ul>
+      <li>The <strong>101 TasteRank grape varieties</strong> (see Grape varieties document) — a personal distillation of the varieties worth knowing</li>
+      <li>The <strong>Soul of Wine region profiles</strong> (see Regions reference document) — terroir profiles covering the world's significant wine regions</li>
+    </ul>
+
+    <h3>Data</h3>
+    <p>The codex currently holds <strong>${WINES.length} wines</strong> across <strong>${new Set(WINES.map(w=>w.country)).size} countries</strong>, <strong>${new Set(WINES.map(w=>w.region)).size} regions</strong>, and <strong>${new Set(WINES.map(w=>w.grape)).size} grape categories</strong>. It grows by a few wines each week.</p>
+    <p>Every entry includes: producer, wine name, vintage, country, region, grape/category, wine colour, rating, date tasted, and geographic coordinates for map placement.</p>
+
+    <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
+  `;
+}
+
+function renderHowto(){
+  return `
+    <h3>Navigating the atlas</h3>
+    <h4>Filters</h4>
+    <p>The left panel offers five filter types: <strong>search</strong> (free text across producer, wine, region, country, grape), <strong>rating</strong> (pick one or more specific scores), <strong>colour</strong> (red, white, rosé, sparkling), <strong>country</strong>, and <strong>grape / category</strong>. Filters combine with <em>AND</em> logic — applying two filter types narrows the set to wines matching both.</p>
+    <p>Within each filter type, selections combine with <em>OR</em> logic. Clicking both "France" and "Italy" shows wines from either country. Clicking both "9.6" and "9.8" shows wines at either rating.</p>
+    <p>All filters affect both the map (The Atlas) and the sortable table (The Book) simultaneously.</p>
+
+    <h4>Map interactions</h4>
+    <ul>
+      <li><strong>Click a pin</strong> for a wine card with producer, vintage, rating, and tasting date</li>
+      <li><strong>Click a cluster</strong> (numbered circle) to zoom in and break it apart</li>
+      <li><strong>Scroll</strong> or use the +/- controls to zoom</li>
+      <li><strong>Click a row in The Book</strong> to fly the map to that wine's pin</li>
+    </ul>
+    <p>Pins are <strong>sized by rating</strong> (higher = larger) and <strong>coloured by grape</strong> (each grape has its own hue).</p>
+
+    <h4>Resetting</h4>
+    <p>Press <kbd>Esc</kbd> or click any <strong>Reset</strong> button to clear all filters. Resetting also returns the map to its default Europe view.</p>
+
+    <h3>Adding a new wine</h3>
+    <p>Three workflows are available. The form is quickest for single entries; direct editing is fine for bulk updates.</p>
+
+    <h4>Method 1 — The Add Wine form (recommended)</h4>
+    <ol>
+      <li>Open <a href="tools/add_wine.html">the Add Wine form</a></li>
+      <li>Fill in producer, wine name, vintage, country → region, grape / category, rating, date</li>
+      <li>Click <strong>Generate JSON</strong></li>
+      <li>Click <strong>Copy to clipboard</strong></li>
+      <li>Open <code>wines.json</code> on GitHub → click the pencil icon to edit</li>
+      <li>Paste the generated block at the top of the array, right after the opening <code>[</code></li>
+      <li>Click <strong>Commit changes</strong></li>
+      <li>Wait ~1 minute — the site updates automatically</li>
+    </ol>
+
+    <h4>Method 2 — Direct edit on GitHub</h4>
+    <p>Edit <code>wines.json</code> directly on github.com. Each entry is a JSON object of this shape:</p>
+    <p><code style="display:block;padding:10px;white-space:pre;background:#1C1A18;color:#E8E2D5;font-size:11px;overflow-x:auto">{
+  "id": "clos-des-papes-chateauneuf-du-pape-2007",
+  "producer": "Clos Des Papes",
+  "wine": "Châteauneuf-du-Pape",
+  "vintage": "2007",
+  "country": "France",
+  "region": "Southern Rhone",
+  "grape": "Châteauneuf-du-Pape Blend",
+  "color": "red",
+  "rating": 10.0,
+  "date_tasted": "2025-09-26",
+  "lat": 44.056,
+  "lng": 4.832
+}</code></p>
+
+    <h4>Method 3 — Local edit + push</h4>
+    <p>Clone the repo, edit <code>wines.json</code> in an editor, commit, and push.</p>
+
+    <h3>Adding a new region or grape</h3>
+    <p><strong>New region:</strong> edit <code>regions.json</code> with the region name as key and <code>{"lat": …, "lng": …}</code> as value. Use the region centroid — a point roughly in the middle of where the vineyards are. Then use that region name when adding a wine.</p>
+    <p><strong>New grape:</strong> if it's one of the 101 TasteRank varieties (see Grape varieties document), it's already recognised. For a new named blend or variety outside the 101, add it to <code>grapes.json</code> first.</p>
+
+    <h3>Tips for consistent data</h3>
+    <ul>
+      <li>Use the producer's canonical name as it appears on the label (<em>Château Margaux</em>, not <em>Margaux</em>)</li>
+      <li>Four-digit year for vintage; use <code>NV</code> for non-vintage wines (mostly Champagne)</li>
+      <li>Match existing country and region names exactly — the Add Wine form's dropdowns enforce this</li>
+      <li>For named blends (Bordeaux Blend, Barolo, Brunello, etc.) — use the named category rather than the lead grape, unless the wine is varietal</li>
+      <li>Borderline calls happen; pick the most common retail / wine-list classification</li>
+    </ul>
+  `;
+}
+
+function renderGrapes(){
+  if (!GRAPE_PROFILES.length){
+    return `<p><em>Grape profiles unavailable. Make sure <code>grape_profiles.json</code> is in the repo.</em></p>`;
+  }
+  const reds = GRAPE_PROFILES.filter(p => p.color === 'red');
+  const whites = GRAPE_PROFILES.filter(p => p.color === 'white');
+  let html = `<p class="section-note">One-paragraph profiles for 101 grape varieties. Drawn from the TasteRank Grape Variety Reference (April 2026). Organised red, then white, alphabetically within each group. Named-wine categories such as Barolo, Brunello, Bordeaux Blend, and Champagne are not single varieties and are not listed here — see the Regions reference and About documents for more on the taxonomy.</p>`;
+  html += `<h3 id="grapes-red">Red grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${reds.length})</span></h3>`;
+  html += `<div class="profile-list">`;
+  reds.forEach(p => {
+    html += `<div class="profile" id="grape-${slugify(p.name)}">
+      <div class="profile-name">${esc(p.name)}</div>
+      <div class="profile-origin">${esc(p.origin)}</div>
+      <div class="profile-text">${esc(p.profile)}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  html += `<h3 id="grapes-white">White grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${whites.length})</span></h3>`;
+  html += `<div class="profile-list">`;
+  whites.forEach(p => {
+    html += `<div class="profile" id="grape-${slugify(p.name)}">
+      <div class="profile-name">${esc(p.name)}</div>
+      <div class="profile-origin">${esc(p.origin)}</div>
+      <div class="profile-text">${esc(p.profile)}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function renderGrapeNav(){
+  const nav = document.getElementById('modal-nav');
+  const reds = GRAPE_PROFILES.filter(p=>p.color==='red').length;
+  const whites = GRAPE_PROFILES.filter(p=>p.color==='white').length;
+  nav.innerHTML = `<a data-jump="grapes-red">Reds (${reds})</a> <a data-jump="grapes-white">Whites (${whites})</a>`;
+  nav.style.display = 'flex';
+  nav.querySelectorAll('a[data-jump]').forEach(a => a.addEventListener('click', () => {
+    const target = document.getElementById(a.dataset.jump);
+    if (target) document.getElementById('modal-body').scrollTo({top: target.offsetTop - 12, behavior: 'smooth'});
+  }));
+}
+
+function renderRegions(){
+  if (!REGION_PROFILES.length){
+    return `<p><em>Region profiles unavailable. Make sure <code>region_profiles.json</code> is in the repo.</em></p>`;
+  }
+  let html = `<p class="section-note">Terroir profiles for ${REGION_PROFILES.length} of the world's significant wine regions — climate, soils, principal varieties, winemaking, and historical position. Drawn from the Soul of Wine region-profiles document. The profile list does not completely match the regions represented in the codex; profiles not yet written are noted when you encounter a wine from such a region.</p>`;
+  html += `<div class="profile-list">`;
+  const sorted = [...REGION_PROFILES].sort((a,b) => a.name.localeCompare(b.name));
+  sorted.forEach(p => {
+    html += `<div class="profile" id="region-${slugify(p.name)}">
+      <div class="profile-name">${esc(p.name)} <em>— ${esc(p.epithet || '')}</em></div>
+      <div class="profile-origin">${esc(p.identity || '')}</div>`;
+    const fields = ['Climate', 'Soils', 'Principal Varieties', 'Winemaking', 'Production Structure', 'Historical Position'];
+    fields.forEach(f => {
+      if (p[f]){
+        html += `<div class="profile-field">
+          <div class="profile-field-label">${f}</div>
+          <div class="profile-field-body">${esc(p[f])}</div>
+        </div>`;
+      }
+    });
+    html += `</div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function renderRegionNav(){
+  const nav = document.getElementById('modal-nav');
+  const sorted = [...REGION_PROFILES].sort((a,b) => a.name.localeCompare(b.name));
+  const buckets = [
+    { label: 'A–G', test: n => n <= 'H' },
+    { label: 'H–N', test: n => n >= 'H' && n <= 'O' },
+    { label: 'O–Z', test: n => n >= 'O' },
+  ];
+  const firsts = {};
+  buckets.forEach(b => {
+    const first = sorted.find(p => b.test(p.name[0].toUpperCase()));
+    if (first) firsts[b.label] = slugify(first.name);
+  });
+  nav.innerHTML = Object.entries(firsts).map(([lab, slug]) =>
+    `<a data-jump="region-${slug}">${lab}</a>`
+  ).join(' ');
+  nav.style.display = 'flex';
+  nav.querySelectorAll('a[data-jump]').forEach(a => a.addEventListener('click', () => {
+    const target = document.getElementById(a.dataset.jump);
+    if (target) document.getElementById('modal-body').scrollTo({top: target.offsetTop - 12, behavior: 'smooth'});
+  }));
+}
+
 loadData();
 </script>
 
