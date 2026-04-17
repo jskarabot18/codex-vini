@@ -221,6 +221,7 @@ footer a:hover{color:var(--bordeaux-dark)}
           <a data-doc="howto">How to navigate &amp; update<span class="docs-sub">adding new wines to the codex</span></a>
           <a data-doc="grapes">Grape varieties<span class="docs-sub">the 101 TasteRank reference</span></a>
           <a data-doc="regions">Regions reference<span class="docs-sub">terroir profiles from Soul of Wine</span></a>
+          <a data-doc="shrinkage">Bayesian shrinkage<span class="docs-sub">how the rating averages are adjusted</span></a>
         </div>
       </div>
     </div>
@@ -325,13 +326,13 @@ footer a:hover{color:var(--bordeaux-dark)}
 
   <div class="chart-card-tall">
     <h3>All regions</h3>
-    <div class="chart-sub">every region, colored by <span style="color:#5B1A2D;font-weight:600">Old World</span> / <span style="color:#A37B3D;font-weight:600">New World</span></div>
+    <div class="chart-sub"><span style="color:#5B1A2D;font-weight:600">Old World</span> in deep bordeaux · <span style="color:#8B3A4D;font-weight:600">New World</span> in lighter bordeaux</div>
     <div class="chart-wrap"><canvas id="chart-regions-all"></canvas></div>
   </div>
 
   <div class="chart-card-tall">
     <h3>All grape categories</h3>
-    <div class="chart-sub">every grape or named category, colored by <span style="color:#7B1E2D;font-weight:600">red</span> / <span style="color:#B8860B;font-weight:600">white</span> / <span style="color:#E5C04D;font-weight:600">sparkling</span> / <span style="color:#E89A9E;font-weight:600">rosé</span></div>
+    <div class="chart-sub"><span style="color:#5B1A2D;font-weight:600">Red grapes</span> in deep bordeaux · <span style="color:#8B3A4D;font-weight:600">white grapes</span> in lighter bordeaux · <span style="color:#C9A35B;font-weight:600">sparkling</span> · <span style="color:#C17A8A;font-weight:600">rosé</span></div>
     <div class="chart-wrap"><canvas id="chart-grapes-all"></canvas></div>
   </div>
 
@@ -460,19 +461,14 @@ function renderStats(){
 const CHART_FONT = { family: 'DM Sans', size: 11 };
 const TICK_MONO = { family: 'JetBrains Mono', size: 10 };
 
-// Per-chart palette — each bar chart has its own distinctive color
+// Per-chart palette — deep Bordeaux is the house color.
+// Split charts pair deep Bordeaux with a lighter matching tone in the same family.
 const CHART_COLORS = {
-  ratings:   '#5B1A2D',   // deep bordeaux
-  vintage:   '#6B2737',   // darker red-purple
-  countries: '#A37B3D',   // gold
-  regionsOld:'#5B1A2D',   // deep bordeaux (Old World)
-  regionsNew:'#A37B3D',   // gold (New World)
-  grapesRed:   '#7B1E2D', // red wine
-  grapesWhite: '#B8860B', // white wine (goldenrod)
-  grapesSparkling: '#E5C04D',
-  grapesRose:  '#E89A9E',
-  ratingCountry: '#3D5A5F', // teal-slate (distinct)
-  ratingGrape:   '#6B4A2D', // chocolate-brown (distinct)
+  bordeauxDeep:  '#5B1A2D',   // house color — all single-color bar charts
+  bordeauxLight: '#8B3A4D',   // lighter matching tone for secondary group in split charts
+  // For the grape chart (up to 4 splits) we extend with two more tones from the same family
+  rose:          '#C17A8A',   // pale rose — for rosé grapes
+  champagneGold: '#C9A35B',   // warm gold — for sparkling grapes (complements the bordeaux palette)
 };
 
 // Bayesian shrinkage: pulls averages toward the global mean using weight m=5
@@ -493,7 +489,7 @@ function renderCharts(){
   const rData = rLabels.map(l => ratings[l]);
   new Chart(document.getElementById('chart-ratings'), {
     type: 'bar',
-    data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: CHART_COLORS.ratings, borderRadius: 1 }]},
+    data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: CHART_COLORS.bordeauxDeep, borderRadius: 1 }]},
     options: {
       maintainAspectRatio: false, responsive: true,
       plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }}},
@@ -527,7 +523,7 @@ function renderCharts(){
     }
   });
 
-  // Vintage distribution
+  // Vintage distribution — deep Bordeaux
   const vc = {};
   WINES.forEach(w => { vc[w.vintage] = (vc[w.vintage]||0) + 1; });
   const vLabels = Object.keys(vc).sort((a,b) => {
@@ -536,7 +532,7 @@ function renderCharts(){
   });
   new Chart(document.getElementById('chart-vintage'), {
     type: 'bar',
-    data: { labels: vLabels, datasets: [{ data: vLabels.map(l=>vc[l]), backgroundColor: CHART_COLORS.vintage, borderRadius:1 }]},
+    data: { labels: vLabels, datasets: [{ data: vLabels.map(l=>vc[l]), backgroundColor: CHART_COLORS.bordeauxDeep, borderRadius:1 }]},
     options: {
       maintainAspectRatio: false, responsive: true,
       plugins: { legend:{display:false}, tooltip:{ backgroundColor:'#1C1A18', titleFont:CHART_FONT, bodyFont:CHART_FONT, padding:10, callbacks:{ label: ctx => `${ctx.parsed.y} wine${ctx.parsed.y===1?'':'s'}` }}},
@@ -550,29 +546,29 @@ function renderCharts(){
   // Global mean for shrinkage
   const globalMean = WINES.reduce((s,w)=>s+w.rating, 0) / WINES.length;
 
-  // All countries — single uniform color (gold)
-  renderCountBar('chart-countries-all', 'country', CHART_COLORS.countries);
+  // All countries — single uniform deep Bordeaux
+  renderCountBar('chart-countries-all', 'country', CHART_COLORS.bordeauxDeep);
 
-  // All regions — split by Old/New World
+  // All regions — Old World in deep Bordeaux, New World in lighter Bordeaux
   renderCountBar('chart-regions-all', 'region', null, (regionName) => {
     const cls = REGION_CLASS[regionName];
-    return (cls && cls.world === 'New World') ? CHART_COLORS.regionsNew : CHART_COLORS.regionsOld;
+    return (cls && cls.world === 'New World') ? CHART_COLORS.bordeauxLight : CHART_COLORS.bordeauxDeep;
   });
 
-  // All grape categories — split by red/white/sparkling/rosé
+  // All grape categories — reds in deep Bordeaux; whites in lighter Bordeaux; sparkling in warm gold; rosé in pale rose
   renderCountBar('chart-grapes-all', 'grape', null, (grapeName) => {
     const t = GRAPE_TYPE[grapeName];
-    if (t === 'white') return CHART_COLORS.grapesWhite;
-    if (t === 'sparkling') return CHART_COLORS.grapesSparkling;
-    if (t === 'rosé') return CHART_COLORS.grapesRose;
-    return CHART_COLORS.grapesRed;  // default red
+    if (t === 'white')     return CHART_COLORS.bordeauxLight;
+    if (t === 'sparkling') return CHART_COLORS.champagneGold;
+    if (t === 'rosé')      return CHART_COLORS.rose;
+    return CHART_COLORS.bordeauxDeep;  // red (default)
   });
 
-  // Avg rating by country — shrinkage-adjusted
-  renderShrinkageBar('chart-rating-country', 'country', globalMean, CHART_COLORS.ratingCountry);
+  // Avg rating by country — shrinkage-adjusted; single deep Bordeaux
+  renderShrinkageBar('chart-rating-country', 'country', globalMean, CHART_COLORS.bordeauxDeep);
 
-  // Avg rating by grape — shrinkage-adjusted
-  renderShrinkageBar('chart-rating-grape', 'grape', globalMean, CHART_COLORS.ratingGrape);
+  // Avg rating by grape — shrinkage-adjusted; single deep Bordeaux
+  renderShrinkageBar('chart-rating-grape', 'grape', globalMean, CHART_COLORS.bordeauxDeep);
 }
 
 // Count-based horizontal bar chart (no shrinkage; just sort by count)
@@ -904,6 +900,10 @@ function openDoc(which){
     sub.textContent = 'Soul of Wine · terroir profiles';
     body.innerHTML = renderRegions();
     renderRegionNav();
+  } else if (which === 'shrinkage'){
+    title.innerHTML = 'Bayesian <em>shrinkage</em>';
+    sub.textContent = 'how the rating averages are adjusted for sample size';
+    body.innerHTML = renderShrinkage();
   }
   backdrop.classList.add('open');
 }
@@ -946,10 +946,102 @@ function renderAbout(){
     <p>Every entry includes: producer, wine name, vintage, country, region, grape/category, wine colour, rating, date tasted, and geographic coordinates for map placement.</p>
 
     <h3>The rating-adjustment used in The Collection</h3>
-    <p>Two charts in The Collection — average rating by country, and average rating by grape — use a statistical adjustment called <strong>Bayesian shrinkage</strong>. The problem it solves: if a country has only one wine rated 10.0, its naïve average is 10.0, and it looks better than a country with 30 wines averaging 9.5 — even though we know almost nothing about the first and a lot about the second.</p>
-    <p>The fix is to pull every average toward the global mean (currently ${(WINES.reduce((s,w)=>s+w.rating,0) / WINES.length).toFixed(2)}) by a weight <code>m = 5</code>. A country with one wine gets pulled most of the way to the mean; a country with thirty wines barely moves. The formula is:</p>
-    <p><code style="display:block;padding:10px;background:#F5E8EB;color:#5B1A2D;font-size:12px;white-space:pre-wrap">adjusted = (n · country_avg + m · global_avg) / (n + m)</code></p>
-    <p>This is the same technique behind the IMDb Top 250. The raw averages and sample counts are still shown in each tooltip — hover any bar to see them.</p>
+    <p>Two charts in The Collection — average rating by country, and average rating by grape — use a statistical adjustment called <strong>Bayesian shrinkage</strong>. In short: it prevents a country with one lucky 10.0 from outranking a country with thirty consistent 9.5s. For the full explanation, see the <strong>Bayesian shrinkage</strong> document in this same menu.</p>
+
+    <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOC CONTENT — Bayesian shrinkage
+// ═══════════════════════════════════════════════════════════════════════════
+function renderShrinkage(){
+  // Compute live examples from current data for the walkthrough
+  const globalMean = WINES.reduce((s,w)=>s+w.rating, 0) / WINES.length;
+
+  // Grab a few representative countries to show in the example table
+  const byCountry = {};
+  WINES.forEach(w => { (byCountry[w.country] ||= []).push(w.rating); });
+  const exampleCountries = Object.entries(byCountry).map(([c, arr]) => {
+    const { raw, adj, n } = shrinkageAdjust(arr, globalMean);
+    return { c, n, raw, adj };
+  }).sort((a,b) => b.n - a.n);
+
+  // Pick a few illustrative ones: largest, medium, and a couple of singletons
+  const showRows = [
+    ...exampleCountries.slice(0, 3),        // top 3 by count
+    ...exampleCountries.filter(r => r.n <= 2).slice(0, 3),  // small samples
+  ];
+
+  return `
+    <h3>What this document is about</h3>
+    <p>Two charts in <em>The Collection</em> show <strong>average rating by country</strong> and <strong>average rating by grape</strong>. If I computed these averages the naïve way — just summing ratings and dividing by count — the charts would be misleading. This document explains the fix.</p>
+
+    <h3>The problem: one wine, one great score</h3>
+    <p>Suppose Greece appears in the codex exactly once: a 9.2-rated wine. Suppose France appears thirty-two times, averaging 9.59. A raw-average chart would rank Greece below France — fine so far. But now suppose the single Greek wine had been a 9.9. Greece would leap to the top of the chart, ahead of every other country, based on <em>one</em> tasting.</p>
+    <p>This is the classic <strong>small-sample problem</strong>. A single data point can look dramatic but tells you almost nothing. IMDb's Top 250 list has the same issue: without adjustment, a movie with three 10-star ratings would rank above <em>The Godfather</em>.</p>
+
+    <h3>The intuition</h3>
+    <p>Here is the trick, phrased as a question: <em>how much do you believe one rating?</em> If you have one tasting of a country, your best guess for that country's "true" average is probably not that single score — it is probably somewhere between that score and your overall baseline. You don't have enough evidence yet to commit. If you have thirty tastings, though, your best guess is very close to the observed average. The evidence is strong.</p>
+    <p>Bayesian shrinkage turns this intuition into a formula. Every country's average gets "pulled" toward the global mean, and the strength of the pull depends on how little data you have.</p>
+
+    <h3>The formula</h3>
+    <p><code style="display:block;padding:12px;background:#F5E8EB;color:#5B1A2D;font-size:12px;white-space:pre-wrap">adjusted = (n × country_avg + m × global_avg) / (n + m)</code></p>
+    <p>Where:</p>
+    <ul>
+      <li><strong>n</strong> — number of wines tasted from that country</li>
+      <li><strong>country_avg</strong> — the raw average rating for that country</li>
+      <li><strong>global_avg</strong> — the overall average across all wines in the codex (currently <strong>${globalMean.toFixed(2)}</strong>)</li>
+      <li><strong>m</strong> — a weight constant that controls how aggressive the pull is (I use <strong>m = 5</strong>)</li>
+    </ul>
+    <p>Read it as a weighted average. You're blending the country's own data (with weight n) and the global mean (with weight m). When n is tiny relative to m, the global mean dominates. When n is large, the country's own data dominates.</p>
+
+    <h3>Why <em>m = 5</em>?</h3>
+    <p>The choice of <em>m</em> is a judgment call. A small m means "I'll trust even small samples;" a large m means "I want a lot of evidence before I believe your average." Picking <em>m</em> close to the typical sample size is a common heuristic — countries with <em>m</em> tastings will sit roughly halfway between their own average and the global one. In this codex, most countries have between three and thirty tastings, so <strong>m = 5</strong> is a reasonable middle ground. If the collection grows substantially, <em>m</em> could grow with it.</p>
+
+    <h3>What it does in practice</h3>
+    <p>Here is how it plays out on the current country-level data (global mean <strong>${globalMean.toFixed(2)}</strong>, m = 5):</p>
+    <p><table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:13px">
+      <thead>
+        <tr style="border-bottom:1px solid var(--rule);background:var(--paper)">
+          <th style="text-align:left;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">Country</th>
+          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">n</th>
+          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">raw avg</th>
+          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">adjusted</th>
+          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">shift</th>
+        </tr>
+      </thead>
+      <tbody>
+      ${showRows.map(r => {
+        const shift = r.adj - r.raw;
+        const shiftStr = (shift >= 0 ? '+' : '') + shift.toFixed(2);
+        return `<tr style="border-bottom:1px solid var(--rule-soft)">
+          <td style="padding:8px 10px;font-family:var(--serif);font-size:14px">${esc(r.c)}</td>
+          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--ink-soft)">${r.n}</td>
+          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--ink-soft)">${r.raw.toFixed(2)}</td>
+          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--bordeaux);font-weight:600">${r.adj.toFixed(2)}</td>
+          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:11px;color:${Math.abs(shift)>0.1?'var(--bordeaux)':'var(--ink-faint)'}">${shiftStr}</td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table></p>
+    <p>Countries with many tastings barely move — the adjustment respects their established average. Countries with one or two tastings get pulled decisively toward the global mean, because one or two wines is not enough evidence for a strong claim.</p>
+
+    <h3>What this is <em>not</em></h3>
+    <p>Shrinkage is not a correction for quality, difficulty, or context. It is purely a correction for <strong>sample size</strong>. It does not know that Italian wines are generally cheaper than Californian ones, or that my mood on a given tasting affects the score. It only says: "if you don't have much data, don't trust the average too strongly."</p>
+    <p>It is also not the only approach. Alternatives include confidence intervals (showing each bar with an uncertainty range), minimum-sample floors (only show countries with at least N wines), or full Bayesian models with priors estimated from the data itself. I chose shrinkage because it produces a single clean ranking, which is what a bar chart wants, while honestly handling the small-sample problem.</p>
+
+    <h3>Seeing both numbers</h3>
+    <p>Every bar in the two adjusted charts is sortable by the adjusted average. Hover any bar for a tooltip showing:</p>
+    <ul>
+      <li>The <strong>adjusted</strong> average (used for the bar length)</li>
+      <li>The <strong>raw</strong> average and sample size <em>n</em></li>
+    </ul>
+    <p>This lets you see both the "fair" ranking and the underlying data. A Greek wine at raw 9.2 with n=1 will show adjusted ≈ 9.46; you'll see both numbers and understand why it sits where it sits.</p>
+
+    <h3>Further reading</h3>
+    <p>The technique goes by several names: <em>Bayesian shrinkage</em>, <em>empirical Bayes</em>, <em>regression to the mean</em>, <em>James–Stein estimation</em>, or just <em>smoothing</em>. IMDb uses it (they call it the "weighted rating"). Baseball analysts use it for batting averages. Epidemiologists use it for rare-disease rates by region. The basic formula stays the same: every local estimate gets pulled toward a global estimate by an amount proportional to how little data you have.</p>
+    <p>For a deeper treatment, see David Robinson's book <em>Introduction to Empirical Bayes</em> (freely available online), or search for "Stein's paradox" for the classical statistics version of the same idea.</p>
 
     <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
   `;
