@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Vini — Add Wine</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bordeaux:#5B1A2D;
+  --bordeaux-dark:#3A1019;
+  --bordeaux-tint:#F5E8EB;
+  --ink:#1C1A18;
+  --ink-soft:#55504A;
+  --ink-faint:#8A837C;
+  --paper:#FAF6EF;
+  --paper-raised:#FFFDF8;
+  --rule:#E6DED1;
+  --rule-soft:#F0E8DB;
+  --ok:#2E7D5B;
+  --warn:#A37B3D;
+  --err:#8B2020;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background-image:radial-gradient(circle at 20% 30%,rgba(163,123,61,0.015) 0%,transparent 40%),radial-gradient(circle at 80% 70%,rgba(91,26,45,0.012) 0%,transparent 40%);opacity:0.6}
+
+#app{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:40px 32px 60px}
+
+header{padding-bottom:24px;border-bottom:1px solid var(--rule);margin-bottom:36px}
+.title-row{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap}
+h1{font-family:var(--serif);font-size:42px;font-weight:500;color:var(--bordeaux);letter-spacing:-0.02em;line-height:1}
+h1 em{font-style:italic;font-weight:400}
+.subtitle{font-size:12px;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-top:8px}
+.back{font-size:12px;color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted var(--ink-soft)}
+.back:hover{color:var(--bordeaux);border-color:var(--bordeaux)}
+
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+@media(max-width:850px){.layout{grid-template-columns:1fr}}
+
+/* Form side */
+.form-panel{background:var(--paper-raised);border:1px solid var(--rule);padding:28px 32px}
+.form-panel h2{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.form-panel h2 em{font-style:italic;color:var(--bordeaux)}
+.form-panel .section-sub{font-size:12px;color:var(--ink-faint);font-style:italic;margin-bottom:24px}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;margin-bottom:6px}
+.field .req{color:var(--bordeaux);margin-left:3px}
+.field input,.field select,.field textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--rule);background:var(--paper);
+  font-family:var(--sans);font-size:13px;color:var(--ink);outline:none;transition:border-color .12s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--bordeaux)}
+.field input::placeholder,.field textarea::placeholder{color:var(--ink-faint)}
+.field .hint{font-size:11px;color:var(--ink-faint);margin-top:4px;font-style:italic}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.actions{display:flex;gap:10px;margin-top:26px;padding-top:20px;border-top:1px solid var(--rule-soft)}
+button{
+  font-family:var(--sans);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;
+  padding:10px 18px;border:1px solid var(--bordeaux);cursor:pointer;transition:all .12s;
+}
+button.primary{background:var(--bordeaux);color:#fff}
+button.primary:hover{background:var(--bordeaux-dark)}
+button.ghost{background:transparent;color:var(--bordeaux)}
+button.ghost:hover{background:var(--bordeaux-tint)}
+
+/* Output side */
+.output-panel{background:var(--paper-raised);border:1px solid var(--rule);padding:28px 32px;position:sticky;top:20px}
+.output-panel h2{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.output-panel h2 em{font-style:italic;color:var(--bordeaux)}
+.output-panel .section-sub{font-size:12px;color:var(--ink-faint);font-style:italic;margin-bottom:20px}
+
+.status{padding:10px 14px;margin-bottom:16px;font-size:12px;display:none;border-left:3px solid}
+.status.ok{display:block;background:rgba(46,125,91,0.08);color:var(--ok);border-color:var(--ok)}
+.status.warn{display:block;background:rgba(163,123,61,0.08);color:var(--warn);border-color:var(--warn)}
+.status.err{display:block;background:rgba(139,32,32,0.08);color:var(--err);border-color:var(--err)}
+
+.output-block{background:var(--ink);color:#E8E2D5;padding:18px 20px;font-family:var(--mono);font-size:11.5px;line-height:1.6;border:1px solid var(--rule);overflow-x:auto;white-space:pre;max-height:520px;overflow-y:auto;margin-bottom:12px}
+.output-block.empty{color:var(--ink-faint);font-family:var(--serif);font-size:14px;font-style:italic;padding:40px 20px;text-align:center;background:var(--paper);white-space:normal}
+
+.instructions{font-size:12px;color:var(--ink-soft);line-height:1.6;margin-top:10px;padding:12px 16px;background:var(--bordeaux-tint);border-left:3px solid var(--bordeaux)}
+.instructions strong{color:var(--bordeaux);font-weight:600}
+.instructions code{font-family:var(--mono);font-size:11px;background:rgba(91,26,45,0.1);padding:1px 5px}
+
+.help-panel{margin-top:28px;padding:20px 24px;background:var(--paper-raised);border:1px solid var(--rule);font-size:12px;color:var(--ink-soft);line-height:1.7}
+.help-panel h3{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.help-panel p{margin-bottom:10px}
+.help-panel p:last-child{margin-bottom:0}
+.help-panel code{font-family:var(--mono);font-size:11px;background:var(--bordeaux-tint);padding:1px 5px;color:var(--bordeaux)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header>
+  <div class="title-row">
+    <div>
+      <h1>Add a <em>wine</em></h1>
+      <div class="subtitle">Codex Vini · data entry</div>
+    </div>
+    <a href="../index.html" class="back">← back to the atlas</a>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- FORM -->
+  <div class="form-panel">
+    <h2>New <em>entry</em></h2>
+    <div class="section-sub">fields marked * are required</div>
+
+    <div class="field">
+      <label>Producer<span class="req">*</span></label>
+      <input id="f-producer" type="text" placeholder="e.g. Domaine Leflaive"/>
+    </div>
+
+    <div class="field">
+      <label>Wine name<span class="req">*</span></label>
+      <input id="f-wine" type="text" placeholder="e.g. Puligny-Montrachet 1er Cru Clavoillon"/>
+      <div class="hint">Full wine name as written on the label</div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Vintage<span class="req">*</span></label>
+        <input id="f-vintage" type="text" placeholder="e.g. 2022 or NV" maxlength="4"/>
+      </div>
+      <div class="field">
+        <label>Rating<span class="req">*</span></label>
+        <input id="f-rating" type="number" min="0" max="10" step="0.1" placeholder="9.5"/>
+        <div class="hint">One decimal, 0.0–10.0</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Country<span class="req">*</span></label>
+        <select id="f-country">
+          <option value="">— select —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Region<span class="req">*</span></label>
+        <select id="f-region">
+          <option value="">— select country first —</option>
+        </select>
+        <div class="hint">Pin location is set by region</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Grape / category<span class="req">*</span></label>
+      <select id="f-grape">
+        <option value="">— select —</option>
+      </select>
+      <div class="hint">101 TasteRank varieties + named blends (Bordeaux Blend, Barolo, etc.)</div>
+    </div>
+
+    <div class="field">
+      <label>Wine colour / style<span class="req">*</span></label>
+      <select id="f-color">
+        <option value="">— auto-detect from grape —</option>
+        <option value="red">Red</option>
+        <option value="white">White</option>
+        <option value="rosé">Rosé</option>
+        <option value="sparkling">Sparkling</option>
+      </select>
+      <div class="hint">Auto-detected from the grape choice above; override if needed (e.g. Xarel·lo used in Cava is sparkling)</div>
+    </div>
+
+    <div class="field">
+      <label>Date tasted</label>
+      <input id="f-date" type="date"/>
+      <div class="hint">Defaults to today</div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="btn-generate">Generate JSON</button>
+      <button class="ghost" id="btn-clear">Clear form</button>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div>
+    <div class="output-panel">
+      <h2>Generated <em>entry</em></h2>
+      <div class="section-sub">paste this into wines.json</div>
+
+      <div id="status" class="status"></div>
+
+      <div id="output-block" class="output-block empty">Fill in the form and press <strong>Generate JSON</strong>.</div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="primary" id="btn-copy" style="display:none">Copy to clipboard</button>
+        <button class="ghost" id="btn-another" style="display:none">Add another</button>
+      </div>
+
+      <div class="instructions" id="instructions" style="display:none">
+        <strong>Next steps:</strong><br>
+        1. Copy the JSON above<br>
+        2. Open <code>wines.json</code> in the repo<br>
+        3. Paste the entry at the start of the array (inside the opening <code>[</code>)<br>
+        4. Add a comma after the pasted block if others follow<br>
+        5. Commit and push — GitHub Pages will redeploy automatically
+      </div>
+    </div>
+
+    <div class="help-panel">
+      <h3>Tips</h3>
+      <p><strong>Producer name:</strong> use the form on the label (e.g. "Château Margaux" not "Margaux"). The ID is auto-generated as a URL-safe slug of producer + wine + vintage.</p>
+      <p><strong>Vintage:</strong> four-digit year, or <code>NV</code> for non-vintage (mostly Champagne).</p>
+      <p><strong>Adding a new region or grape?</strong> The dropdowns only show regions and grapes already in the codex. To add a new one, edit <code>regions.json</code> (add lat/lng) or <code>grapes.json</code> first, then return here.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ═══════════════════════════════════════════════════════════════════════════
+let REGIONS = {};
+let GRAPES = { tasterank_reds: [], tasterank_whites: [], named_blends: {}, additional_varieties: {} };
+let EXISTING_WINES = [];
+
+const COLOR_BY_LIST = {
+  red: new Set(),
+  white: new Set(),
+  sparkling: new Set(),
+  rosé: new Set(),
+};
+
+async function loadData(){
+  try {
+    const [regResp, grResp, winesResp] = await Promise.all([
+      fetch('../regions.json'),
+      fetch('../grapes.json'),
+      fetch('../wines.json'),
+    ]);
+    REGIONS = await regResp.json();
+    GRAPES = await grResp.json();
+    EXISTING_WINES = await winesResp.json();
+  } catch(e) {
+    showStatus('err', 'Could not load regions.json / grapes.json / wines.json. Make sure this file is served from the tools/ folder of the repo.');
+    console.error(e);
+    return;
+  }
+  populateColorIndex();
+  populateDropdowns();
+  document.getElementById('f-date').valueAsDate = new Date();
+}
+
+function populateColorIndex(){
+  GRAPES.tasterank_reds.forEach(g => COLOR_BY_LIST.red.add(g));
+  GRAPES.tasterank_whites.forEach(g => COLOR_BY_LIST.white.add(g));
+  for (const [name, meta] of Object.entries(GRAPES.named_blends || {})){
+    COLOR_BY_LIST[meta.color]?.add(name);
+  }
+  for (const [name, meta] of Object.entries(GRAPES.additional_varieties || {})){
+    COLOR_BY_LIST[meta.color]?.add(name);
+  }
+}
+
+function populateDropdowns(){
+  // Countries — from regions, sorted
+  const countries = new Set();
+  for (const [region, meta] of Object.entries(REGIONS)){
+    // REGIONS doesn't have country; infer from existing wines
+  }
+  // Better: infer countries from existing wines data
+  const countriesFromData = new Set(EXISTING_WINES.map(w => w.country));
+  const sortedCountries = [...countriesFromData].sort();
+  const countrySelect = document.getElementById('f-country');
+  sortedCountries.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    countrySelect.appendChild(opt);
+  });
+
+  // Country → region mapping from existing wines
+  window.COUNTRY_REGIONS = {};
+  EXISTING_WINES.forEach(w => {
+    if (!COUNTRY_REGIONS[w.country]) COUNTRY_REGIONS[w.country] = new Set();
+    COUNTRY_REGIONS[w.country].add(w.region);
+  });
+
+  // When country changes, repopulate region dropdown
+  countrySelect.addEventListener('change', () => {
+    const regionSelect = document.getElementById('f-region');
+    regionSelect.innerHTML = '<option value="">— select —</option>';
+    const regions = COUNTRY_REGIONS[countrySelect.value];
+    if (!regions) return;
+    [...regions].sort().forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r; opt.textContent = r;
+      regionSelect.appendChild(opt);
+    });
+  });
+
+  // Grapes — organized: blends first, then TasteRank reds, then whites, then additional
+  const grapeSelect = document.getElementById('f-grape');
+  const blendGroup = document.createElement('optgroup');
+  blendGroup.label = 'Named blends & styles';
+  Object.keys(GRAPES.named_blends || {}).sort().forEach(g => {
+    const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
+    blendGroup.appendChild(opt);
+  });
+  grapeSelect.appendChild(blendGroup);
+
+  const redGroup = document.createElement('optgroup');
+  redGroup.label = 'Red varieties';
+  [...GRAPES.tasterank_reds].sort().forEach(g => {
+    const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
+    redGroup.appendChild(opt);
+  });
+  grapeSelect.appendChild(redGroup);
+
+  const whiteGroup = document.createElement('optgroup');
+  whiteGroup.label = 'White varieties';
+  [...GRAPES.tasterank_whites].sort().forEach(g => {
+    const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
+    whiteGroup.appendChild(opt);
+  });
+  grapeSelect.appendChild(whiteGroup);
+
+  if (GRAPES.additional_varieties && Object.keys(GRAPES.additional_varieties).length){
+    const addGroup = document.createElement('optgroup');
+    addGroup.label = 'Additional varieties';
+    Object.keys(GRAPES.additional_varieties).sort().forEach(g => {
+      const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
+      addGroup.appendChild(opt);
+    });
+    grapeSelect.appendChild(addGroup);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+function slug(text){
+  return String(text)
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function inferColor(grape){
+  if (COLOR_BY_LIST.red.has(grape)) return 'red';
+  if (COLOR_BY_LIST.white.has(grape)) return 'white';
+  if (COLOR_BY_LIST.sparkling.has(grape)) return 'sparkling';
+  if (COLOR_BY_LIST.rosé.has(grape)) return 'rosé';
+  return null;
+}
+
+function showStatus(kind, msg){
+  const s = document.getElementById('status');
+  s.className = `status ${kind}`;
+  s.textContent = msg;
+}
+function clearStatus(){
+  document.getElementById('status').className = 'status';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GENERATE
+// ═══════════════════════════════════════════════════════════════════════════
+document.getElementById('btn-generate').addEventListener('click', () => {
+  clearStatus();
+
+  const producer = document.getElementById('f-producer').value.trim();
+  const wine = document.getElementById('f-wine').value.trim();
+  const vintage = document.getElementById('f-vintage').value.trim().toUpperCase();
+  const rating = parseFloat(document.getElementById('f-rating').value);
+  const country = document.getElementById('f-country').value;
+  const region = document.getElementById('f-region').value;
+  const grape = document.getElementById('f-grape').value;
+  const colorOverride = document.getElementById('f-color').value;
+  const date = document.getElementById('f-date').value;
+
+  // Validate
+  const missing = [];
+  if (!producer) missing.push('Producer');
+  if (!wine) missing.push('Wine name');
+  if (!vintage) missing.push('Vintage');
+  if (isNaN(rating)) missing.push('Rating');
+  if (!country) missing.push('Country');
+  if (!region) missing.push('Region');
+  if (!grape) missing.push('Grape');
+  if (missing.length){
+    showStatus('err', `Missing required fields: ${missing.join(', ')}`);
+    return;
+  }
+  if (rating < 0 || rating > 10){
+    showStatus('err', 'Rating must be between 0 and 10');
+    return;
+  }
+  if (vintage !== 'NV' && !/^(19|20)\d{2}$/.test(vintage)){
+    showStatus('err', 'Vintage must be 4-digit year or NV');
+    return;
+  }
+  if (!REGIONS[region]){
+    showStatus('err', `No coordinates for region "${region}". Add it to regions.json first.`);
+    return;
+  }
+
+  // Infer color
+  const color = colorOverride || inferColor(grape);
+  if (!color){
+    showStatus('err', `Could not determine wine colour for grape "${grape}". Please select a colour manually.`);
+    return;
+  }
+
+  // Build the object
+  const id = `${slug(producer)}-${slug(wine)}-${slug(vintage)}`;
+  const coords = REGIONS[region];
+  const obj = {
+    id,
+    producer,
+    wine,
+    vintage,
+    country,
+    region,
+    grape,
+    color,
+    rating: Math.round(rating * 10) / 10,
+    date_tasted: date || new Date().toISOString().slice(0, 10),
+    lat: coords.lat,
+    lng: coords.lng,
+  };
+
+  // Duplicate check
+  const existingIds = new Set(EXISTING_WINES.map(w => w.id));
+  if (existingIds.has(id)){
+    showStatus('warn', `⚠ ID "${id}" already exists in wines.json. This might be a duplicate — double-check before pasting.`);
+  } else {
+    showStatus('ok', `✓ Generated. ID: ${id}`);
+  }
+
+  // Render JSON (with trailing comma for easy paste)
+  const pretty = JSON.stringify(obj, null, 2) + ',';
+  const out = document.getElementById('output-block');
+  out.className = 'output-block';
+  out.textContent = pretty;
+
+  document.getElementById('btn-copy').style.display = '';
+  document.getElementById('btn-another').style.display = '';
+  document.getElementById('instructions').style.display = '';
+});
+
+document.getElementById('btn-copy').addEventListener('click', async () => {
+  const text = document.getElementById('output-block').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById('btn-copy');
+    const old = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(() => btn.textContent = old, 1500);
+  } catch(e) {
+    showStatus('err', 'Could not copy. Select the text manually.');
+  }
+});
+
+document.getElementById('btn-another').addEventListener('click', () => {
+  ['f-producer','f-wine','f-vintage','f-rating','f-grape'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-color').value = '';
+  document.getElementById('output-block').className = 'output-block empty';
+  document.getElementById('output-block').textContent = 'Fill in the form and press Generate JSON.';
+  document.getElementById('btn-copy').style.display = 'none';
+  document.getElementById('btn-another').style.display = 'none';
+  document.getElementById('instructions').style.display = 'none';
+  clearStatus();
+  document.getElementById('f-producer').focus();
+});
+
+document.getElementById('btn-clear').addEventListener('click', () => {
+  document.querySelectorAll('input, select').forEach(el => el.value = '');
+  document.getElementById('f-date').valueAsDate = new Date();
+  document.getElementById('output-block').className = 'output-block empty';
+  document.getElementById('output-block').textContent = 'Fill in the form and press Generate JSON.';
+  document.getElementById('btn-copy').style.display = 'none';
+  document.getElementById('btn-another').style.display = 'none';
+  document.getElementById('instructions').style.display = 'none';
+  clearStatus();
+});
+
+// Auto-fill color when grape changes
+document.getElementById('f-grape').addEventListener('change', e => {
+  const inferred = inferColor(e.target.value);
+  if (inferred && !document.getElementById('f-color').value){
+    // Update hint only, don't force override
+    const hintEl = document.querySelector('#f-color + .hint');
+    hintEl.textContent = `Will auto-set to "${inferred}" unless you override`;
+  }
+});
+
+loadData();
+</script>
+
+</body>
+</html>
