@@ -243,9 +243,9 @@ const COLOR_BY_LIST = {
 async function loadData(){
   try {
     const [regResp, grResp, winesResp] = await Promise.all([
-      fetch('../regions.json'),
-      fetch('../grapes.json'),
-      fetch('../wines.json'),
+      fetch('regions.json'),
+      fetch('grapes.json'),
+      fetch('wines.json'),
     ]);
     REGIONS = await regResp.json();
     GRAPES = await grResp.json();
