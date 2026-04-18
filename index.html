@@ -37,16 +37,29 @@ h1.title em{font-style:italic;font-weight:400}
 .meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .author{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft)}
 
-.docs-wrap{position:relative}
-.docs-btn{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--bordeaux);background:transparent;color:var(--bordeaux);cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:8px}
-.docs-btn:hover{background:var(--bordeaux);color:#fff}
-.docs-btn .chev{font-size:10px}
-.docs-menu{position:absolute;top:calc(100% + 4px);right:0;z-index:1000;min-width:260px;background:var(--paper-raised);border:1px solid var(--rule);box-shadow:0 4px 20px rgba(0,0,0,0.08);padding:6px 0;display:none}
-.docs-menu.open{display:block}
-.docs-menu a{display:block;padding:11px 18px;font-size:13px;color:var(--ink);text-decoration:none;cursor:pointer;border-bottom:1px solid var(--rule-soft);transition:background .1s}
-.docs-menu a:last-child{border-bottom:none}
-.docs-menu a:hover{background:var(--bordeaux-tint);color:var(--bordeaux)}
-.docs-menu a .docs-sub{display:block;font-size:11px;color:var(--ink-faint);margin-top:2px;font-style:italic}
+.docs-row{
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid var(--rule-soft);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.docs-label{
+  font-family:var(--sans);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  font-weight:600;color:var(--ink-faint);margin-right:4px;
+}
+.docs-pill{
+  display:inline-block;font-family:var(--sans);font-size:11.5px;font-weight:500;
+  padding:6px 14px;border:1px solid var(--bordeaux);color:var(--bordeaux);
+  text-decoration:none;transition:all .12s;background:transparent;
+  letter-spacing:0.02em;
+}
+.docs-pill:hover{background:var(--bordeaux);color:#fff}
+.docs-pill:focus{outline:1px dotted var(--bordeaux);outline-offset:3px}
+@media(max-width:700px){
+  .docs-row{gap:6px}
+  .docs-pill{padding:5px 10px;font-size:11px}
+  .docs-label{width:100%;margin-bottom:4px}
+}
 
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);margin:36px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 .stat{background:var(--paper);padding:22px 24px;display:flex;flex-direction:column;gap:4px}
@@ -140,52 +153,6 @@ td.date-cell{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-
 .chart-card-tall{background:var(--paper-raised);border:1px solid var(--rule);padding:22px 24px;margin-bottom:24px}
 .chart-card-tall .chart-wrap{height:auto;min-height:240px}
 
-/* Modal */
-.modal-backdrop{position:fixed;inset:0;background:rgba(28,26,24,0.6);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
-.modal-backdrop.open{display:flex}
-.modal{background:var(--paper-raised);border:1px solid var(--rule);max-width:820px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.25);position:relative}
-.modal-head{padding:26px 32px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;justify-content:space-between;gap:20px}
-.modal-head h2{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink);letter-spacing:-0.01em}
-.modal-head h2 em{font-style:italic;color:var(--bordeaux)}
-.modal-head .modal-sub{font-size:11px;color:var(--ink-faint);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;margin-top:4px}
-.modal-close{background:none;border:none;font-size:22px;color:var(--ink-faint);cursor:pointer;line-height:1;padding:0 0 0 10px;transition:color .1s}
-.modal-close:hover{color:var(--bordeaux)}
-.modal-body{padding:24px 32px 32px;max-height:72vh;overflow-y:auto;line-height:1.7}
-.modal-body h3{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--bordeaux);margin:24px 0 10px;letter-spacing:-0.01em}
-.modal-body h3:first-child{margin-top:0}
-.modal-body h4{font-family:var(--serif);font-style:italic;font-size:17px;font-weight:500;color:var(--ink);margin:18px 0 6px}
-.modal-body p{margin-bottom:14px;color:var(--ink-soft);font-size:14px}
-.modal-body .section-note{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin-bottom:16px}
-.modal-body code{font-family:var(--mono);font-size:12px;background:var(--bordeaux-tint);padding:1px 5px;color:var(--bordeaux)}
-.modal-body ol,.modal-body ul{margin:10px 0 16px 22px;color:var(--ink-soft)}
-.modal-body li{margin-bottom:6px}
-.modal-body strong{color:var(--ink);font-weight:600}
-.modal-body a{color:var(--bordeaux);border-bottom:1px dotted var(--bordeaux);text-decoration:none}
-.modal-body kbd{font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--rule);padding:1px 6px;border-radius:2px}
-.modal-body .eq{
-  font-family:var(--serif);font-size:15px;
-  padding:10px 18px;margin:10px 0 14px;
-  background:var(--paper);border-left:2px solid var(--bordeaux);
-  color:var(--ink);font-style:italic;letter-spacing:0.01em;
-  overflow-x:auto;
-}
-.modal-body .eq sub, .modal-body .eq sup{font-style:normal}
-.modal-body table{margin:0}
-
-.profile-list{display:flex;flex-direction:column;gap:28px}
-.profile{border-bottom:1px solid var(--rule-soft);padding-bottom:24px}
-.profile:last-child{border-bottom:none}
-.profile-name{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--bordeaux);line-height:1.1;letter-spacing:-0.01em}
-.profile-name em{font-style:italic;font-weight:400;color:var(--ink)}
-.profile-origin{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin:3px 0 10px;letter-spacing:0.04em}
-.profile-text{color:var(--ink-soft);font-size:13.5px;line-height:1.65}
-.profile-field{margin-top:8px}
-.profile-field-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.12em;color:var(--bordeaux);font-weight:600;margin-bottom:3px}
-.profile-field-body{color:var(--ink-soft);font-size:13px;line-height:1.6;margin-bottom:8px}
-.modal-nav{padding:14px 32px;background:var(--paper);border-bottom:1px solid var(--rule-soft);display:flex;gap:6px;flex-wrap:wrap;font-size:11px}
-.modal-nav a{color:var(--ink-soft);text-decoration:none;padding:4px 9px;border:1px solid var(--rule);cursor:pointer;transition:all .1s}
-.modal-nav a:hover{color:var(--bordeaux);border-color:var(--bordeaux)}
-
 footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--ink-faint);gap:20px;flex-wrap:wrap}
 footer .cite{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-soft)}
 footer a{color:var(--bordeaux);text-decoration:none;border-bottom:1px dotted var(--bordeaux)}
@@ -223,17 +190,15 @@ footer a:hover{color:var(--bordeaux-dark)}
     </div>
     <div class="meta">
       <div class="author">Jure Skarabot · New York</div>
-      <div class="docs-wrap">
-        <button class="docs-btn" id="docs-btn">Documents <span class="chev">▾</span></button>
-        <div class="docs-menu" id="docs-menu">
-          <a data-doc="about">About Codex Vini<span class="docs-sub">project overview &amp; rating scale</span></a>
-          <a data-doc="howto">How to navigate &amp; update<span class="docs-sub">adding new wines to the codex</span></a>
-          <a data-doc="grapes">Grape varieties<span class="docs-sub">the 101 TasteRank reference</span></a>
-          <a data-doc="regions">Regions reference<span class="docs-sub">terroir profiles from Soul of Wine</span></a>
-          <a data-doc="shrinkage">Bayesian shrinkage<span class="docs-sub">hierarchical model &amp; derivation of the estimator</span></a>
-        </div>
-      </div>
     </div>
+  </div>
+  <div class="docs-row">
+    <span class="docs-label">Documents</span>
+    <a class="docs-pill" href="docs/about.pdf" target="_blank" rel="noopener">About</a>
+    <a class="docs-pill" href="docs/howto.pdf" target="_blank" rel="noopener">How to update</a>
+    <a class="docs-pill" href="https://jskarabot18.github.io/tasterank-explorer/TasteRank_Grape_Reference.pdf" target="_blank" rel="noopener">Grapes</a>
+    <a class="docs-pill" href="https://jskarabot18.github.io/soul-of-wine/docs/layer2-descriptions.pdf" target="_blank" rel="noopener">Regions</a>
+    <a class="docs-pill" href="docs/shrinkage.pdf" target="_blank" rel="noopener">Shrinkage</a>
   </div>
 </header>
 
@@ -358,24 +323,10 @@ footer a:hover{color:var(--bordeaux-dark)}
   </div>
 </section>
 
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal">
-    <div class="modal-head">
-      <div>
-        <h2 id="modal-title">—</h2>
-        <div class="modal-sub" id="modal-sub">—</div>
-      </div>
-      <button class="modal-close" id="modal-close">✕</button>
-    </div>
-    <div class="modal-nav" id="modal-nav" style="display:none"></div>
-    <div class="modal-body" id="modal-body"></div>
-  </div>
-</div>
-
 <footer>
   <div class="cite">Codex Vini · <em>in vino veritas</em></div>
   <div>
-    <a href="#" id="footer-about">About</a> ·
+    <a href="docs/about.pdf" target="_blank" rel="noopener">About</a> ·
     <a href="https://jskarabot18.github.io/grand-cru-atlas/">The Grand Cru Atlas</a>
   </div>
 </footer>
@@ -448,7 +399,6 @@ function init(){
   renderFilters();
   renderMap();
   applyFilters();
-  wireModal();
 }
 
 function renderStats(){
@@ -717,7 +667,7 @@ function renderFilters(){
   document.getElementById('btn-reset-atlas').addEventListener('click', resetAll);
   document.getElementById('btn-reset-book').addEventListener('click', resetAll);
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !document.getElementById('modal-backdrop').classList.contains('open')) resetAll();
+    if (e.key === 'Escape') resetAll();
   });
 
   document.querySelectorAll('th[data-sort]').forEach(th => th.addEventListener('click', () => {
@@ -870,416 +820,6 @@ function renderTable(){
   }));
 }
 
-function wireModal(){
-  const btn = document.getElementById('docs-btn'), menu = document.getElementById('docs-menu');
-  btn.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('open'); });
-  document.addEventListener('click', e => { if (!menu.contains(e.target) && e.target !== btn) menu.classList.remove('open'); });
-  menu.querySelectorAll('a[data-doc]').forEach(a => a.addEventListener('click', e => {
-    e.preventDefault(); menu.classList.remove('open'); openDoc(a.dataset.doc);
-  }));
-  // Footer "About" link — open the in-page About document
-  const footerAbout = document.getElementById('footer-about');
-  if (footerAbout) footerAbout.addEventListener('click', e => { e.preventDefault(); openDoc('about'); });
-  document.getElementById('modal-close').addEventListener('click', closeModal);
-  document.getElementById('modal-backdrop').addEventListener('click', e => {
-    if (e.target.id === 'modal-backdrop') closeModal();
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && document.getElementById('modal-backdrop').classList.contains('open')) closeModal();
-  });
-}
-
-function openDoc(which){
-  const backdrop = document.getElementById('modal-backdrop');
-  const title = document.getElementById('modal-title');
-  const sub = document.getElementById('modal-sub');
-  const body = document.getElementById('modal-body');
-  const nav = document.getElementById('modal-nav');
-  nav.innerHTML = ''; nav.style.display = 'none'; body.scrollTop = 0;
-
-  if (which === 'about'){
-    title.innerHTML = 'About Codex <em>Vini</em>';
-    sub.textContent = 'project overview · rating scale · data structure';
-    body.innerHTML = renderAbout();
-  } else if (which === 'howto'){
-    title.innerHTML = 'How to <em>navigate</em> & update';
-    sub.textContent = 'using the atlas, adding new wines';
-    body.innerHTML = renderHowto();
-  } else if (which === 'grapes'){
-    title.innerHTML = '<em>Grape</em> varieties';
-    sub.textContent = '101 TasteRank profiles · Jure Skarabot, 2026';
-    body.innerHTML = renderGrapes();
-    renderGrapeNav();
-  } else if (which === 'regions'){
-    title.innerHTML = 'Regions <em>reference</em>';
-    sub.textContent = 'Soul of Wine · terroir profiles';
-    body.innerHTML = renderRegions();
-    renderRegionNav();
-  } else if (which === 'shrinkage'){
-    title.innerHTML = 'Bayesian <em>shrinkage</em>';
-    sub.textContent = 'hierarchical model · derivation · application to codex data';
-    body.innerHTML = renderShrinkage();
-  }
-  backdrop.classList.add('open');
-}
-function closeModal(){ document.getElementById('modal-backdrop').classList.remove('open'); }
-function esc(s){ return String(s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-function slugify(s){ return String(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
-
-function renderAbout(){
-  return `
-    <h3>The project</h3>
-    <p><em>Codex Vini</em> — the book of wine — is a personal atlas of wines I have tasted, with my ratings attached. It is a reference tool, not a commercial site. The goal is to make the collection legible to myself: to see where I've tasted, what I've gravitated toward, and what remains unexplored.</p>
-    <p>This project is a sibling to <a href="https://jskarabot18.github.io/grand-cru-atlas/" target="_blank" rel="noreferrer">The Grand Cru Atlas</a>, which maps the world's classified vineyard sites. Where the Atlas is historical and aspirational, Codex Vini is personal and cumulative — a record of what has actually crossed my palate.</p>
-
-    <h3>Rating scale</h3>
-    <p>Wines are scored on a 0–10 scale with one decimal of precision. The practical range in this codex runs from <strong>8.9</strong> to <strong>10.0</strong>, because the collection records only wines I considered worth noting. Lower-rated wines are omitted.</p>
-    <p>Rough interpretive bands:</p>
-    <ul>
-      <li><strong>10.0</strong> — transcendent; among the finest wines I have ever tasted</li>
-      <li><strong>9.8–9.9</strong> — extraordinary; consistent, memorable, benchmark examples</li>
-      <li><strong>9.5–9.7</strong> — excellent; distinctive, complete wines with few flaws</li>
-      <li><strong>9.2–9.4</strong> — very good; well-made wines with real character</li>
-      <li><strong>below 9.0</strong> — noteworthy but with reservations</li>
-    </ul>
-    <p class="section-note">Ratings are subjective, contextual (bottle condition, food, mood), and drift over time as one's palate develops. They are a snapshot of an impression, not an objective verdict.</p>
-
-    <h3>Dynamic structure</h3>
-    <p>Every wine lives as a single JSON entry in <code>wines.json</code>, stored in the GitHub repository that powers this site. Adding a new wine means committing one new object to that file; the site updates automatically within a minute.</p>
-    <p>This design choice — a flat JSON file in a git repository, instead of a database or spreadsheet — is deliberate. Git provides version history and backup. There's no server to run, no database to maintain, no authentication to manage. The atlas is self-contained, portable, and will outlive most web stacks.</p>
-
-    <h3>Taxonomy</h3>
-    <p>Wines are categorized by a <strong>single grape/category field</strong>. Grape varieties (Cabernet Sauvignon, Nebbiolo, Riesling) and named-wine categories (Barolo, Brunello di Montalcino, Champagne, Bordeaux Blend) sit as peers. A Châteauneuf-du-Pape is tagged <em>Châteauneuf-du-Pape Blend</em>, not decomposed into its lead grape Grenache. A varietal Grenache from another region is tagged <em>Grenache</em>. This matches how sommeliers and retail actually organize wine — by the identity on the label.</p>
-    <p>The reference lists draw on:</p>
-    <ul>
-      <li>The <strong>101 TasteRank grape varieties</strong> (see Grape varieties document) — a personal distillation of the varieties worth knowing</li>
-      <li>The <strong>Soul of Wine region profiles</strong> (see Regions reference document) — terroir profiles covering the world's significant wine regions</li>
-    </ul>
-
-    <h3>Data</h3>
-    <p>The codex currently holds <strong>${WINES.length} wines</strong> across <strong>${new Set(WINES.map(w=>w.country)).size} countries</strong>, <strong>${new Set(WINES.map(w=>w.region)).size} regions</strong>, and <strong>${new Set(WINES.map(w=>w.grape)).size} grape categories</strong>. It grows by a few wines each week.</p>
-    <p>Every entry includes: producer, wine name, vintage, country, region, grape/category, wine colour, rating, date tasted, and geographic coordinates for map placement.</p>
-
-    <h3>The rating-adjustment used in The Collection</h3>
-    <p>Two charts in The Collection — average rating by country, and average rating by grape — use a statistical adjustment called <strong>Bayesian shrinkage</strong>. In short: it prevents a country with one lucky 10.0 from outranking a country with thirty consistent 9.5s. For the full explanation, see the <strong>Bayesian shrinkage</strong> document in this same menu.</p>
-
-    <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
-  `;
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// DOC CONTENT — Bayesian shrinkage (academic treatment)
-// ═══════════════════════════════════════════════════════════════════════════
-function renderShrinkage(){
-  // Live numbers computed from current data
-  const N = WINES.length;
-  const globalMean = WINES.reduce((s,w)=>s+w.rating, 0) / N;
-  const globalVar  = WINES.reduce((s,w)=>s + Math.pow(w.rating - globalMean, 2), 0) / (N - 1);
-  const sigma = Math.sqrt(globalVar);
-
-  // Per-country grouping
-  const byCountry = {};
-  WINES.forEach(w => { (byCountry[w.country] ||= []).push(w.rating); });
-  const countryStats = Object.entries(byCountry).map(([c, arr]) => {
-    const { raw, adj, n } = shrinkageAdjust(arr, globalMean);
-    return { c, n, raw, adj };
-  }).sort((a,b) => b.n - a.n);
-
-  // Empirical Bayes estimate of m — derived below
-  // m ≈ σ² / τ², where σ² is the within-group sampling variance and
-  // τ² is the between-group variance of the country means.
-  // We estimate τ² via method-of-moments from the country-level raw averages,
-  // using sample sizes ≥ 2 to avoid singleton noise.
-  const groupsForTau = countryStats.filter(r => r.n >= 2);
-  const weightedMean = groupsForTau.reduce((s,r)=> s + r.n*r.raw, 0) /
-                       groupsForTau.reduce((s,r)=> s + r.n, 0);
-  const betweenSS = groupsForTau.reduce((s,r)=> s + r.n * Math.pow(r.raw - weightedMean, 2), 0);
-  const dfBetween = groupsForTau.length - 1;
-  // Total within-group SS (pooled)
-  let withinSS = 0, dfWithin = 0;
-  groupsForTau.forEach(r => {
-    const arr = byCountry[r.c];
-    const mean = r.raw;
-    arr.forEach(x => { withinSS += Math.pow(x - mean, 2); });
-    dfWithin += (arr.length - 1);
-  });
-  const mseBetween = betweenSS / Math.max(dfBetween, 1);
-  const mseWithin  = withinSS  / Math.max(dfWithin, 1);
-  const avgN = groupsForTau.reduce((s,r)=>s+r.n, 0) / groupsForTau.length;
-  // Method-of-moments: τ̂² = max(0, (MSB − MSW) / n̄)
-  const tauHat2 = Math.max(0, (mseBetween - mseWithin) / avgN);
-  const sigmaHat2 = mseWithin;
-  const mEB = tauHat2 > 0 ? (sigmaHat2 / tauHat2).toFixed(2) : '∞';
-
-  const fmt = x => Number.isFinite(x) ? x.toFixed(3) : '—';
-
-  return `
-    <h3>1. Setting and notation</h3>
-    <p>The codex contains ${N} wines partitioned into K groups (countries, or analogously grape categories). Let group <em>i</em> have <em>n<sub>i</sub></em> wines with ratings <em>x<sub>i1</sub>, …, x<sub>i,n<sub>i</sub></sub></em> and sample mean</p>
-    <p class="eq">x̄<sub>i</sub> = (1 / n<sub>i</sub>) · Σ<sub>j</sub> x<sub>ij</sub>.</p>
-    <p>We want an estimator θ̂<sub>i</sub> of each group's "true" mean rating θ<sub>i</sub>. The naïve choice θ̂<sub>i</sub> = x̄<sub>i</sub> is the maximum likelihood estimator under independent sampling, and it is unbiased. But when some <em>n<sub>i</sub></em> are small, the variance of x̄<sub>i</sub> is large — a country with n = 1 has Var(x̄<sub>i</sub>) = σ², the full population variance — and the resulting rankings are dominated by sampling noise rather than by true differences in θ<sub>i</sub>.</p>
-    <p>Bayesian shrinkage resolves this by imposing a hierarchical model: the group means θ<sub>i</sub> are themselves drawn from a common distribution, and each x̄<sub>i</sub> is combined with that population-level information to produce a posterior estimate. The result is a point estimator that is biased but has smaller mean squared error than the MLE in every realistic setting.</p>
-
-    <h3>2. The Normal–Normal hierarchical model</h3>
-    <p>Assume:</p>
-    <p class="eq">x<sub>ij</sub> | θ<sub>i</sub> &nbsp;~&nbsp; 𝒩(θ<sub>i</sub>, σ²),&nbsp; independent across <em>i</em>, <em>j</em></p>
-    <p class="eq">θ<sub>i</sub> &nbsp;~&nbsp; 𝒩(μ, τ²),&nbsp; independent across <em>i</em></p>
-    <p>Here σ² is the within-group sampling variance (how much ratings vary within a single country), τ² is the between-group variance (how much true country means vary), and μ is the grand mean. This is the simplest non-trivial hierarchical model and suffices for rating data bounded roughly in [8.9, 10.0], where normality is a reasonable working assumption.</p>
-    <p>Given the model, the sufficient statistic for θ<sub>i</sub> is x̄<sub>i</sub>, which satisfies</p>
-    <p class="eq">x̄<sub>i</sub> | θ<sub>i</sub> &nbsp;~&nbsp; 𝒩(θ<sub>i</sub>, σ² / n<sub>i</sub>).</p>
-
-    <h3>3. Posterior derivation</h3>
-    <p>Because the Normal family is self-conjugate, the posterior for θ<sub>i</sub> given x̄<sub>i</sub> is also Normal. Apply Bayes' rule with a 𝒩(μ, τ²) prior and a 𝒩(θ<sub>i</sub>, σ² / n<sub>i</sub>) likelihood. The posterior precision is the sum of prior and likelihood precisions:</p>
-    <p class="eq">1 / Var(θ<sub>i</sub> | x̄<sub>i</sub>) = 1 / τ² + n<sub>i</sub> / σ².</p>
-    <p>The posterior mean is the precision-weighted average of the prior mean μ and the data mean x̄<sub>i</sub>:</p>
-    <p class="eq">𝔼[θ<sub>i</sub> | x̄<sub>i</sub>] = (μ / τ² + n<sub>i</sub> x̄<sub>i</sub> / σ²) / (1 / τ² + n<sub>i</sub> / σ²).</p>
-    <p>Multiply numerator and denominator by τ² · σ² / σ² and rearrange:</p>
-    <p class="eq">θ̂<sub>i</sub> = (n<sub>i</sub> · x̄<sub>i</sub> + (σ² / τ²) · μ) / (n<sub>i</sub> + σ² / τ²).</p>
-    <p>Define the shrinkage constant</p>
-    <p class="eq">m = σ² / τ².</p>
-    <p>The estimator then takes the clean closed form</p>
-    <p class="eq" style="background:#F5E8EB;color:#5B1A2D;padding:14px;font-weight:600">θ̂<sub>i</sub> = (n<sub>i</sub> · x̄<sub>i</sub> + m · μ) / (n<sub>i</sub> + m).</p>
-    <p>This is the formula implemented on the site. It is the posterior mean under the Normal–Normal hierarchical model; equivalently, it is the Bayes estimator under squared-error loss. As n<sub>i</sub> → ∞ the estimator converges to x̄<sub>i</sub>; as n<sub>i</sub> → 0 it converges to the prior mean μ. The ratio m = σ² / τ² has an intuitive reading: it is the number of observations whose evidence is worth, in aggregate, the same as the prior — a prior "sample size."</p>
-
-    <h3>4. Equivalent weighted-average form</h3>
-    <p>Let α<sub>i</sub> = n<sub>i</sub> / (n<sub>i</sub> + m). Then</p>
-    <p class="eq">θ̂<sub>i</sub> = α<sub>i</sub> · x̄<sub>i</sub> + (1 − α<sub>i</sub>) · μ.</p>
-    <p>This makes the shrinkage explicit: the estimate is a convex combination of the group mean and the grand mean, with the weight on x̄<sub>i</sub> growing with sample size. The factor (1 − α<sub>i</sub>) is the <em>shrinkage fraction</em>. For n<sub>i</sub> = m, the estimate sits exactly halfway between x̄<sub>i</sub> and μ.</p>
-
-    <h3>5. Estimating σ² and τ² from the Codex Vini data</h3>
-    <p>The formula requires σ² and τ². In a fully Bayesian treatment these would have their own priors; the <strong>empirical Bayes</strong> approach estimates them from the data by method of moments.</p>
-    <p>With the current ${N} wines:</p>
-    <p class="eq">μ̂ = ${globalMean.toFixed(3)}&nbsp;&nbsp;(grand mean)<br>σ̂² = MSW = ${fmt(sigmaHat2)}&nbsp;&nbsp;(pooled within-country variance)<br>τ̂² = max{0, (MSB − MSW) / n̄} = ${fmt(tauHat2)}&nbsp;&nbsp;(between-country variance)</p>
-    <p>where MSW is the mean squared error within countries, MSB is the mean squared error between country means (weighted by sample size), and n̄ = ${avgN.toFixed(1)} is the average sample size across countries with n ≥ 2. Singletons are excluded from τ̂² estimation because their contribution to the between-group sum of squares is indistinguishable from within-group noise.</p>
-    <p>The empirical-Bayes shrinkage constant is</p>
-    <p class="eq">m̂<sub>EB</sub> = σ̂² / τ̂² ≈ ${mEB}.</p>
-    <p>The site uses a fixed <strong>m = 5</strong> rather than m̂<sub>EB</sub>. With m̂<sub>EB</sub> substantially larger than 5, the empirical-Bayes estimator would shrink ranks more aggressively than the site currently does — reflecting that within-country variance (σ̂²) greatly exceeds between-country variance (τ̂²), so most of the observed spread in raw country means is sampling noise rather than real differences in θ<sub>i</sub>. Two practical considerations argue against simply adopting m̂<sub>EB</sub>:</p>
-    <ul>
-      <li>τ̂² is itself estimated from only ${groupsForTau.length} groups with n ≥ 2. Its sampling distribution is wide enough that m̂<sub>EB</sub> could easily double or halve as the codex grows by a dozen wines. A fixed m produces a stable ranking that is not sensitive to small changes in the data.</li>
-      <li>At m̂<sub>EB</sub> ≈ ${mEB}, small-n countries are shrunk so close to μ that the chart becomes visually flat and conveys little. m = 5 preserves more of the raw signal while still correcting for the most obvious small-sample distortions. This is a deliberate bias-for-legibility trade-off.</li>
-    </ul>
-    <p>A reader interested in the more aggressive estimate can read it off the chart tooltips: the raw x̄<sub>i</sub> and n<sub>i</sub> are shown, and θ̂<sub>i</sub>(m = ${mEB}) = (n<sub>i</sub> x̄<sub>i</sub> + ${mEB} · ${globalMean.toFixed(3)}) / (n<sub>i</sub> + ${mEB}) can be computed by inspection.</p>
-
-    <h3>6. Worked example</h3>
-    <p>Applying θ̂<sub>i</sub> = (n<sub>i</sub> · x̄<sub>i</sub> + 5 · ${globalMean.toFixed(3)}) / (n<sub>i</sub> + 5) to the current country data:</p>
-    <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px">
-      <thead>
-        <tr style="border-bottom:1px solid var(--rule);background:var(--paper)">
-          <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">Country (i)</th>
-          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">n<sub>i</sub></th>
-          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">x̄<sub>i</sub></th>
-          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">α<sub>i</sub></th>
-          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">θ̂<sub>i</sub></th>
-          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">shift</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${countryStats.map(r => {
-          const alpha = r.n / (r.n + 5);
-          const shift = r.adj - r.raw;
-          return `<tr style="border-bottom:1px solid var(--rule-soft)">
-            <td style="padding:7px 10px;font-family:var(--serif);font-size:13.5px">${esc(r.c)}</td>
-            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)">${r.n}</td>
-            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)">${r.raw.toFixed(3)}</td>
-            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)">${alpha.toFixed(3)}</td>
-            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--bordeaux);font-weight:600">${r.adj.toFixed(3)}</td>
-            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11px;color:${Math.abs(shift)>0.1?'var(--bordeaux)':'var(--ink-faint)'}">${(shift>=0?'+':'')}${shift.toFixed(3)}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-    <p>The column α<sub>i</sub> = n<sub>i</sub> / (n<sub>i</sub> + 5) is the effective weight on each country's own data. France (n = 32) has α ≈ 0.86, so its estimate barely moves. Countries with n = 1 have α ≈ 0.17, meaning ≈ 83% of their estimate comes from the grand mean — a direct reflection of how little we know about them. Notice that the shrinkage magnitude depends on both the sample size <em>and</em> how far the raw mean sits from μ: Argentina's three wines average ${byCountry.Argentina ? (byCountry.Argentina.reduce((s,x)=>s+x,0)/byCountry.Argentina.length).toFixed(2) : '—'}, far above μ, so it gets pulled visibly; Austria sits near μ and barely moves despite a similar n.</p>
-
-    <h3>7. Properties of the estimator</h3>
-    <p>Under the assumed model, the estimator θ̂<sub>i</sub> is:</p>
-    <ul>
-      <li><strong>Biased</strong> toward μ. The bias is <em>E</em>[θ̂<sub>i</sub>] − θ<sub>i</sub> = (1 − α<sub>i</sub>)(μ − θ<sub>i</sub>), which vanishes as n<sub>i</sub> → ∞.</li>
-      <li><strong>Lower-variance</strong> than x̄<sub>i</sub>: Var(θ̂<sub>i</sub> | θ<sub>i</sub>) = α<sub>i</sub>² · σ² / n<sub>i</sub>, reduced by factor α<sub>i</sub>² relative to the MLE.</li>
-      <li><strong>Admissible</strong>: there exists no estimator that dominates it in mean squared error uniformly over all (θ<sub>1</sub>, …, θ<sub>K</sub>). This is a standard decision-theoretic result in the Normal means problem.</li>
-    </ul>
-    <p>For group rankings — the use case here — what matters is that the posterior mean is the Bayes estimator under squared-error loss, and that it orders groups in a way that accounts for sampling uncertainty. A country ranked high on θ̂<sub>i</sub> is high either because its true mean is high, or because n<sub>i</sub> is large enough that we are confident in x̄<sub>i</sub>; either is a defensible reason to display it high.</p>
-
-    <h3>8. Limitations</h3>
-    <p>The normality assumption is a working convenience. Ratings are bounded and right-censored near 10.0 (there is no rating above 10.0, and my own 9.9s are de facto truncated draws from whatever unbounded latent variable they represent). For bounded ratings with potential ceiling effects, a Beta-Binomial or ordered-logit model would be more principled but would not change the qualitative ranking meaningfully at current sample sizes.</p>
-    <p>The model also assumes θ<sub>i</sub> are exchangeable across countries, which is a convenient fiction. A Burgundy and a Mosel wine are drawn from visibly different underlying distributions. A more refined model would introduce further hierarchy (continent, climate zone, price tier), at the cost of requiring substantially more data to identify the additional variance components.</p>
-    <p>Finally, the ratings themselves are not independent samples from a well-defined population. They reflect my purchase patterns, which are non-random — I buy what I expect to enjoy — and my tasting context, which varies. No amount of statistical machinery fixes that; shrinkage only addresses the sample-size problem conditional on whatever selection process generated the data in the first place.</p>
-
-    <h3>References</h3>
-    <ul>
-      <li>Efron, B. &amp; Morris, C. (1975). "Data Analysis Using Stein's Estimator and Its Generalizations." <em>JASA</em> 70 (350): 311–319.</li>
-      <li>Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian Data Analysis</em>, 3rd ed., chapter 5.</li>
-      <li>Robinson, D. (2017). <em>Introduction to Empirical Bayes: Examples from Baseball Statistics.</em></li>
-    </ul>
-
-    <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
-  `;
-}
-
-function renderHowto(){
-  return `
-    <h3>Navigating the atlas</h3>
-    <h4>Filters</h4>
-    <p>The left panel offers five filter types: <strong>search</strong> (free text across producer, wine, region, country, grape), <strong>rating</strong> (pick one or more specific scores), <strong>colour</strong> (red, white, rosé, sparkling), <strong>country</strong>, and <strong>grape / category</strong>. Filters combine with <em>AND</em> logic — applying two filter types narrows the set to wines matching both.</p>
-    <p>Within each filter type, selections combine with <em>OR</em> logic. Clicking both "France" and "Italy" shows wines from either country. Clicking both "9.6" and "9.8" shows wines at either rating.</p>
-    <p>All filters affect both the map (The Atlas) and the sortable table (The Book) simultaneously.</p>
-
-    <h4>Map interactions</h4>
-    <ul>
-      <li><strong>Click a pin</strong> for a wine card with producer, vintage, rating, and tasting date</li>
-      <li><strong>Click a cluster</strong> (numbered circle) to zoom in and break it apart</li>
-      <li><strong>Scroll</strong> or use the +/- controls to zoom</li>
-      <li><strong>Click a row in The Book</strong> to fly the map to that wine's pin</li>
-    </ul>
-    <p>Pins are <strong>sized by rating</strong> (higher = larger) and <strong>coloured by grape</strong> (each grape has its own hue).</p>
-
-    <h4>Resetting</h4>
-    <p>Press <kbd>Esc</kbd> or click any <strong>Reset</strong> button to clear all filters. Resetting also returns the map to its default Europe view.</p>
-
-    <h3>Adding a new wine</h3>
-    <p>Three workflows are available. The form is quickest for single entries; direct editing is fine for bulk updates.</p>
-
-    <h4>Method 1 — The Add Wine form (recommended)</h4>
-    <ol>
-      <li>Open <a href="tools/add_wine.html">the Add Wine form</a></li>
-      <li>Fill in producer, wine name, vintage, country → region, grape / category, rating, date</li>
-      <li>Click <strong>Generate JSON</strong></li>
-      <li>Click <strong>Copy to clipboard</strong></li>
-      <li>Open <code>wines.json</code> on GitHub → click the pencil icon to edit</li>
-      <li>Paste the generated block at the top of the array, right after the opening <code>[</code></li>
-      <li>Click <strong>Commit changes</strong></li>
-      <li>Wait ~1 minute — the site updates automatically</li>
-    </ol>
-
-    <h4>Method 2 — Direct edit on GitHub</h4>
-    <p>Edit <code>wines.json</code> directly on github.com. Each entry is a JSON object of this shape:</p>
-    <p><code style="display:block;padding:10px;white-space:pre;background:#1C1A18;color:#E8E2D5;font-size:11px;overflow-x:auto">{
-  "id": "clos-des-papes-chateauneuf-du-pape-2007",
-  "producer": "Clos Des Papes",
-  "wine": "Châteauneuf-du-Pape",
-  "vintage": "2007",
-  "country": "France",
-  "region": "Southern Rhone",
-  "grape": "Châteauneuf-du-Pape Blend",
-  "color": "red",
-  "rating": 10.0,
-  "date_tasted": "2025-09-26",
-  "lat": 44.056,
-  "lng": 4.832
-}</code></p>
-
-    <h4>Method 3 — Local edit + push</h4>
-    <p>Clone the repo, edit <code>wines.json</code> in an editor, commit, and push.</p>
-
-    <h3>Adding a new region or grape</h3>
-    <p><strong>New region:</strong> edit <code>regions.json</code> with the region name as key and <code>{"lat": …, "lng": …}</code> as value. Use the region centroid — a point roughly in the middle of where the vineyards are. Then use that region name when adding a wine.</p>
-    <p><strong>New grape:</strong> if it's one of the 101 TasteRank varieties (see Grape varieties document), it's already recognised. For a new named blend or variety outside the 101, add it to <code>grapes.json</code> first.</p>
-
-    <h3>Tips for consistent data</h3>
-    <ul>
-      <li>Use the producer's canonical name as it appears on the label (<em>Château Margaux</em>, not <em>Margaux</em>)</li>
-      <li>Four-digit year for vintage; use <code>NV</code> for non-vintage wines (mostly Champagne)</li>
-      <li>Match existing country and region names exactly — the Add Wine form's dropdowns enforce this</li>
-      <li>For named blends (Bordeaux Blend, Barolo, Brunello, etc.) — use the named category rather than the lead grape, unless the wine is varietal</li>
-      <li>Borderline calls happen; pick the most common retail / wine-list classification</li>
-    </ul>
-  `;
-}
-
-function renderGrapes(){
-  if (!GRAPE_PROFILES.length){
-    return `<p><em>Grape profiles unavailable. Make sure <code>grape_profiles.json</code> is in the repo.</em></p>`;
-  }
-  // Whites first, then reds — each alphabetical
-  const whites = GRAPE_PROFILES.filter(p => p.color === 'white').sort((a,b) => a.name.localeCompare(b.name));
-  const reds   = GRAPE_PROFILES.filter(p => p.color === 'red').sort((a,b) => a.name.localeCompare(b.name));
-  let html = `<p class="section-note">One-paragraph profiles for 101 grape varieties. Drawn from the TasteRank Grape Variety Reference (April 2026). Organised whites first, then reds — alphabetical within each group. Named-wine categories such as Barolo, Brunello, Bordeaux Blend, and Champagne are not single varieties and are not listed here — see the Regions reference and About documents for more on the taxonomy.</p>`;
-  html += `<h3 id="grapes-white">White grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${whites.length})</span></h3>`;
-  html += `<div class="profile-list">`;
-  whites.forEach(p => {
-    html += `<div class="profile" id="grape-${slugify(p.name)}">
-      <div class="profile-name">${esc(p.name)}</div>
-      <div class="profile-origin">${esc(p.origin)}</div>
-      <div class="profile-text">${esc(p.profile)}</div>
-    </div>`;
-  });
-  html += `</div>`;
-  html += `<h3 id="grapes-red">Red grape varieties <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${reds.length})</span></h3>`;
-  html += `<div class="profile-list">`;
-  reds.forEach(p => {
-    html += `<div class="profile" id="grape-${slugify(p.name)}">
-      <div class="profile-name">${esc(p.name)}</div>
-      <div class="profile-origin">${esc(p.origin)}</div>
-      <div class="profile-text">${esc(p.profile)}</div>
-    </div>`;
-  });
-  html += `</div>`;
-  return html;
-}
-
-function renderGrapeNav(){
-  const nav = document.getElementById('modal-nav');
-  const reds = GRAPE_PROFILES.filter(p=>p.color==='red').length;
-  const whites = GRAPE_PROFILES.filter(p=>p.color==='white').length;
-  nav.innerHTML = `<a data-jump="grapes-white">Whites (${whites})</a> <a data-jump="grapes-red">Reds (${reds})</a>`;
-  nav.style.display = 'flex';
-  nav.querySelectorAll('a[data-jump]').forEach(a => a.addEventListener('click', () => {
-    const target = document.getElementById(a.dataset.jump);
-    if (target) document.getElementById('modal-body').scrollTo({top: target.offsetTop - 12, behavior: 'smooth'});
-  }));
-}
-
-function renderRegions(){
-  if (!REGION_PROFILES.length){
-    return `<p><em>Region profiles unavailable. Make sure <code>region_profiles.json</code> is in the repo.</em></p>`;
-  }
-  // Group by world → country → regions
-  const byWorld = { 'Old World': {}, 'New World': {} };
-  REGION_PROFILES.forEach(p => {
-    if (!p.world || !p.country) return;
-    if (!byWorld[p.world][p.country]) byWorld[p.world][p.country] = [];
-    byWorld[p.world][p.country].push(p);
-  });
-
-  let html = `<p class="section-note">Terroir profiles for ${REGION_PROFILES.length} of the world's significant wine regions — climate, soils, principal varieties, winemaking, and historical position. Drawn from the Soul of Wine region-profiles document. Organised by Old World / New World, then by country alphabetically, with regions sorted alphabetically within each country. Note: the profile list does not completely match the regions represented in the codex — some codex regions (e.g. Crozes-Hermitage, Central Otago, Trentino) do not yet have profiles here.</p>`;
-
-  ['Old World', 'New World'].forEach(world => {
-    const countries = Object.keys(byWorld[world]).sort();
-    if (!countries.length) return;
-    html += `<h3 id="regions-${slugify(world)}">${world} <span style="font-weight:400;color:var(--ink-faint);font-style:italic;font-size:15px">(${countries.length} countries · ${Object.values(byWorld[world]).reduce((s,a)=>s+a.length,0)} regions)</span></h3>`;
-    countries.forEach(country => {
-      const regions = byWorld[world][country].sort((a,b) => a.name.localeCompare(b.name));
-      html += `<h4 id="country-${slugify(country)}">${esc(country)}</h4>`;
-      html += `<div class="profile-list">`;
-      regions.forEach(p => {
-        html += `<div class="profile" id="region-${slugify(p.name)}">
-          <div class="profile-name">${esc(p.name)} <em>— ${esc(p.epithet || '')}</em></div>
-          <div class="profile-origin">${esc(p.identity || '')}</div>`;
-        const fields = ['Climate', 'Soils', 'Principal Varieties', 'Winemaking', 'Production Structure', 'Historical Position'];
-        fields.forEach(f => {
-          if (p[f]){
-            html += `<div class="profile-field">
-              <div class="profile-field-label">${f}</div>
-              <div class="profile-field-body">${esc(p[f])}</div>
-            </div>`;
-          }
-        });
-        html += `</div>`;
-      });
-      html += `</div>`;
-    });
-  });
-  return html;
-}
-
-function renderRegionNav(){
-  const nav = document.getElementById('modal-nav');
-  nav.innerHTML = `<a data-jump="regions-old-world">Old World</a> <a data-jump="regions-new-world">New World</a>`;
-  nav.style.display = 'flex';
-  nav.querySelectorAll('a[data-jump]').forEach(a => a.addEventListener('click', () => {
-    const target = document.getElementById(a.dataset.jump);
-    if (target) document.getElementById('modal-body').scrollTo({top: target.offsetTop - 12, behavior: 'smooth'});
-  }));
-}
 
 loadData();
 </script>
