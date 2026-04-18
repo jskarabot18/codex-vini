@@ -162,6 +162,15 @@ td.date-cell{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-
 .modal-body strong{color:var(--ink);font-weight:600}
 .modal-body a{color:var(--bordeaux);border-bottom:1px dotted var(--bordeaux);text-decoration:none}
 .modal-body kbd{font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--rule);padding:1px 6px;border-radius:2px}
+.modal-body .eq{
+  font-family:var(--serif);font-size:15px;
+  padding:10px 18px;margin:10px 0 14px;
+  background:var(--paper);border-left:2px solid var(--bordeaux);
+  color:var(--ink);font-style:italic;letter-spacing:0.01em;
+  overflow-x:auto;
+}
+.modal-body .eq sub, .modal-body .eq sup{font-style:normal}
+.modal-body table{margin:0}
 
 .profile-list{display:flex;flex-direction:column;gap:28px}
 .profile{border-bottom:1px solid var(--rule-soft);padding-bottom:24px}
@@ -221,7 +230,7 @@ footer a:hover{color:var(--bordeaux-dark)}
           <a data-doc="howto">How to navigate &amp; update<span class="docs-sub">adding new wines to the codex</span></a>
           <a data-doc="grapes">Grape varieties<span class="docs-sub">the 101 TasteRank reference</span></a>
           <a data-doc="regions">Regions reference<span class="docs-sub">terroir profiles from Soul of Wine</span></a>
-          <a data-doc="shrinkage">Bayesian shrinkage<span class="docs-sub">how the rating averages are adjusted</span></a>
+          <a data-doc="shrinkage">Bayesian shrinkage<span class="docs-sub">hierarchical model &amp; derivation of the estimator</span></a>
         </div>
       </div>
     </div>
@@ -908,7 +917,7 @@ function openDoc(which){
     renderRegionNav();
   } else if (which === 'shrinkage'){
     title.innerHTML = 'Bayesian <em>shrinkage</em>';
-    sub.textContent = 'how the rating averages are adjusted for sample size';
+    sub.textContent = 'hierarchical model · derivation · application to codex data';
     body.innerHTML = renderShrinkage();
   }
   backdrop.classList.add('open');
@@ -959,95 +968,148 @@ function renderAbout(){
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// DOC CONTENT — Bayesian shrinkage
+// DOC CONTENT — Bayesian shrinkage (academic treatment)
 // ═══════════════════════════════════════════════════════════════════════════
 function renderShrinkage(){
-  // Compute live examples from current data for the walkthrough
-  const globalMean = WINES.reduce((s,w)=>s+w.rating, 0) / WINES.length;
+  // Live numbers computed from current data
+  const N = WINES.length;
+  const globalMean = WINES.reduce((s,w)=>s+w.rating, 0) / N;
+  const globalVar  = WINES.reduce((s,w)=>s + Math.pow(w.rating - globalMean, 2), 0) / (N - 1);
+  const sigma = Math.sqrt(globalVar);
 
-  // Grab a few representative countries to show in the example table
+  // Per-country grouping
   const byCountry = {};
   WINES.forEach(w => { (byCountry[w.country] ||= []).push(w.rating); });
-  const exampleCountries = Object.entries(byCountry).map(([c, arr]) => {
+  const countryStats = Object.entries(byCountry).map(([c, arr]) => {
     const { raw, adj, n } = shrinkageAdjust(arr, globalMean);
     return { c, n, raw, adj };
   }).sort((a,b) => b.n - a.n);
 
-  // Pick a few illustrative ones: largest, medium, and a couple of singletons
-  const showRows = [
-    ...exampleCountries.slice(0, 3),        // top 3 by count
-    ...exampleCountries.filter(r => r.n <= 2).slice(0, 3),  // small samples
-  ];
+  // Empirical Bayes estimate of m — derived below
+  // m ≈ σ² / τ², where σ² is the within-group sampling variance and
+  // τ² is the between-group variance of the country means.
+  // We estimate τ² via method-of-moments from the country-level raw averages,
+  // using sample sizes ≥ 2 to avoid singleton noise.
+  const groupsForTau = countryStats.filter(r => r.n >= 2);
+  const weightedMean = groupsForTau.reduce((s,r)=> s + r.n*r.raw, 0) /
+                       groupsForTau.reduce((s,r)=> s + r.n, 0);
+  const betweenSS = groupsForTau.reduce((s,r)=> s + r.n * Math.pow(r.raw - weightedMean, 2), 0);
+  const dfBetween = groupsForTau.length - 1;
+  // Total within-group SS (pooled)
+  let withinSS = 0, dfWithin = 0;
+  groupsForTau.forEach(r => {
+    const arr = byCountry[r.c];
+    const mean = r.raw;
+    arr.forEach(x => { withinSS += Math.pow(x - mean, 2); });
+    dfWithin += (arr.length - 1);
+  });
+  const mseBetween = betweenSS / Math.max(dfBetween, 1);
+  const mseWithin  = withinSS  / Math.max(dfWithin, 1);
+  const avgN = groupsForTau.reduce((s,r)=>s+r.n, 0) / groupsForTau.length;
+  // Method-of-moments: τ̂² = max(0, (MSB − MSW) / n̄)
+  const tauHat2 = Math.max(0, (mseBetween - mseWithin) / avgN);
+  const sigmaHat2 = mseWithin;
+  const mEB = tauHat2 > 0 ? (sigmaHat2 / tauHat2).toFixed(2) : '∞';
+
+  const fmt = x => Number.isFinite(x) ? x.toFixed(3) : '—';
 
   return `
-    <h3>What this document is about</h3>
-    <p>Two charts in <em>The Collection</em> show <strong>average rating by country</strong> and <strong>average rating by grape</strong>. If I computed these averages the naïve way — just summing ratings and dividing by count — the charts would be misleading. This document explains the fix.</p>
+    <h3>1. Setting and notation</h3>
+    <p>The codex contains ${N} wines partitioned into K groups (countries, or analogously grape categories). Let group <em>i</em> have <em>n<sub>i</sub></em> wines with ratings <em>x<sub>i1</sub>, …, x<sub>i,n<sub>i</sub></sub></em> and sample mean</p>
+    <p class="eq">x̄<sub>i</sub> = (1 / n<sub>i</sub>) · Σ<sub>j</sub> x<sub>ij</sub>.</p>
+    <p>We want an estimator θ̂<sub>i</sub> of each group's "true" mean rating θ<sub>i</sub>. The naïve choice θ̂<sub>i</sub> = x̄<sub>i</sub> is the maximum likelihood estimator under independent sampling, and it is unbiased. But when some <em>n<sub>i</sub></em> are small, the variance of x̄<sub>i</sub> is large — a country with n = 1 has Var(x̄<sub>i</sub>) = σ², the full population variance — and the resulting rankings are dominated by sampling noise rather than by true differences in θ<sub>i</sub>.</p>
+    <p>Bayesian shrinkage resolves this by imposing a hierarchical model: the group means θ<sub>i</sub> are themselves drawn from a common distribution, and each x̄<sub>i</sub> is combined with that population-level information to produce a posterior estimate. The result is a point estimator that is biased but has smaller mean squared error than the MLE in every realistic setting.</p>
 
-    <h3>The problem: one wine, one great score</h3>
-    <p>Suppose Greece appears in the codex exactly once: a 9.2-rated wine. Suppose France appears thirty-two times, averaging 9.59. A raw-average chart would rank Greece below France — fine so far. But now suppose the single Greek wine had been a 9.9. Greece would leap to the top of the chart, ahead of every other country, based on <em>one</em> tasting.</p>
-    <p>This is the classic <strong>small-sample problem</strong>. A single data point can look dramatic but tells you almost nothing. IMDb's Top 250 list has the same issue: without adjustment, a movie with three 10-star ratings would rank above <em>The Godfather</em>.</p>
+    <h3>2. The Normal–Normal hierarchical model</h3>
+    <p>Assume:</p>
+    <p class="eq">x<sub>ij</sub> | θ<sub>i</sub> &nbsp;~&nbsp; 𝒩(θ<sub>i</sub>, σ²),&nbsp; independent across <em>i</em>, <em>j</em></p>
+    <p class="eq">θ<sub>i</sub> &nbsp;~&nbsp; 𝒩(μ, τ²),&nbsp; independent across <em>i</em></p>
+    <p>Here σ² is the within-group sampling variance (how much ratings vary within a single country), τ² is the between-group variance (how much true country means vary), and μ is the grand mean. This is the simplest non-trivial hierarchical model and suffices for rating data bounded roughly in [8.9, 10.0], where normality is a reasonable working assumption.</p>
+    <p>Given the model, the sufficient statistic for θ<sub>i</sub> is x̄<sub>i</sub>, which satisfies</p>
+    <p class="eq">x̄<sub>i</sub> | θ<sub>i</sub> &nbsp;~&nbsp; 𝒩(θ<sub>i</sub>, σ² / n<sub>i</sub>).</p>
 
-    <h3>The intuition</h3>
-    <p>Here is the trick, phrased as a question: <em>how much do you believe one rating?</em> If you have one tasting of a country, your best guess for that country's "true" average is probably not that single score — it is probably somewhere between that score and your overall baseline. You don't have enough evidence yet to commit. If you have thirty tastings, though, your best guess is very close to the observed average. The evidence is strong.</p>
-    <p>Bayesian shrinkage turns this intuition into a formula. Every country's average gets "pulled" toward the global mean, and the strength of the pull depends on how little data you have.</p>
+    <h3>3. Posterior derivation</h3>
+    <p>Because the Normal family is self-conjugate, the posterior for θ<sub>i</sub> given x̄<sub>i</sub> is also Normal. Apply Bayes' rule with a 𝒩(μ, τ²) prior and a 𝒩(θ<sub>i</sub>, σ² / n<sub>i</sub>) likelihood. The posterior precision is the sum of prior and likelihood precisions:</p>
+    <p class="eq">1 / Var(θ<sub>i</sub> | x̄<sub>i</sub>) = 1 / τ² + n<sub>i</sub> / σ².</p>
+    <p>The posterior mean is the precision-weighted average of the prior mean μ and the data mean x̄<sub>i</sub>:</p>
+    <p class="eq">𝔼[θ<sub>i</sub> | x̄<sub>i</sub>] = (μ / τ² + n<sub>i</sub> x̄<sub>i</sub> / σ²) / (1 / τ² + n<sub>i</sub> / σ²).</p>
+    <p>Multiply numerator and denominator by τ² · σ² / σ² and rearrange:</p>
+    <p class="eq">θ̂<sub>i</sub> = (n<sub>i</sub> · x̄<sub>i</sub> + (σ² / τ²) · μ) / (n<sub>i</sub> + σ² / τ²).</p>
+    <p>Define the shrinkage constant</p>
+    <p class="eq">m = σ² / τ².</p>
+    <p>The estimator then takes the clean closed form</p>
+    <p class="eq" style="background:#F5E8EB;color:#5B1A2D;padding:14px;font-weight:600">θ̂<sub>i</sub> = (n<sub>i</sub> · x̄<sub>i</sub> + m · μ) / (n<sub>i</sub> + m).</p>
+    <p>This is the formula implemented on the site. It is the posterior mean under the Normal–Normal hierarchical model; equivalently, it is the Bayes estimator under squared-error loss. As n<sub>i</sub> → ∞ the estimator converges to x̄<sub>i</sub>; as n<sub>i</sub> → 0 it converges to the prior mean μ. The ratio m = σ² / τ² has an intuitive reading: it is the number of observations whose evidence is worth, in aggregate, the same as the prior — a prior "sample size."</p>
 
-    <h3>The formula</h3>
-    <p><code style="display:block;padding:12px;background:#F5E8EB;color:#5B1A2D;font-size:12px;white-space:pre-wrap">adjusted = (n × country_avg + m × global_avg) / (n + m)</code></p>
-    <p>Where:</p>
+    <h3>4. Equivalent weighted-average form</h3>
+    <p>Let α<sub>i</sub> = n<sub>i</sub> / (n<sub>i</sub> + m). Then</p>
+    <p class="eq">θ̂<sub>i</sub> = α<sub>i</sub> · x̄<sub>i</sub> + (1 − α<sub>i</sub>) · μ.</p>
+    <p>This makes the shrinkage explicit: the estimate is a convex combination of the group mean and the grand mean, with the weight on x̄<sub>i</sub> growing with sample size. The factor (1 − α<sub>i</sub>) is the <em>shrinkage fraction</em>. For n<sub>i</sub> = m, the estimate sits exactly halfway between x̄<sub>i</sub> and μ.</p>
+
+    <h3>5. Estimating σ² and τ² from the Codex Vini data</h3>
+    <p>The formula requires σ² and τ². In a fully Bayesian treatment these would have their own priors; the <strong>empirical Bayes</strong> approach estimates them from the data by method of moments.</p>
+    <p>With the current ${N} wines:</p>
+    <p class="eq">μ̂ = ${globalMean.toFixed(3)}&nbsp;&nbsp;(grand mean)<br>σ̂² = MSW = ${fmt(sigmaHat2)}&nbsp;&nbsp;(pooled within-country variance)<br>τ̂² = max{0, (MSB − MSW) / n̄} = ${fmt(tauHat2)}&nbsp;&nbsp;(between-country variance)</p>
+    <p>where MSW is the mean squared error within countries, MSB is the mean squared error between country means (weighted by sample size), and n̄ = ${avgN.toFixed(1)} is the average sample size across countries with n ≥ 2. Singletons are excluded from τ̂² estimation because their contribution to the between-group sum of squares is indistinguishable from within-group noise.</p>
+    <p>The empirical-Bayes shrinkage constant is</p>
+    <p class="eq">m̂<sub>EB</sub> = σ̂² / τ̂² ≈ ${mEB}.</p>
+    <p>The site uses a fixed <strong>m = 5</strong> rather than m̂<sub>EB</sub>. With m̂<sub>EB</sub> substantially larger than 5, the empirical-Bayes estimator would shrink ranks more aggressively than the site currently does — reflecting that within-country variance (σ̂²) greatly exceeds between-country variance (τ̂²), so most of the observed spread in raw country means is sampling noise rather than real differences in θ<sub>i</sub>. Two practical considerations argue against simply adopting m̂<sub>EB</sub>:</p>
     <ul>
-      <li><strong>n</strong> — number of wines tasted from that country</li>
-      <li><strong>country_avg</strong> — the raw average rating for that country</li>
-      <li><strong>global_avg</strong> — the overall average across all wines in the codex (currently <strong>${globalMean.toFixed(2)}</strong>)</li>
-      <li><strong>m</strong> — a weight constant that controls how aggressive the pull is (I use <strong>m = 5</strong>)</li>
+      <li>τ̂² is itself estimated from only ${groupsForTau.length} groups with n ≥ 2. Its sampling distribution is wide enough that m̂<sub>EB</sub> could easily double or halve as the codex grows by a dozen wines. A fixed m produces a stable ranking that is not sensitive to small changes in the data.</li>
+      <li>At m̂<sub>EB</sub> ≈ ${mEB}, small-n countries are shrunk so close to μ that the chart becomes visually flat and conveys little. m = 5 preserves more of the raw signal while still correcting for the most obvious small-sample distortions. This is a deliberate bias-for-legibility trade-off.</li>
     </ul>
-    <p>Read it as a weighted average. You're blending the country's own data (with weight n) and the global mean (with weight m). When n is tiny relative to m, the global mean dominates. When n is large, the country's own data dominates.</p>
+    <p>A reader interested in the more aggressive estimate can read it off the chart tooltips: the raw x̄<sub>i</sub> and n<sub>i</sub> are shown, and θ̂<sub>i</sub>(m = ${mEB}) = (n<sub>i</sub> x̄<sub>i</sub> + ${mEB} · ${globalMean.toFixed(3)}) / (n<sub>i</sub> + ${mEB}) can be computed by inspection.</p>
 
-    <h3>Why <em>m = 5</em>?</h3>
-    <p>The choice of <em>m</em> is a judgment call. A small m means "I'll trust even small samples;" a large m means "I want a lot of evidence before I believe your average." Picking <em>m</em> close to the typical sample size is a common heuristic — countries with <em>m</em> tastings will sit roughly halfway between their own average and the global one. In this codex, most countries have between three and thirty tastings, so <strong>m = 5</strong> is a reasonable middle ground. If the collection grows substantially, <em>m</em> could grow with it.</p>
-
-    <h3>What it does in practice</h3>
-    <p>Here is how it plays out on the current country-level data (global mean <strong>${globalMean.toFixed(2)}</strong>, m = 5):</p>
-    <p><table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:13px">
+    <h3>6. Worked example</h3>
+    <p>Applying θ̂<sub>i</sub> = (n<sub>i</sub> · x̄<sub>i</sub> + 5 · ${globalMean.toFixed(3)}) / (n<sub>i</sub> + 5) to the current country data:</p>
+    <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px">
       <thead>
         <tr style="border-bottom:1px solid var(--rule);background:var(--paper)">
-          <th style="text-align:left;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">Country</th>
-          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">n</th>
-          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">raw avg</th>
-          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">adjusted</th>
-          <th style="text-align:right;padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">shift</th>
+          <th style="text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">Country (i)</th>
+          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">n<sub>i</sub></th>
+          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">x̄<sub>i</sub></th>
+          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">α<sub>i</sub></th>
+          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">θ̂<sub>i</sub></th>
+          <th style="text-align:right;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);font-weight:600">shift</th>
         </tr>
       </thead>
       <tbody>
-      ${showRows.map(r => {
-        const shift = r.adj - r.raw;
-        const shiftStr = (shift >= 0 ? '+' : '') + shift.toFixed(2);
-        return `<tr style="border-bottom:1px solid var(--rule-soft)">
-          <td style="padding:8px 10px;font-family:var(--serif);font-size:14px">${esc(r.c)}</td>
-          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--ink-soft)">${r.n}</td>
-          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--ink-soft)">${r.raw.toFixed(2)}</td>
-          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--bordeaux);font-weight:600">${r.adj.toFixed(2)}</td>
-          <td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-size:11px;color:${Math.abs(shift)>0.1?'var(--bordeaux)':'var(--ink-faint)'}">${shiftStr}</td>
-        </tr>`;
-      }).join('')}
+        ${countryStats.map(r => {
+          const alpha = r.n / (r.n + 5);
+          const shift = r.adj - r.raw;
+          return `<tr style="border-bottom:1px solid var(--rule-soft)">
+            <td style="padding:7px 10px;font-family:var(--serif);font-size:13.5px">${esc(r.c)}</td>
+            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)">${r.n}</td>
+            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)">${r.raw.toFixed(3)}</td>
+            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)">${alpha.toFixed(3)}</td>
+            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11.5px;color:var(--bordeaux);font-weight:600">${r.adj.toFixed(3)}</td>
+            <td style="padding:7px 10px;text-align:right;font-family:var(--mono);font-size:11px;color:${Math.abs(shift)>0.1?'var(--bordeaux)':'var(--ink-faint)'}">${(shift>=0?'+':'')}${shift.toFixed(3)}</td>
+          </tr>`;
+        }).join('')}
       </tbody>
-    </table></p>
-    <p>Countries with many tastings barely move — the adjustment respects their established average. Countries with one or two tastings get pulled decisively toward the global mean, because one or two wines is not enough evidence for a strong claim.</p>
+    </table>
+    <p>The column α<sub>i</sub> = n<sub>i</sub> / (n<sub>i</sub> + 5) is the effective weight on each country's own data. France (n = 32) has α ≈ 0.86, so its estimate barely moves. Countries with n = 1 have α ≈ 0.17, meaning ≈ 83% of their estimate comes from the grand mean — a direct reflection of how little we know about them. Notice that the shrinkage magnitude depends on both the sample size <em>and</em> how far the raw mean sits from μ: Argentina's three wines average ${byCountry.Argentina ? (byCountry.Argentina.reduce((s,x)=>s+x,0)/byCountry.Argentina.length).toFixed(2) : '—'}, far above μ, so it gets pulled visibly; Austria sits near μ and barely moves despite a similar n.</p>
 
-    <h3>What this is <em>not</em></h3>
-    <p>Shrinkage is not a correction for quality, difficulty, or context. It is purely a correction for <strong>sample size</strong>. It does not know that Italian wines are generally cheaper than Californian ones, or that my mood on a given tasting affects the score. It only says: "if you don't have much data, don't trust the average too strongly."</p>
-    <p>It is also not the only approach. Alternatives include confidence intervals (showing each bar with an uncertainty range), minimum-sample floors (only show countries with at least N wines), or full Bayesian models with priors estimated from the data itself. I chose shrinkage because it produces a single clean ranking, which is what a bar chart wants, while honestly handling the small-sample problem.</p>
-
-    <h3>Seeing both numbers</h3>
-    <p>Every bar in the two adjusted charts is sortable by the adjusted average. Hover any bar for a tooltip showing:</p>
+    <h3>7. Properties of the estimator</h3>
+    <p>Under the assumed model, the estimator θ̂<sub>i</sub> is:</p>
     <ul>
-      <li>The <strong>adjusted</strong> average (used for the bar length)</li>
-      <li>The <strong>raw</strong> average and sample size <em>n</em></li>
+      <li><strong>Biased</strong> toward μ. The bias is <em>E</em>[θ̂<sub>i</sub>] − θ<sub>i</sub> = (1 − α<sub>i</sub>)(μ − θ<sub>i</sub>), which vanishes as n<sub>i</sub> → ∞.</li>
+      <li><strong>Lower-variance</strong> than x̄<sub>i</sub>: Var(θ̂<sub>i</sub> | θ<sub>i</sub>) = α<sub>i</sub>² · σ² / n<sub>i</sub>, reduced by factor α<sub>i</sub>² relative to the MLE.</li>
+      <li><strong>Admissible</strong>: there exists no estimator that dominates it in mean squared error uniformly over all (θ<sub>1</sub>, …, θ<sub>K</sub>). This is a standard decision-theoretic result in the Normal means problem.</li>
     </ul>
-    <p>This lets you see both the "fair" ranking and the underlying data. A Greek wine at raw 9.2 with n=1 will show adjusted ≈ 9.46; you'll see both numbers and understand why it sits where it sits.</p>
+    <p>For group rankings — the use case here — what matters is that the posterior mean is the Bayes estimator under squared-error loss, and that it orders groups in a way that accounts for sampling uncertainty. A country ranked high on θ̂<sub>i</sub> is high either because its true mean is high, or because n<sub>i</sub> is large enough that we are confident in x̄<sub>i</sub>; either is a defensible reason to display it high.</p>
 
-    <h3>Further reading</h3>
-    <p>The technique goes by several names: <em>Bayesian shrinkage</em>, <em>empirical Bayes</em>, <em>regression to the mean</em>, <em>James–Stein estimation</em>, or just <em>smoothing</em>. IMDb uses it (they call it the "weighted rating"). Baseball analysts use it for batting averages. Epidemiologists use it for rare-disease rates by region. The basic formula stays the same: every local estimate gets pulled toward a global estimate by an amount proportional to how little data you have.</p>
-    <p>For a deeper treatment, see David Robinson's book <em>Introduction to Empirical Bayes</em> (freely available online), or search for "Stein's paradox" for the classical statistics version of the same idea.</p>
+    <h3>8. Limitations</h3>
+    <p>The normality assumption is a working convenience. Ratings are bounded and right-censored near 10.0 (there is no rating above 10.0, and my own 9.9s are de facto truncated draws from whatever unbounded latent variable they represent). For bounded ratings with potential ceiling effects, a Beta-Binomial or ordered-logit model would be more principled but would not change the qualitative ranking meaningfully at current sample sizes.</p>
+    <p>The model also assumes θ<sub>i</sub> are exchangeable across countries, which is a convenient fiction. A Burgundy and a Mosel wine are drawn from visibly different underlying distributions. A more refined model would introduce further hierarchy (continent, climate zone, price tier), at the cost of requiring substantially more data to identify the additional variance components.</p>
+    <p>Finally, the ratings themselves are not independent samples from a well-defined population. They reflect my purchase patterns, which are non-random — I buy what I expect to enjoy — and my tasting context, which varies. No amount of statistical machinery fixes that; shrinkage only addresses the sample-size problem conditional on whatever selection process generated the data in the first place.</p>
+
+    <h3>References</h3>
+    <ul>
+      <li>Efron, B. &amp; Morris, C. (1975). "Data Analysis Using Stein's Estimator and Its Generalizations." <em>JASA</em> 70 (350): 311–319.</li>
+      <li>Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian Data Analysis</em>, 3rd ed., chapter 5.</li>
+      <li>Robinson, D. (2017). <em>Introduction to Empirical Bayes: Examples from Baseball Statistics.</em></li>
+    </ul>
 
     <p class="section-note" style="margin-top:24px"><em>Jure Skarabot · New York · 2026</em></p>
   `;
