@@ -1,4 +1,19 @@
 [
+
+{
+  "id": "domaine-weinbach-riesling-grand-cru-schlossberg-2021",
+  "producer": "Domaine Weinbach",
+  "wine": "Riesling Grand Cru Schlossberg",
+  "vintage": "2021",
+  "country": "France",
+  "region": "Alsace",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.6,
+  "date_tasted": "2026-04-22",
+  "lat": 48.218,
+  "lng": 7.357
+},	
   {
     "id": "domaine-zind-humbrecht-gewurztraminer-clos-saint-urbain-grand-cru-2023",
     "producer": "Domaine Zind-Humbrecht",
