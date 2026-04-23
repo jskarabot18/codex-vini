@@ -34,6 +34,8 @@ header{padding:40px 0 28px;border-bottom:1px solid var(--rule)}
 h1.title{font-family:var(--serif);font-size:54px;font-weight:500;color:var(--bordeaux);letter-spacing:-0.02em;line-height:1}
 h1.title em{font-style:italic;font-weight:400}
 .subtitle{font-size:13px;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;font-weight:500}
+.header-motto{font-family:var(--serif);font-style:italic;font-size:16px;font-weight:400;color:var(--bordeaux);letter-spacing:0.01em;margin-top:4px}
+.header-motto em{font-style:italic}
 .meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .author{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft)}
 
@@ -207,10 +209,6 @@ footer{
   color:var(--bordeaux);letter-spacing:0.01em;margin-bottom:26px;
 }
 .footer-motto em{font-style:italic}
-.footer-prose{
-  max-width:620px;margin:0 auto 22px;font-size:14px;line-height:1.65;
-  color:var(--ink-soft);
-}
 .footer-copyright{
   font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;font-weight:500;
   color:var(--ink-faint);
@@ -218,7 +216,6 @@ footer{
 @media(max-width:700px){
   footer{margin-top:50px;padding:32px 16px 28px}
   .footer-motto{font-size:18px;margin-bottom:20px}
-  .footer-prose{font-size:13px;margin-bottom:18px}
 }
 
 @media(max-width:1100px){
@@ -250,6 +247,7 @@ footer{
     <div class="brand">
       <h1 class="title">Codex <em>Vini</em></h1>
       <div class="subtitle">A Personal Wine Atlas</div>
+      <div class="header-motto">— <em>in vino, cognitio</em> —</div>
     </div>
     <div class="meta">
       <div class="author">Jure Skarabot · New York</div>
@@ -264,11 +262,11 @@ footer{
   </div>
   <div class="docs-row">
     <span class="docs-label">Documents</span>
-    <a class="docs-pill" href="docs/about.pdf" target="_blank" rel="noopener">About</a>
-    <a class="docs-pill" href="docs/howto.pdf" target="_blank" rel="noopener">How to update</a>
-    <a class="docs-pill" href="https://jskarabot18.github.io/tasterank-explorer/TasteRank_Grape_Reference.pdf" target="_blank" rel="noopener">Grapes</a>
-    <a class="docs-pill" href="https://jskarabot18.github.io/soul-of-wine/docs/layer2-descriptions.pdf" target="_blank" rel="noopener">Regions</a>
-    <a class="docs-pill" href="docs/shrinkage.pdf" target="_blank" rel="noopener">Shrinkage</a>
+    <a class="docs-pill" href="docs/about.pdf#page=1" target="_blank" rel="noopener">About</a>
+    <a class="docs-pill" href="docs/howto.pdf#page=1" target="_blank" rel="noopener">How to update</a>
+    <a class="docs-pill" href="https://jskarabot18.github.io/tasterank-explorer/TasteRank_Grape_Reference.pdf#page=1" target="_blank" rel="noopener">Grapes</a>
+    <a class="docs-pill" href="https://jskarabot18.github.io/soul-of-wine/docs/layer2-descriptions.pdf#page=1" target="_blank" rel="noopener">Regions</a>
+    <a class="docs-pill" href="docs/shrinkage.pdf#page=1" target="_blank" rel="noopener">Shrinkage</a>
   </div>
   <div class="eco-row">
     <span class="eco-label">Ecosystem</span>
@@ -403,10 +401,6 @@ footer{
 
 <footer>
   <div class="footer-motto">— <em>in vino, cognitio</em> —</div>
-  <p class="footer-prose">
-    Source-available and free for personal and non-commercial use.
-    Corrections, arguments, and recommended bottles are warmly received.
-  </p>
   <div class="footer-copyright">© Jure Skarabot · MMXXVI</div>
 </footer>
 
