@@ -10,10 +10,16 @@ An interactive personal wine atlas — every wine I have tasted, plotted on a ma
 
 ## What's inside
 
-- **Interactive map** (Leaflet + CARTO basemap) with one pin per wine, sized by rating and coloured by grape variety
-- **Full ledger** — sortable, searchable, filterable table of every wine tasted
-- **Summary charts** — rating distribution and top countries, updated live as the collection grows
-- **Cross-linked filters** — clicking any filter updates both the map and the table simultaneously
+The site is organised into three sections:
+
+- **The Book** — sortable, searchable, filterable table of every wine tasted
+- **The Atlas** — interactive map (Leaflet + CARTO basemap) with one pin per wine, sized by rating and coloured by grape variety
+- **The Collection** — eight charts visualising the codex: rating distribution, colour share, vintage distribution, all countries / regions / grapes, and average rating broken down by country and by grape
+
+Plus:
+
+- **Cross-linked filters** — clicking any filter updates both the map and the table simultaneously; rating buttons let you isolate a single score
+- **Documents dropdown** — about, how-to, the 101 TasteRank grape profiles, and 57 Soul of Wine regional terroir profiles, all built into the page
 - **~120 wines at launch**, growing weekly
 
 Each wine is tagged with:
@@ -30,13 +36,15 @@ Each wine is tagged with:
 | `wines.json` | Single source of truth — every wine as a JSON object |
 | `grapes.json` | Grape taxonomy (101 varieties + named blends) |
 | `regions.json` | Region → lat/lng lookup |
+| `grape_profiles.json` | One-paragraph reference for each of the 101 TasteRank grape varieties |
+| `region_profiles.json` | Terroir profile (climate, soils, varieties, winemaking, history) for 57 regions, from Soul of Wine |
 | `tools/add_wine.html` | Local form for adding new wines |
 | `README.md` | This file |
 | `LICENSE` | CC BY-NC 4.0 |
 
 ## How to use
 
-Open the [live site](https://jskarabot18.github.io/codex-vini/) in any modern browser. Use the filters in the left panel to narrow by country, grape, colour, or rating. Click any pin on the map for a full wine card. Click any row in the ledger to fly the map to that wine. Press `Esc` or the ✕ Reset button to return to the full view.
+Open the [live site](https://jskarabot18.github.io/codex-vini/) in any modern browser. Use the filters in the left panel to narrow by country, grape, colour, or rating. Click any pin on the map for a full wine card. Click any row in The Book to fly the map to that wine. Click any of the **Reset** buttons or press `Esc` to clear all filters and return the map to its default Europe view.
 
 To run locally, simply open `index.html` in a browser — no build tools or server required. *(If opening via `file://`, the browser may block loading `wines.json` via `fetch()`. Either use a local server — `python3 -m http.server` — or open `codex-vini-preview.html` which has the data embedded.)*
 

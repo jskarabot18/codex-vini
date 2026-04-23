@@ -284,6 +284,34 @@ footer{
 
 <section class="section">
   <div class="section-head">
+    <h2>The <em>book</em></h2>
+    <div class="section-sub">— every wine, every tasting</div>
+  </div>
+  <div class="table-head-bar">
+    <div class="results-count" id="results-count"></div>
+    <button class="btn-reset" id="btn-reset-book" style="display:none">Reset filters</button>
+  </div>
+  <div class="table-wrap">
+    <table id="wine-table">
+      <thead>
+        <tr>
+          <th data-sort="producer">Producer</th>
+          <th data-sort="wine">Wine</th>
+          <th data-sort="vintage">Vintage</th>
+          <th data-sort="region">Region</th>
+          <th data-sort="country">Country</th>
+          <th data-sort="grape">Grape / Category</th>
+          <th class="rating-col" data-sort="rating">Rating</th>
+          <th data-sort="date_tasted">Tasted</th>
+        </tr>
+      </thead>
+      <tbody id="wine-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="atlas-section">
+  <div class="section-head">
     <h2>The <em>atlas</em></h2>
     <div class="section-sub">— filter by country, grape, colour, or rating</div>
   </div>
@@ -315,34 +343,6 @@ footer{
       </div>
     </aside>
     <div id="map-container"><div id="map"></div></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="section-head">
-    <h2>The <em>book</em></h2>
-    <div class="section-sub">— every wine, every tasting</div>
-  </div>
-  <div class="table-head-bar">
-    <div class="results-count" id="results-count"></div>
-    <button class="btn-reset" id="btn-reset-book" style="display:none">Reset filters</button>
-  </div>
-  <div class="table-wrap">
-    <table id="wine-table">
-      <thead>
-        <tr>
-          <th data-sort="producer">Producer</th>
-          <th data-sort="wine">Wine</th>
-          <th data-sort="vintage">Vintage</th>
-          <th data-sort="region">Region</th>
-          <th data-sort="country">Country</th>
-          <th data-sort="grape">Grape / Category</th>
-          <th class="rating-col" data-sort="rating">Rating</th>
-          <th data-sort="date_tasted">Tasted</th>
-        </tr>
-      </thead>
-      <tbody id="wine-tbody"></tbody>
-    </table>
   </div>
 </section>
 
@@ -894,7 +894,7 @@ function renderTable(){
       setTimeout(() => {
         if (markers[wine.id]) clusterGroup.zoomToShowLayer(markers[wine.id], () => markers[wine.id].openPopup());
       }, 900);
-      document.querySelector('.section').scrollIntoView({ behavior:'smooth', block:'start' });
+      document.getElementById('atlas-section').scrollIntoView({ behavior:'smooth', block:'start' });
     }
   }));
 }
