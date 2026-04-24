@@ -144,25 +144,23 @@ button.ghost:hover{background:var(--bordeaux-tint)}
     <div class="row">
       <div class="field">
         <label>Country<span class="req">*</span></label>
-        <select id="f-country">
-          <option value="">— select —</option>
-        </select>
+        <input id="f-country" type="text" list="country-list" placeholder="e.g. France" autocomplete="off"/>
+        <datalist id="country-list"></datalist>
+        <div class="hint">Type to search; new countries accepted</div>
       </div>
       <div class="field">
         <label>Region<span class="req">*</span></label>
-        <select id="f-region">
-          <option value="">— select country first —</option>
-        </select>
-        <div class="hint">Pin location is set by region</div>
+        <input id="f-region" type="text" list="region-list" placeholder="e.g. Côte de Beaune" autocomplete="off"/>
+        <datalist id="region-list"></datalist>
+        <div class="hint">Pin location is set by region (must exist in regions.json)</div>
       </div>
     </div>
 
     <div class="field">
       <label>Grape / category<span class="req">*</span></label>
-      <select id="f-grape">
-        <option value="">— select —</option>
-      </select>
-      <div class="hint">101 TasteRank varieties + named blends (Bordeaux Blend, Barolo, etc.)</div>
+      <input id="f-grape" type="text" list="grape-list" placeholder="e.g. Chardonnay, Barolo, Bordeaux Blend" autocomplete="off"/>
+      <datalist id="grape-list"></datalist>
+      <div class="hint">101 TasteRank varieties + named blends. New grape? Type it; grapes.json snippet will be generated alongside.</div>
     </div>
 
     <div class="field">
@@ -218,7 +216,8 @@ button.ghost:hover{background:var(--bordeaux-tint)}
       <h3>Tips</h3>
       <p><strong>Producer name:</strong> use the form on the label (e.g. "Château Margaux" not "Margaux"). The ID is auto-generated as a URL-safe slug of producer + wine + vintage.</p>
       <p><strong>Vintage:</strong> four-digit year, or <code>NV</code> for non-vintage (mostly Champagne).</p>
-      <p><strong>Adding a new region or grape?</strong> The dropdowns only show regions and grapes already in the codex. To add a new one, edit <code>regions.json</code> (add lat/lng) or <code>grapes.json</code> first, then return here.</p>
+      <p><strong>Adding a new region?</strong> You must first add the region to <code>regions.json</code> with its lat/lng centroid (the region's geographic heart — usually the main town or vineyard concentration). The form will block submission until that's done, since without coordinates the pin has nowhere to go.</p>
+      <p><strong>Adding a new grape?</strong> Just type it. The form will generate two JSON snippets — one for <code>wines.json</code> and one for <code>grapes.json</code> under <code>additional_varieties</code>. You must pick a colour manually for new grapes since auto-detection only works on known ones.</p>
     </div>
   </div>
 
@@ -243,9 +242,9 @@ const COLOR_BY_LIST = {
 async function loadData(){
   try {
     const [regResp, grResp, winesResp] = await Promise.all([
-      fetch('regions.json'),
-      fetch('grapes.json'),
-      fetch('wines.json'),
+      fetch('../regions.json'),
+      fetch('../grapes.json'),
+      fetch('../wines.json'),
     ]);
     REGIONS = await regResp.json();
     GRAPES = await grResp.json();
@@ -272,19 +271,14 @@ function populateColorIndex(){
 }
 
 function populateDropdowns(){
-  // Countries — from regions, sorted
-  const countries = new Set();
-  for (const [region, meta] of Object.entries(REGIONS)){
-    // REGIONS doesn't have country; infer from existing wines
-  }
-  // Better: infer countries from existing wines data
+  // Countries — unique values from existing wines
   const countriesFromData = new Set(EXISTING_WINES.map(w => w.country));
   const sortedCountries = [...countriesFromData].sort();
-  const countrySelect = document.getElementById('f-country');
+  const countryList = document.getElementById('country-list');
   sortedCountries.forEach(c => {
     const opt = document.createElement('option');
-    opt.value = c; opt.textContent = c;
-    countrySelect.appendChild(opt);
+    opt.value = c;
+    countryList.appendChild(opt);
   });
 
   // Country → region mapping from existing wines
@@ -294,54 +288,66 @@ function populateDropdowns(){
     COUNTRY_REGIONS[w.country].add(w.region);
   });
 
-  // When country changes, repopulate region dropdown
-  countrySelect.addEventListener('change', () => {
-    const regionSelect = document.getElementById('f-region');
-    regionSelect.innerHTML = '<option value="">— select —</option>';
-    const regions = COUNTRY_REGIONS[countrySelect.value];
+  // When country changes, repopulate region datalist with regions from that country
+  const countryInput = document.getElementById('f-country');
+  const regionList = document.getElementById('region-list');
+  function refreshRegionList(){
+    regionList.innerHTML = '';
+    const regions = COUNTRY_REGIONS[countryInput.value];
     if (!regions) return;
     [...regions].sort().forEach(r => {
       const opt = document.createElement('option');
-      opt.value = r; opt.textContent = r;
-      regionSelect.appendChild(opt);
+      opt.value = r;
+      regionList.appendChild(opt);
     });
-  });
-
-  // Grapes — organized: blends first, then TasteRank reds, then whites, then additional
-  const grapeSelect = document.getElementById('f-grape');
-  const blendGroup = document.createElement('optgroup');
-  blendGroup.label = 'Named blends & styles';
-  Object.keys(GRAPES.named_blends || {}).sort().forEach(g => {
-    const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
-    blendGroup.appendChild(opt);
-  });
-  grapeSelect.appendChild(blendGroup);
-
-  const redGroup = document.createElement('optgroup');
-  redGroup.label = 'Red varieties';
-  [...GRAPES.tasterank_reds].sort().forEach(g => {
-    const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
-    redGroup.appendChild(opt);
-  });
-  grapeSelect.appendChild(redGroup);
-
-  const whiteGroup = document.createElement('optgroup');
-  whiteGroup.label = 'White varieties';
-  [...GRAPES.tasterank_whites].sort().forEach(g => {
-    const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
-    whiteGroup.appendChild(opt);
-  });
-  grapeSelect.appendChild(whiteGroup);
-
-  if (GRAPES.additional_varieties && Object.keys(GRAPES.additional_varieties).length){
-    const addGroup = document.createElement('optgroup');
-    addGroup.label = 'Additional varieties';
-    Object.keys(GRAPES.additional_varieties).sort().forEach(g => {
-      const opt = document.createElement('option'); opt.value = g; opt.textContent = g;
-      addGroup.appendChild(opt);
-    });
-    grapeSelect.appendChild(addGroup);
   }
+  countryInput.addEventListener('input', refreshRegionList);
+  countryInput.addEventListener('change', refreshRegionList);
+
+  // Grapes — all categories into one datalist, with category label shown beside the value
+  const grapeList = document.getElementById('grape-list');
+  const addGrapeOption = (name, label) => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = label;  // shown as secondary hint in browsers that support it
+    grapeList.appendChild(opt);
+  };
+
+  Object.keys(GRAPES.named_blends || {}).sort().forEach(g => addGrapeOption(g, 'named blend / style'));
+  [...GRAPES.tasterank_reds].sort().forEach(g => addGrapeOption(g, 'red variety'));
+  [...GRAPES.tasterank_whites].sort().forEach(g => addGrapeOption(g, 'white variety'));
+  Object.keys(GRAPES.additional_varieties || {}).sort().forEach(g => {
+    const color = GRAPES.additional_varieties[g]?.color || '';
+    addGrapeOption(g, color ? `${color} variety (additional)` : 'additional variety');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LOOKUPS — case/accent-insensitive matching against known values
+// ═══════════════════════════════════════════════════════════════════════════
+function normalizeForMatch(s){
+  return String(s).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function findCanonicalGrape(input){
+  const needle = normalizeForMatch(input);
+  const pools = [
+    Object.keys(GRAPES.named_blends || {}),
+    GRAPES.tasterank_reds || [],
+    GRAPES.tasterank_whites || [],
+    Object.keys(GRAPES.additional_varieties || {}),
+  ];
+  for (const pool of pools){
+    const hit = pool.find(g => normalizeForMatch(g) === needle);
+    if (hit) return hit;
+  }
+  return null;  // new grape
+}
+
+function findCanonicalRegion(input){
+  const needle = normalizeForMatch(input);
+  const hit = Object.keys(REGIONS).find(r => normalizeForMatch(r) === needle);
+  return hit || null;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -383,9 +389,9 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   const wine = document.getElementById('f-wine').value.trim();
   const vintage = document.getElementById('f-vintage').value.trim().toUpperCase();
   const rating = parseFloat(document.getElementById('f-rating').value);
-  const country = document.getElementById('f-country').value;
-  const region = document.getElementById('f-region').value;
-  const grape = document.getElementById('f-grape').value;
+  const countryInput = document.getElementById('f-country').value.trim();
+  const regionInput = document.getElementById('f-region').value.trim();
+  const grapeInput = document.getElementById('f-grape').value.trim();
   const colorOverride = document.getElementById('f-color').value;
   const date = document.getElementById('f-date').value;
 
@@ -395,9 +401,9 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   if (!wine) missing.push('Wine name');
   if (!vintage) missing.push('Vintage');
   if (isNaN(rating)) missing.push('Rating');
-  if (!country) missing.push('Country');
-  if (!region) missing.push('Region');
-  if (!grape) missing.push('Grape');
+  if (!countryInput) missing.push('Country');
+  if (!regionInput) missing.push('Region');
+  if (!grapeInput) missing.push('Grape');
   if (missing.length){
     showStatus('err', `Missing required fields: ${missing.join(', ')}`);
     return;
@@ -410,19 +416,37 @@ document.getElementById('btn-generate').addEventListener('click', () => {
     showStatus('err', 'Vintage must be 4-digit year or NV');
     return;
   }
+
+  // Canonicalize region & grape — accept existing values even if user typed different casing/accents
+  const canonicalRegion = findCanonicalRegion(regionInput);
+  const region = canonicalRegion || regionInput;  // keep user's spelling if new
+  const canonicalGrape = findCanonicalGrape(grapeInput);
+  const grape = canonicalGrape || grapeInput;
+  const isNewGrape = canonicalGrape === null;
+
+  // Canonicalize country — accept existing values even if user typed different casing
+  const existingCountries = new Set(EXISTING_WINES.map(w => w.country));
+  const canonicalCountry = [...existingCountries].find(c => normalizeForMatch(c) === normalizeForMatch(countryInput));
+  const country = canonicalCountry || countryInput;
+
+  // Region hygiene gate — MUST exist in regions.json
   if (!REGIONS[region]){
-    showStatus('err', `No coordinates for region "${region}". Add it to regions.json first.`);
+    showStatus('err', `Region "${region}" is not in regions.json. Add it there with lat/lng first, then try again.`);
     return;
   }
 
   // Infer color
-  const color = colorOverride || inferColor(grape);
+  let color = colorOverride || (isNewGrape ? null : inferColor(grape));
   if (!color){
-    showStatus('err', `Could not determine wine colour for grape "${grape}". Please select a colour manually.`);
+    if (isNewGrape){
+      showStatus('err', `"${grape}" is a new grape — please pick a wine colour manually so the grapes.json entry is complete.`);
+    } else {
+      showStatus('err', `Could not determine wine colour for grape "${grape}". Please select a colour manually.`);
+    }
     return;
   }
 
-  // Build the object
+  // Build the wine object
   const id = `${slug(producer)}-${slug(wine)}-${slug(vintage)}`;
   const coords = REGIONS[region];
   const obj = {
@@ -442,14 +466,30 @@ document.getElementById('btn-generate').addEventListener('click', () => {
 
   // Duplicate check
   const existingIds = new Set(EXISTING_WINES.map(w => w.id));
+  const notes = [];
   if (existingIds.has(id)){
-    showStatus('warn', `⚠ ID "${id}" already exists in wines.json. This might be a duplicate — double-check before pasting.`);
+    notes.push(`⚠ ID "${id}" already exists in wines.json — possible duplicate`);
+  }
+  if (!canonicalCountry){
+    notes.push(`✨ New country: "${country}"`);
+  }
+  if (isNewGrape){
+    notes.push(`✨ New grape: "${grape}" — grapes.json snippet generated below`);
+  }
+  if (notes.length){
+    showStatus(notes[0].startsWith('⚠') ? 'warn' : 'ok', notes.join(' · '));
   } else {
     showStatus('ok', `✓ Generated. ID: ${id}`);
   }
 
-  // Render JSON (with trailing comma for easy paste)
-  const pretty = JSON.stringify(obj, null, 2) + ',';
+  // Render JSON — wines.json entry, plus grapes.json entry if new grape
+  let pretty = '// --- paste into wines.json ---\n' + JSON.stringify(obj, null, 2) + ',';
+  if (isNewGrape){
+    const grapeEntry = { [grape]: { color } };
+    pretty += '\n\n// --- paste into grapes.json → additional_varieties ---\n';
+    pretty += JSON.stringify(grapeEntry, null, 2).replace(/^{\n|\n}$/g, '').trim() + ',';
+  }
+
   const out = document.getElementById('output-block');
   out.className = 'output-block';
   out.textContent = pretty;
@@ -457,6 +497,27 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   document.getElementById('btn-copy').style.display = '';
   document.getElementById('btn-another').style.display = '';
   document.getElementById('instructions').style.display = '';
+
+  // Update instructions panel if new grape
+  const inst = document.getElementById('instructions');
+  if (isNewGrape){
+    inst.innerHTML = `
+      <strong>Next steps:</strong><br>
+      1. Copy the text above<br>
+      2. Paste the <code>wines.json</code> entry at the start of the <code>wines.json</code> array<br>
+      3. Paste the <code>grapes.json</code> entry into the <code>additional_varieties</code> object in <code>grapes.json</code><br>
+      4. Commit both files and push — GitHub Pages will redeploy automatically
+    `;
+  } else {
+    inst.innerHTML = `
+      <strong>Next steps:</strong><br>
+      1. Copy the JSON above<br>
+      2. Open <code>wines.json</code> in the repo<br>
+      3. Paste the entry at the start of the array (inside the opening <code>[</code>)<br>
+      4. Add a comma after the pasted block if others follow<br>
+      5. Commit and push — GitHub Pages will redeploy automatically
+    `;
+  }
 });
 
 document.getElementById('btn-copy').addEventListener('click', async () => {
@@ -497,13 +558,17 @@ document.getElementById('btn-clear').addEventListener('click', () => {
   clearStatus();
 });
 
-// Auto-fill color when grape changes
-document.getElementById('f-grape').addEventListener('change', e => {
-  const inferred = inferColor(e.target.value);
-  if (inferred && !document.getElementById('f-color').value){
-    // Update hint only, don't force override
-    const hintEl = document.querySelector('#f-color + .hint');
-    hintEl.textContent = `Will auto-set to "${inferred}" unless you override`;
+// Auto-suggest color hint when grape value changes
+document.getElementById('f-grape').addEventListener('input', e => {
+  const canonical = findCanonicalGrape(e.target.value);
+  const hintEl = document.querySelector('#f-color + .hint');
+  if (canonical){
+    const inferred = inferColor(canonical);
+    if (inferred && !document.getElementById('f-color').value){
+      hintEl.textContent = `Will auto-set to "${inferred}" unless you override`;
+    }
+  } else if (e.target.value.trim()){
+    hintEl.textContent = 'New grape — please pick a colour manually';
   }
 });
 
