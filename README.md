@@ -20,7 +20,7 @@ Plus:
 
 - **Cross-linked filters** — clicking any filter updates both the map and the table simultaneously; rating buttons let you isolate a single score
 - **Documents dropdown** — about, how-to, the 101 TasteRank grape profiles, and 57 Soul of Wine regional terroir profiles, all built into the page
-- **~120 wines at launch**, growing weekly
+- **Growing weekly** as new bottles are tasted
 
 Each wine is tagged with:
 - Producer, wine name, vintage, rating (0–10 scale), date tasted
@@ -33,12 +33,13 @@ Each wine is tagged with:
 | File | Purpose |
 |---|---|
 | `index.html` | The main app — self-contained HTML + CSS + JS |
+| `add_wine.html` | In-browser form for adding new wines |
 | `wines.json` | Single source of truth — every wine as a JSON object |
-| `grapes.json` | Grape taxonomy (101 varieties + named blends) |
+| `grapes.json` | Grape taxonomy (101 varieties + named blends + additional varieties) |
 | `regions.json` | Region → lat/lng lookup |
 | `grape_profiles.json` | One-paragraph reference for each of the 101 TasteRank grape varieties |
 | `region_profiles.json` | Terroir profile (climate, soils, varieties, winemaking, history) for 57 regions, from Soul of Wine |
-| `tools/add_wine.html` | Local form for adding new wines |
+| `codex-vini-preview.html` | Standalone preview with embedded data, for opening via `file://` without a server |
 | `README.md` | This file |
 | `LICENSE` | CC BY-NC 4.0 |
 
@@ -46,17 +47,20 @@ Each wine is tagged with:
 
 Open the [live site](https://jskarabot18.github.io/codex-vini/) in any modern browser. Use the filters in the left panel to narrow by country, grape, colour, or rating. Click any pin on the map for a full wine card. Click any row in The Book to fly the map to that wine. Click any of the **Reset** buttons or press `Esc` to clear all filters and return the map to its default Europe view.
 
-To run locally, simply open `index.html` in a browser — no build tools or server required. *(If opening via `file://`, the browser may block loading `wines.json` via `fetch()`. Either use a local server — `python3 -m http.server` — or open `codex-vini-preview.html` which has the data embedded.)*
+To run locally, use a local server (`python3 -m http.server` from the repo root) and open `http://localhost:8000/`. The page loads `wines.json`, `grapes.json`, and `regions.json` via `fetch()`, which most browsers block under the `file://` protocol — opening `index.html` by double-click will render the layout but show zero wines. As an alternative, open `codex-vini-preview.html` directly; it has the data embedded and works without a server.
 
 ## Adding a new wine
 
-### Option 1 — Local form (recommended)
+### Option 1 — In-browser form (recommended)
 
-1. Open `tools/add_wine.html` in a browser (via a local server, since it loads JSON)
-2. Fill in the producer, wine, vintage, country/region, grape, and rating
+1. Open `add_wine.html` (in the live site or via a local server)
+2. Fill in producer, wine, vintage, country, region, grape, and rating. The country, region, and grape fields autocomplete from existing values but accept anything new you type
 3. Click **Generate JSON** and **Copy to clipboard**
-4. Open `wines.json` and paste the generated block at the start of the array (immediately after the opening `[`)
-5. Commit and push — GitHub Pages redeploys automatically
+4. Open `wines.json` and paste the generated entry at the start of the array (immediately after the opening `[`)
+5. If the form also generated a `grapes.json` snippet (because the grape was new), paste that into the `additional_varieties` object in `grapes.json`
+6. Commit and push — GitHub Pages redeploys automatically
+
+The form blocks submission for new regions until you've added the region to `regions.json` first (see below). This is intentional: pin coordinates can't be made up at the form, so the region has to exist in the lookup before a wine can use it.
 
 ### Option 2 — Direct edit on GitHub
 
@@ -88,7 +92,7 @@ Every wine is a JSON object of this shape:
 
 - `id` — stable slug of `producer-wine-vintage`, URL-safe
 - `vintage` — four-digit year or `"NV"` (non-vintage)
-- `grape` — must match an entry in `grapes.json` (either a TasteRank variety, a named blend, or an additional variety)
+- `grape` — a TasteRank variety, a named blend, or an additional variety in `grapes.json`. The form will generate a `grapes.json` snippet for any grape it doesn't recognise
 - `color` — one of `red`, `white`, `rosé`, `sparkling`
 - `rating` — number, one decimal, 0–10
 - `date_tasted` — ISO date `YYYY-MM-DD`
@@ -96,21 +100,21 @@ Every wine is a JSON object of this shape:
 
 ## Adding a new region or grape
 
-**New region:** edit `regions.json`, add an entry with the region name as key and `{"lat": …, "lng": …}` as value. Then you can use that region for a wine.
+**New region.** Edit `regions.json` and add an entry with the region name as key and `{"lat": …, "lng": …}` as value, where lat/lng is a sensible centroid for the region (the main town, the heart of the vineyard area). The form requires this to exist before it will accept a wine from that region — otherwise the pin would have nowhere to go.
 
-**New grape variety:** if the grape is one of the [101 TasteRank varieties](#), it's already in `grapes.json` — just use the name. If it's a new named blend or a variety outside the 101, add it to the relevant section of `grapes.json` first.
+**New grape variety.** Just type the grape into the form and it will generate two snippets: one for `wines.json`, one for `grapes.json` under `additional_varieties`. You'll need to pick a colour manually since auto-detection only works on known varieties. If you prefer to edit by hand, add the grape to the relevant section of `grapes.json` first (`tasterank_reds`, `tasterank_whites`, `named_blends`, or `additional_varieties`) and then add the wine.
 
 ## Taxonomy philosophy
 
-Wines are categorized by **a single grape/category field**, where grape varieties and named wine categories sit as peers — Option C in design terms. A Barolo is tagged `"Barolo"` (not decomposed to `"Nebbiolo"`). A Châteauneuf-du-Pape is tagged `"Châteauneuf-du-Pape Blend"` (not `"Grenache"`). A varietal Grenache from Gredos is tagged `"Grenache"`. This matches how sommeliers, wine lists, and retail actually organize wine — the named wine is its own identity, not a derivative of its dominant grape.
+Wines are categorized by **a single grape/category field**, where grape varieties and named wine categories sit as peers. A Barolo is tagged `"Barolo"` (not decomposed to `"Nebbiolo"`). A Châteauneuf-du-Pape is tagged `"Châteauneuf-du-Pape Blend"` (not `"Grenache"`). A varietal Grenache from Gredos is tagged `"Grenache"`. This matches how sommeliers, wine lists, and retail actually organize wine — the named wine is its own identity, not a derivative of its dominant grape.
 
-Borderline cases are handled individually. See the Phase 1 data report for the reasoning behind specific classification decisions.
+Borderline cases are handled individually.
 
 ## About
 
 This project grew out of 20+ years of wine collecting and tasting. It is a personal reference tool — a codex of every wine I have notable memory of having tasted, organized for my own lookup and reflection.
 
-The grape reference draws on my [TasteRank Grape Variety Reference](#), which provides one-paragraph profiles of 101 varieties.
+The grape reference draws on my [TasteRank Grape Variety Reference](https://jskarabot18.github.io/tasterank-explorer/), which provides one-paragraph profiles of 101 varieties. The regional terroir profiles draw on my [Soul of Wine](https://jskarabot18.github.io/soul-of-wine/) project.
 
 ## License
 
