@@ -1,5 +1,19 @@
 [
-
+// --- paste into wines.json ---
+{
+  "id": "luis-seabra-granito-cru-albarino-2022",
+  "producer": "Luís Seabra",
+  "wine": "Granito Cru Albariño",
+  "vintage": "2022",
+  "country": "Portugal",
+  "region": "Vinho Verde",
+  "grape": "Albariño",
+  "color": "white",
+  "rating": 9.4,
+  "date_tasted": "2026-04-22",
+  "lat": 41.55,
+  "lng": -8.42
+},
 {
   "id": "domaine-weinbach-riesling-grand-cru-schlossberg-2021",
   "producer": "Domaine Weinbach",
