@@ -1678,5 +1678,19 @@
     "date_tasted": "2025-01-11",
     "lat": 43.35,
     "lng": 11.25
-  }
+  },
+{
+  "id": "terlano-pinot-grigio-2024",
+  "producer": "Terlano",
+  "wine": "Pinot Grigio",
+  "vintage": "2024",
+  "country": "Italy",
+  "region": "Alto Adige",
+  "grape": "Pinot Gris",
+  "color": "white",
+  "rating": 9.1,
+  "date_tasted": "2026-04-26",
+  "lat": 46.4983,
+  "lng": 11.3548
+},
 ]
