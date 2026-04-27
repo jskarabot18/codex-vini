@@ -206,5 +206,8 @@
   "Vinho Verde": {
     "lat": 41.55,
     "lng": -8.42
+  },
+  "Alto Adige": {
+    "lat": 46.4983, "lng": 11.3548
   }
 }
