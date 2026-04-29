@@ -1,4 +1,18 @@
 [
+  {
+  "id": "le-berne-vino-nobile-di-montepulciano-alto-pieve-cervognano-2021",
+  "producer": "Le Bèrne",
+  "wine": "Vino Nobile di Montepulciano Alto Pieve Cervognano",
+  "vintage": "2021",
+  "country": "Italy",
+  "region": "Tuscany",
+  "grape": "Sangiovese",
+  "color": "red",
+  "rating": 9.4,
+  "date_tasted": "2026-04-29",
+  "lat": 43.35,
+  "lng": 11.25
+},
 {
   "id": "terlano-pinot-grigio-2024",
   "producer": "Terlano",
