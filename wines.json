@@ -1,5 +1,19 @@
 [
 {
+  "id": "terlano-pinot-grigio-2024",
+  "producer": "Terlano",
+  "wine": "Pinot Grigio",
+  "vintage": "2024",
+  "country": "Italy",
+  "region": "Alto Adige",
+  "grape": "Pinot Gris",
+  "color": "white",
+  "rating": 9.1,
+  "date_tasted": "2026-04-26",
+  "lat": 46.4983,
+  "lng": 11.3548
+},
+{
   "id": "luis-seabra-granito-cru-albarino-2022",
   "producer": "Luís Seabra",
   "wine": "Granito Cru Albariño",
