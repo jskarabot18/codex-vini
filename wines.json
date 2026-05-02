@@ -1,5 +1,19 @@
 [
   {
+  "id": "tercic-scemen-sauvignon-blanc-2023",
+  "producer": "Terčič",
+  "wine": "Scemen Sauvignon Blanc",
+  "vintage": "2023",
+  "country": "Italy",
+  "region": "Friuli-Venezia Giulia",
+  "grape": "Sauvignon Blanc",
+  "color": "white",
+  "rating": 9.3,
+  "date_tasted": "2026-05-01",
+  "lat": 45.96,
+  "lng": 13.35
+},
+  {
   "id": "le-berne-vino-nobile-di-montepulciano-alto-pieve-cervognano-2021",
   "producer": "Le Bèrne",
   "wine": "Vino Nobile di Montepulciano Alto Pieve Cervognano",
