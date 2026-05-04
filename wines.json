@@ -1,4 +1,18 @@
 [
+{
+  "id": "f-x-pichler-riesling-ried-kellerberg-2023",
+  "producer": "F.X. Pichler",
+  "wine": "Riesling Ried Kellerberg",
+  "vintage": "2023",
+  "country": "Austria",
+  "region": "Wachau",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.9,
+  "date_tasted": "2026-05-03",
+  "lat": 48.375,
+  "lng": 15.42
+},
   {
   "id": "tercic-scemen-sauvignon-blanc-2023",
   "producer": "Terčič",
