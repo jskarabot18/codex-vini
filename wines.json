@@ -1,4 +1,18 @@
 [
+  {
+  "id": "prager-gruner-veltliner-ried-achleiten-smaragd-2023",
+  "producer": "Prager",
+  "wine": "Grüner Veltliner Ried Achleiten Smaragd",
+  "vintage": "2023",
+  "country": "Austria",
+  "region": "Wachau",
+  "grape": "Grüner Veltliner",
+  "color": "white",
+  "rating": 9.7,
+  "date_tasted": "2026-05-03",
+  "lat": 48.375,
+  "lng": 15.42
+},
 {
   "id": "f-x-pichler-riesling-ried-kellerberg-2023",
   "producer": "F.X. Pichler",
