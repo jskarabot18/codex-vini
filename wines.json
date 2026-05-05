@@ -1,5 +1,19 @@
 [
   {
+  "id": "prager-ried-achleiten-smaragd-riesling-2022",
+  "producer": "Prager",
+  "wine": "Ried Achleiten Smaragd Riesling",
+  "vintage": "2022",
+  "country": "Austria",
+  "region": "Wachau",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.7,
+  "date_tasted": "2026-05-03",
+  "lat": 48.375,
+  "lng": 15.42
+},
+  {
   "id": "weingut-knoll-gruner-veltliner-ried-loibenberg-smaragd-2022",
   "producer": "Weingut Knoll",
   "wine": "Grüner Veltliner Ried Loibenberg Smaragd",
