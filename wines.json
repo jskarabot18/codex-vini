@@ -1,4 +1,18 @@
 [
+{
+  "id": "jurtschitsch-ried-heiligenstein-steinwand-riesling-2021",
+  "producer": "Jurtschitsch",
+  "wine": "Ried Heiligenstein Steinwand Riesling",
+  "vintage": "2021",
+  "country": "Austria",
+  "region": "Kamptal",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.6,
+  "date_tasted": "2026-05-03",
+  "lat": 48.478,
+  "lng": 15.685
+},
   {
   "id": "prager-ried-achleiten-smaragd-riesling-2022",
   "producer": "Prager",
