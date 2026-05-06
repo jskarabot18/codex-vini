@@ -1,9 +1,7 @@
 {
-  {
-  "name": "Franken",
-  "country": "Germany",
-  "latitude": 49.7913,
-  "longitude": 9.1772
+  "Franken": {
+  "lat": 49.791,
+  "lng": 9.177
 },
   "Wagram": {
     "lat": 48.42,
