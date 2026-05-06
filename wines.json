@@ -1,4 +1,18 @@
 [
+  {
+  "id": "weingut-rudolf-furst-klingenberger-spatburgunder-2022",
+  "producer": "Weingut Rudolf Fürst",
+  "wine": "Klingenberger Spätburgunder",
+  "vintage": "2022",
+  "country": "Germany",
+  "region": "Franken",
+  "grape": "Pinot Noir",
+  "color": "red",
+  "rating": 9.4,
+  "date_tasted": "2026-05-05",
+  "lat": 49.791,
+  "lng": 9.177
+},
 {
   "id": "jurtschitsch-ried-heiligenstein-steinwand-riesling-2021",
   "producer": "Jurtschitsch",
