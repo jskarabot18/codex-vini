@@ -1,5 +1,16 @@
 [
   {
+  "name": "Franken",
+  "country": "Germany",
+  "summary": "A continental wine region in northern Bavaria, centered on the meandering Main river. Among Germany's warmest and driest growing areas, with a viticultural identity built around Silvaner and increasingly recognized for Spätburgunder from its westernmost stretches.",
+  "climate": "Continental, with warm dry summers, cold winters, and a notable diurnal range. Spring frost remains a recurring risk on lower sites. Among the driest wine regions in Germany, with rainfall often well below the national average.",
+  "soils": "Three principal geological zones define the region. The western Mainviereck, including the Churfranken stretch around Klingenberg and Bürgstadt, is dominated by Buntsandstein — a weathered red sandstone that warms quickly and suits Pinot Noir. The central Maindreieck around Würzburg sits on Muschelkalk, a shell-limestone formation favoring Silvaner and Riesling. The eastern Steigerwald rests on Keuper, a heavier gypsum-bearing marl that produces fuller-bodied whites.",
+  "signature_grapes": ["Silvaner", "Müller-Thurgau", "Riesling", "Spätburgunder", "Bacchus"],
+  "sub_areas": ["Mainviereck", "Maindreieck", "Steigerwald"],
+  "traditions": "Quality wines from the region are historically bottled in the Bocksbeutel, a flat rounded flask whose shape is legally protected for wines of Franconian origin.",
+  "notable_villages": ["Würzburg", "Iphofen", "Escherndorf", "Klingenberg am Main", "Bürgstadt", "Volkach"]
+},
+  {
     "name": "Kamptal",
     "epithet": "Discipline",
     "identity": "The Moderates",
