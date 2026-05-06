@@ -1,4 +1,10 @@
 {
+  {
+  "name": "Franken",
+  "country": "Germany",
+  "latitude": 49.7913,
+  "longitude": 9.1772
+},
   "Wagram": {
     "lat": 48.42,
     "lng": 15.82
