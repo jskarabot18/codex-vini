@@ -1,5 +1,19 @@
 [
   {
+  "id": "elvio-cogno-barolo-ravera-2020",
+  "producer": "Elvio Cogno",
+  "wine": "Barolo Ravera",
+  "vintage": "2020",
+  "country": "Italy",
+  "region": "Piedmont",
+  "grape": "Nebbiolo",
+  "color": "red",
+  "rating": 9.5,
+  "date_tasted": "2026-05-07",
+  "lat": 44.7,
+  "lng": 7.9
+},
+  {
   "id": "weingut-rudolf-furst-klingenberger-spatburgunder-2022",
   "producer": "Weingut Rudolf Fürst",
   "wine": "Klingenberger Spätburgunder",
