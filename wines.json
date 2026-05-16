@@ -1,5 +1,19 @@
 [
   {
+  "id": "hermann-j-wiemer-riesling-flower-day-2024",
+  "producer": "Hermann J. Wiemer",
+  "wine": "Riesling Flower Day",
+  "vintage": "2024",
+  "country": "USA",
+  "region": "Finger Lakes",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.1,
+  "date_tasted": "2026-05-15",
+  "lat": 42.62,
+  "lng": -76.92
+},
+  {
   "id": "elvio-cogno-barolo-ravera-2020",
   "producer": "Elvio Cogno",
   "wine": "Barolo Ravera",
