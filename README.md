@@ -2,7 +2,7 @@
 
 *In vino veritas.*
 
-An interactive personal wine atlas — every wine I have tasted, plotted on a map, filterable by country, region, grape, colour, and rating. A sibling to [The Grand Cru Atlas](https://jskarabot18.github.io/grand-cru-atlas/).
+An interactive personal wine atlas — every wine I have tasted, plotted on a map, filterable by country, region, grape, colour, and rating. A sibling to [The Vineyard Atlas](https://jskarabot18.github.io/grand-cru-atlas/).
 
 ## Live site
 
