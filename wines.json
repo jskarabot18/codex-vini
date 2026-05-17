@@ -1,5 +1,19 @@
 [
   {
+  "id": "giuseppe-cortese-barbaresco-2022",
+  "producer": "Giuseppe Cortese",
+  "wine": "Barbaresco",
+  "vintage": "2022",
+  "country": "Italy",
+  "region": "Piedmont",
+  "grape": "Nebbiolo",
+  "color": "red",
+  "rating": 9.4,
+  "date_tasted": "2026-05-15",
+  "lat": 44.7,
+  "lng": 7.9
+},
+  {
   "id": "hermann-j-wiemer-riesling-flower-day-2024",
   "producer": "Hermann J. Wiemer",
   "wine": "Riesling Flower Day",
