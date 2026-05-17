@@ -1,5 +1,19 @@
 [
   {
+  "id": "joh-jos-prum-wehlener-sonnenuhr-riesling-spatlese-2007",
+  "producer": "Joh. Jos. Prüm",
+  "wine": "Wehlener Sonnenuhr Riesling Spätlese",
+  "vintage": "2007",
+  "country": "Germany",
+  "region": "Mosel",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.6,
+  "date_tasted": "2026-05-16",
+  "lat": 49.95,
+  "lng": 7.025
+},
+  {
   "id": "giuseppe-cortese-barbaresco-2022",
   "producer": "Giuseppe Cortese",
   "wine": "Barbaresco",
