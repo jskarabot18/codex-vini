@@ -1,4 +1,18 @@
 [
+{
+  "id": "chateau-latour-les-forts-de-latour-2016",
+  "producer": "Château Latour",
+  "wine": "Les Forts de Latour",
+  "vintage": "2016",
+  "country": "France",
+  "region": "Bordeaux",
+  "grape": "Bordeaux Blend",
+  "color": "red",
+  "rating": 9.7,
+  "date_tasted": "2026-05-30",
+  "lat": 44.837,
+  "lng": -0.579
+},
   {
   "id": "altos-las-hormigas-meteora-malbec-2022",
   "producer": "Altos Las Hormigas",
