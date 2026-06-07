@@ -1,5 +1,19 @@
 [
   {
+  "id": "poderi-luigi-einaudi-barolo-cannubi-1999",
+  "producer": "Poderi Luigi Einaudi",
+  "wine": "Barolo Cannubi",
+  "vintage": "1999",
+  "country": "Italy",
+  "region": "Piedmont",
+  "grape": "Nebbiolo",
+  "color": "red",
+  "rating": 9.7,
+  "date_tasted": "2026-06-06",
+  "lat": 44.7,
+  "lng": 7.9
+},
+  {
   "id": "paul-hobbs-nathan-coombs-estate-cabernet-sauvignon-2015",
   "producer": "Paul Hobbs",
   "wine": "Nathan Coombs Estate Cabernet Sauvignon",
