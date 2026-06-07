@@ -1,4 +1,18 @@
 [
+  {
+  "id": "zuccardi-finca-canal-uco-2019",
+  "producer": "Zuccardi",
+  "wine": "Finca Canal Uco",
+  "vintage": "2019",
+  "country": "Argentina",
+  "region": "Mendoza",
+  "grape": "Malbec",
+  "color": "red",
+  "rating": 9.7,
+  "date_tasted": "2026-06-06",
+  "lat": -33.3,
+  "lng": -68.8
+},
 {
   "id": "chateau-latour-les-forts-de-latour-2016",
   "producer": "Château Latour",
