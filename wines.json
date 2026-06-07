@@ -1,5 +1,19 @@
 [
   {
+  "id": "paul-hobbs-nathan-coombs-estate-cabernet-sauvignon-2015",
+  "producer": "Paul Hobbs",
+  "wine": "Nathan Coombs Estate Cabernet Sauvignon",
+  "vintage": "2015",
+  "country": "USA",
+  "region": "Napa Valley",
+  "grape": "Cabernet Sauvignon",
+  "color": "red",
+  "rating": 9.9,
+  "date_tasted": "2026-06-06",
+  "lat": 38.5,
+  "lng": -122.42
+},
+  {
   "id": "zuccardi-finca-canal-uco-2019",
   "producer": "Zuccardi",
   "wine": "Finca Canal Uco",
