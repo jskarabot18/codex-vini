@@ -1,5 +1,19 @@
 [
   {
+  "id": "chateau-lynch-bages-blanc-de-lynch-bages-2021",
+  "producer": "Château Lynch-Bages",
+  "wine": "Blanc de Lynch-Bages",
+  "vintage": "2021",
+  "country": "France",
+  "region": "Bordeaux",
+  "grape": "Bordeaux Blend",
+  "color": "white",
+  "rating": 9.3,
+  "date_tasted": "2026-06-18",
+  "lat": 44.837,
+  "lng": -0.579
+},
+  {
   "id": "e-guigal-cote-rotie-brune-et-blonde-2019",
   "producer": "E. Guigal",
   "wine": "Côte-Rôtie Brune et Blonde",
