@@ -1,5 +1,19 @@
 [
   {
+  "id": "fontodi-chianti-classico-gran-selezione-terrazze-san-leolino-2021",
+  "producer": "Fontodi",
+  "wine": "Chianti Classico Gran Selezione Terrazze San Leolino",
+  "vintage": "2021",
+  "country": "Italy",
+  "region": "Tuscany",
+  "grape": "Sangiovese",
+  "color": "red",
+  "rating": 9.3,
+  "date_tasted": "2026-06-19",
+  "lat": 43.35,
+  "lng": 11.25
+},
+  {
   "id": "chateau-lynch-bages-blanc-de-lynch-bages-2021",
   "producer": "Château Lynch-Bages",
   "wine": "Blanc de Lynch-Bages",
