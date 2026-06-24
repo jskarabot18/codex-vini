@@ -3,10 +3,6 @@
   "lat": 49.791,
   "lng": 9.177
 },
-  "Wagram": {
-    "lat": 48.42,
-    "lng": 15.82
-  },
   "Alsace": {
     "lat": 48.218,
     "lng": 7.357
@@ -106,6 +102,10 @@
   "Kamptal": {
     "lat": 48.478,
     "lng": 15.685
+  },
+  "Leithaberg": {
+    "lat": 47.9,
+    "lng": 16.67
   },
   "Südsteiermark": {
     "lat": 46.71,
