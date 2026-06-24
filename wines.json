@@ -1,5 +1,19 @@
 [
   {
+  "id": "chateau-musar-jeune-red-2022",
+  "producer": "Château Musar",
+  "wine": "Jeune Red",
+  "vintage": "2022",
+  "country": "Lebanon",
+  "region": "Bekaa Valley",
+  "grape": "Cinsault",
+  "color": "red",
+  "rating": 9.1,
+  "date_tasted": "2026-06-21",
+  "lat": 33.77,
+  "lng": 35.85
+},
+  {
   "id": "prieler-ried-marienthal-blaufrankisch-2021",
   "producer": "Prieler",
   "wine": "Ried Marienthal Blaufränkisch",
