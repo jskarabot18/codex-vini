@@ -1,5 +1,19 @@
 [
   {
+  "id": "prieler-ried-marienthal-blaufrankisch-2021",
+  "producer": "Prieler",
+  "wine": "Ried Marienthal Blaufränkisch",
+  "vintage": "2021",
+  "country": "Austria",
+  "region": "Leithaberg",
+  "grape": "Blaufränkisch",
+  "color": "red",
+  "rating": 9.5,
+  "date_tasted": "2026-06-22",
+  "lat": 47.9,
+  "lng": 16.67
+},
+  {
   "id": "fontodi-chianti-classico-gran-selezione-terrazze-san-leolino-2021",
   "producer": "Fontodi",
   "wine": "Chianti Classico Gran Selezione Terrazze San Leolino",
