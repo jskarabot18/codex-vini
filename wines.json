@@ -1,5 +1,19 @@
 [
   {
+  "id": "bodega-chacra-mainque-chardonnay-2024",
+  "producer": "Bodega Chacra",
+  "wine": "Mainqué Chardonnay",
+  "vintage": "2024",
+  "country": "Argentina",
+  "region": "Río Negro",
+  "grape": "Chardonnay",
+  "color": "white",
+  "rating": 9.7,
+  "date_tasted": "2026-06-26",
+  "lat": -39.05,
+  "lng": -67.45
+},
+  {
   "id": "chateau-musar-jeune-red-2022",
   "producer": "Château Musar",
   "wine": "Jeune Red",
