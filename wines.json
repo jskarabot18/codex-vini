@@ -1,5 +1,19 @@
 [
   {
+  "id": "r-lopez-de-heredia-vina-tondonia-tinto-reserva-2013",
+  "producer": "R. López de Heredia",
+  "wine": "Viña Tondonia Tinto Reserva",
+  "vintage": "2013",
+  "country": "Spain",
+  "region": "Rioja",
+  "grape": "Tempranillo",
+  "color": "red",
+  "rating": 9.6,
+  "date_tasted": "2026-07-09",
+  "lat": 42.47,
+  "lng": -2.45
+},
+  {
   "id": "cayuse-no-girls-double-lucky-8-2022",
   "producer": "Cayuse",
   "wine": "No Girls Double Lucky 8",
