@@ -1,5 +1,19 @@
 [
   {
+  "id": "cayuse-no-girls-double-lucky-8-2022",
+  "producer": "Cayuse",
+  "wine": "No Girls Double Lucky 8",
+  "vintage": "2022",
+  "country": "USA",
+  "region": "Walla Walla Valley",
+  "grape": "Proprietary Red Blend",
+  "color": "red",
+  "rating": 9.4,
+  "date_tasted": "2026-07-03",
+  "lat": 46.02,
+  "lng": -118.35
+},
+  {
   "id": "bodega-chacra-mainque-chardonnay-2024",
   "producer": "Bodega Chacra",
   "wine": "Mainqué Chardonnay",
