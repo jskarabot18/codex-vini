@@ -1,5 +1,19 @@
 [
   {
+  "id": "rippon-mature-vine-pinot-noir-2021",
+  "producer": "Rippon",
+  "wine": "Mature Vine Pinot Noir",
+  "vintage": "2021",
+  "country": "New Zealand",
+  "region": "Central Otago",
+  "grape": "Pinot Noir",
+  "color": "red",
+  "rating": 9.6,
+  "date_tasted": "2026-07-10",
+  "lat": -45.03,
+  "lng": 169.2
+},
+  {
   "id": "r-lopez-de-heredia-vina-tondonia-tinto-reserva-2013",
   "producer": "R. López de Heredia",
   "wine": "Viña Tondonia Tinto Reserva",
