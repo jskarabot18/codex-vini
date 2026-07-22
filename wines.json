@@ -1,5 +1,19 @@
 [
   {
+  "id": "frank-cornelissen-munjebel-va-terre-siciliane-rosso-2021",
+  "producer": "Frank Cornelissen",
+  "wine": "Munjebel VA Terre Siciliane Rosso",
+  "vintage": "2021",
+  "country": "Italy",
+  "region": "Sicily",
+  "grape": "Nerello Mascalese",
+  "color": "red",
+  "rating": 9.6,
+  "date_tasted": "2026-07-17",
+  "lat": 37.6,
+  "lng": 14.015
+},
+  {
   "id": "rippon-mature-vine-pinot-noir-2021",
   "producer": "Rippon",
   "wine": "Mature Vine Pinot Noir",
