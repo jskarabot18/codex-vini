@@ -1,5 +1,19 @@
 [
   {
+  "id": "domaine-zind-humbrecht-riesling-grand-cru-rangen-de-thann-clos-saint-urbain-2023",
+  "producer": "Domaine Zind-Humbrecht",
+  "wine": "Riesling Grand Cru Rangen de Thann Clos Saint-Urbain",
+  "vintage": "2023",
+  "country": "France",
+  "region": "Alsace",
+  "grape": "Riesling",
+  "color": "white",
+  "rating": 9.8,
+  "date_tasted": "2026-07-24",
+  "lat": 48.218,
+  "lng": 7.357
+},
+  {
   "id": "jermann-where-dreams-have-no-end-2023",
   "producer": "Jermann",
   "wine": "Where Dreams Have No End",
