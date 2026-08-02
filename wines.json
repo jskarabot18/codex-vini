@@ -1,5 +1,19 @@
 [
   {
+  "id": "chateau-figeac-chateau-figeac-2020",
+  "producer": "Château Figeac",
+  "wine": "Château Figeac",
+  "vintage": "2020",
+  "country": "France",
+  "region": "Bordeaux",
+  "grape": "Bordeaux Blend",
+  "color": "red",
+  "rating": 9.8,
+  "date_tasted": "2026-08-01",
+  "lat": 44.837,
+  "lng": -0.579
+},
+  {
   "id": "domaine-zind-humbrecht-riesling-grand-cru-rangen-de-thann-clos-saint-urbain-2023",
   "producer": "Domaine Zind-Humbrecht",
   "wine": "Riesling Grand Cru Rangen de Thann Clos Saint-Urbain",
