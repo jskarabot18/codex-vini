@@ -1,5 +1,19 @@
 [
   {
+  "id": "sadie-family-palladius-2023",
+  "producer": "Sadie Family",
+  "wine": "Palladius",
+  "vintage": "2023",
+  "country": "South Africa",
+  "region": "Swartland",
+  "grape": "White Blend",
+  "color": "white",
+  "rating": 9.7,
+  "date_tasted": "2026-08-08",
+  "lat": -33.415,
+  "lng": 18.725
+},
+  {
   "id": "chateau-figeac-chateau-figeac-2020",
   "producer": "Château Figeac",
   "wine": "Château Figeac",
