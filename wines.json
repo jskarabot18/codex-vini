@@ -1,5 +1,19 @@
 [
   {
+  "id": "matosevic-grimalda-2020",
+  "producer": "Matošević",
+  "wine": "Grimalda",
+  "vintage": "2020",
+  "country": "Croatia",
+  "region": "Istria",
+  "grape": "White Blend",
+  "color": "white",
+  "rating": 9.5,
+  "date_tasted": "2026-08-19",
+  "lat": 45.3,
+  "lng": 13.8
+},
+  {
   "id": "kozlovic-santa-lucia-malvasia-2018",
   "producer": "Kozlovic",
   "wine": "Santa Lucia Malvasia",
