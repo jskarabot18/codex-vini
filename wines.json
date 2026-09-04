@@ -1,5 +1,19 @@
 [
   {
+  "id": "crvik-vilin-ples-2021",
+  "producer": "Crvik",
+  "wine": "Vilin Ples",
+  "vintage": "2021",
+  "country": "Croatia",
+  "region": "Konavle",
+  "grape": "Proprietary Red Blend",
+  "color": "red",
+  "rating": 9.3,
+  "date_tasted": "2026-08-13",
+  "lat": 42.537,
+  "lng": 18.285
+},
+  {
   "id": "sadie-family-palladius-2023",
   "producer": "Sadie Family",
   "wine": "Palladius",
