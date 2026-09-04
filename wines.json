@@ -1,5 +1,19 @@
 [
   {
+  "id": "volarevic-kremena-dubrovacka-malvasija-2020",
+  "producer": "Volarević",
+  "wine": "Kremena Dubrovačka Malvasija",
+  "vintage": "2020",
+  "country": "Croatia",
+  "region": "Komarna",
+  "grape": "Malvasia",
+  "color": "white",
+  "rating": 9.1,
+  "date_tasted": "2026-08-14",
+  "lat": 42.945,
+  "lng": 17.534
+},
+  {
   "id": "antunovic-chardonnay-sur-lie-2017",
   "producer": "Antunović",
   "wine": "Chardonnay Sur Lie",
