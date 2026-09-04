@@ -1,4 +1,17 @@
 [
+    "id": "korta-katarina-plavac-mali-2018",
+  "producer": "Korta Katarina",
+  "wine": "Plavac Mali",
+  "vintage": "2018",
+  "country": "Croatia",
+  "region": "Pelješac",
+  "grape": "Plavac Mali",
+  "color": "red",
+  "rating": 9.4,
+  "date_tasted": "2026-08-20",
+  "lat": 42.96,
+  "lng": 17.22
+},
   {
   "id": "volarevic-kremena-dubrovacka-malvasija-2020",
   "producer": "Volarević",
