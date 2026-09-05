@@ -1,4 +1,18 @@
 [
+{
+  "id": "tedeschi-marne-amarone-2018",
+  "producer": "Tedeschi",
+  "wine": "Marne Amarone",
+  "vintage": "2018",
+  "country": "Italy",
+  "region": "Veneto",
+  "grape": "Corvina",
+  "color": "red",
+  "rating": 9.3,
+  "date_tasted": "2026-08-27",
+  "lat": 45.5,
+  "lng": 11.5
+},
     {
   "id": "zarova-milimetri-cabernet-franc-2021",
   "producer": "Zarova",
