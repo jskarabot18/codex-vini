@@ -1,5 +1,19 @@
 [
     {
+  "id": "marjan-simcic-teodor-bianca-2022",
+  "producer": "Marjan Simčič",
+  "wine": "Teodor Bianca",
+  "vintage": "2022",
+  "country": "Slovenia",
+  "region": "Goriška Brda",
+  "grape": "White Blend",
+  "color": "white",
+  "rating": 9.3,
+  "date_tasted": "2026-08-19",
+  "lat": 45.995,
+  "lng": 13.54
+},
+    {
   "id": "steyer-sauvignon-2024",
   "producer": "Steyer",
   "wine": "Sauvignon",
