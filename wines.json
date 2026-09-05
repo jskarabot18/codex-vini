@@ -1,5 +1,19 @@
 [
   {
+  "id": "giuseppe-cortese-barbaresco-rabaja-2018",
+  "producer": "Giuseppe Cortese",
+  "wine": "Barbaresco Rabajà",
+  "vintage": "2018",
+  "country": "Italy",
+  "region": "Piedmont",
+  "grape": "Nebbiolo",
+  "color": "red",
+  "rating": 9.3,
+  "date_tasted": "2026-08-27",
+  "lat": 44.7,
+  "lng": 7.9
+},
+  {
   "id": "masi-costasera-amarone-classico-riserva-2019",
   "producer": "Masi",
   "wine": "Costasera Amarone Classico Riserva",
