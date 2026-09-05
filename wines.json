@@ -1,5 +1,19 @@
 [
   {
+  "id": "tenuta-di-fessina-il-musmeci-etna-rosso-2024",
+  "producer": "Tenuta di Fessina",
+  "wine": "Il Musmeci Etna Rosso",
+  "vintage": "2024",
+  "country": "Italy",
+  "region": "Sicily",
+  "grape": "Nerello Mascalese",
+  "color": "red",
+  "rating": 9.5,
+  "date_tasted": "2026-08-30",
+  "lat": 37.6,
+  "lng": 14.015
+},
+  {
   "id": "tenuta-san-guido-sassicaia-2020",
   "producer": "Tenuta San Guido",
   "wine": "Sassicaia",
