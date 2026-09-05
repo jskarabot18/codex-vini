@@ -243,13 +243,13 @@
   "wine": "No Girls Double Lucky 8",
   "vintage": "2022",
   "country": "USA",
-  "region": "Walla Walla Valley",
+  "region": "Columbia Valley",
   "grape": "Proprietary Red Blend",
   "color": "red",
   "rating": 9.4,
   "date_tasted": "2026-07-03",
-  "lat": 46.02,
-  "lng": -118.35
+  "lat": 46.47,
+  "lng": -119.6
 },
   {
   "id": "bodega-chacra-mainque-chardonnay-2024",
@@ -691,13 +691,13 @@
     "wine": "Domaine de Thalabert Crozes-Hermitage",
     "vintage": "2020",
     "country": "France",
-    "region": "Crozes-Hermitage",
+    "region": "Northern Rhone",
     "grape": "Syrah",
     "color": "red",
     "rating": 9.4,
     "date_tasted": "2026-04-11",
-    "lat": 45.06,
-    "lng": 4.845
+    "lat": 45.08,
+    "lng": 4.84
   },
   {
     "id": "vietti-nebbiolo-perbacco-2022",
