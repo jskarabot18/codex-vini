@@ -1,5 +1,19 @@
 [
     {
+  "id": "zarova-milimetri-cabernet-franc-2021",
+  "producer": "Zarova",
+  "wine": "Milimetri Cabernet Franc",
+  "vintage": "2021",
+  "country": "Slovenia",
+  "region": "Slovenian Istria",
+  "grape": "Cabernet Franc",
+  "color": "red",
+  "rating": 9.4,
+  "date_tasted": "2026-08-19",
+  "lat": 45.53,
+  "lng": 13.69
+},
+    {
   "id": "hedele-obelunec-chardonnay-2021",
   "producer": "Hedele",
   "wine": "Obelunec Chardonnay",
