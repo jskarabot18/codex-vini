@@ -1,5 +1,19 @@
 [
   {
+  "id": "giodo-brunello-di-montalcino-2020",
+  "producer": "Giodo",
+  "wine": "Brunello di Montalcino",
+  "vintage": "2020",
+  "country": "Italy",
+  "region": "Tuscany",
+  "grape": "Sangiovese",
+  "color": "red",
+  "rating": 9.8,
+  "date_tasted": "2026-08-28",
+  "lat": 43.35,
+  "lng": 11.25
+},
+  {
   "id": "tenuta-san-leonardo-san-leonardo-2018",
   "producer": "Tenuta San Leonardo",
   "wine": "San Leonardo",
