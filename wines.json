@@ -9,7 +9,7 @@
   "grape": "Cabernet Franc",
   "color": "red",
   "rating": 9.4,
-  "date_tasted": "2026-08-19",
+  "date_tasted": "2026-08-26",
   "lat": 45.53,
   "lng": 13.69
 },
@@ -23,7 +23,7 @@
   "grape": "Chardonnay",
   "color": "white",
   "rating": 9.2,
-  "date_tasted": "2026-08-19",
+  "date_tasted": "2026-08-26",
   "lat": 45.845,
   "lng": 13.95
 },
@@ -37,7 +37,7 @@
   "grape": "White Blend",
   "color": "white",
   "rating": 9.3,
-  "date_tasted": "2026-08-19",
+  "date_tasted": "2026-08-26",
   "lat": 45.995,
   "lng": 13.54
 },
@@ -51,7 +51,7 @@
   "grape": "Sauvignon Blanc",
   "color": "white",
   "rating": 9,
-  "date_tasted": "2026-08-16",
+  "date_tasted": "2026-08-23",
   "lat": 46.48,
   "lng": 15.69
 },
