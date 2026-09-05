@@ -1,5 +1,19 @@
 [
   {
+  "id": "tenuta-dell-ornellaia-ornellaia-2016",
+  "producer": "Tenuta Dell'Ornellaia",
+  "wine": "Ornellaia",
+  "vintage": "2016",
+  "country": "Italy",
+  "region": "Tuscany",
+  "grape": "Tuscan Blend (Super Tuscan)",
+  "color": "red",
+  "rating": 9.9,
+  "date_tasted": "2026-08-28",
+  "lat": 43.35,
+  "lng": 11.25
+},
+  {
   "id": "giodo-brunello-di-montalcino-2020",
   "producer": "Giodo",
   "wine": "Brunello di Montalcino",
