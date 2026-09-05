@@ -1,4 +1,18 @@
 [
+  {
+  "id": "tenuta-san-guido-sassicaia-2020",
+  "producer": "Tenuta San Guido",
+  "wine": "Sassicaia",
+  "vintage": "2020",
+  "country": "Italy",
+  "region": "Tuscany",
+  "grape": "Tuscan Blend (Super Tuscan)",
+  "color": "red",
+  "rating": 9.8,
+  "date_tasted": "2026-08-29",
+  "lat": 43.35,
+  "lng": 11.25
+},
 {
   "id": "marchesi-antinori-tignanello-2023",
   "producer": "Marchesi Antinori",
