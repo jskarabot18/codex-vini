@@ -89,13 +89,13 @@
   "wine": "Chardonnay Sur Lie",
   "vintage": "2017",
   "country": "Croatia",
-  "region": "Erdut",
+  "region": "Slavonia",
   "grape": "Chardonnay",
   "color": "white",
   "rating": 9.2,
   "date_tasted": "2026-08-13",
-  "lat": 45.505,
-  "lng": 19.02
+  "lat": 45.42,
+  "lng": 18.1
 },
   {
   "id": "matosevic-grimalda-2020",
