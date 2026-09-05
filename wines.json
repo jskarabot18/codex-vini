@@ -1,5 +1,19 @@
 [
     {
+  "id": "hedele-obelunec-chardonnay-2021",
+  "producer": "Hedele",
+  "wine": "Obelunec Chardonnay",
+  "vintage": "2021",
+  "country": "Slovenia",
+  "region": "Vipava Valley",
+  "grape": "Chardonnay",
+  "color": "white",
+  "rating": 9.2,
+  "date_tasted": "2026-08-19",
+  "lat": 45.845,
+  "lng": 13.95
+},
+    {
   "id": "marjan-simcic-teodor-bianca-2022",
   "producer": "Marjan Simčič",
   "wine": "Teodor Bianca",
