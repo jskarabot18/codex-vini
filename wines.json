@@ -1,5 +1,19 @@
 [
   {
+  "id": "tenuta-san-leonardo-san-leonardo-2018",
+  "producer": "Tenuta San Leonardo",
+  "wine": "San Leonardo",
+  "vintage": "2018",
+  "country": "Italy",
+  "region": "Trentino",
+  "grape": "Bordeaux Blend",
+  "color": "red",
+  "rating": 9.5,
+  "date_tasted": "2026-08-27",
+  "lat": 46.067,
+  "lng": 11.121
+},
+  {
   "id": "giuseppe-cortese-barbaresco-rabaja-2018",
   "producer": "Giuseppe Cortese",
   "wine": "Barbaresco Rabajà",
