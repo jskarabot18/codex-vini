@@ -1,4 +1,19 @@
 [
+  // --- paste into wines.json ---
+{
+  "id": "marchesi-antinori-tignanello-2023",
+  "producer": "Marchesi Antinori",
+  "wine": "Tignanello",
+  "vintage": "2023",
+  "country": "Italy",
+  "region": "Tuscany",
+  "grape": "Tuscan Blend (Super Tuscan)",
+  "color": "red",
+  "rating": 9.7,
+  "date_tasted": "2026-08-29",
+  "lat": 43.35,
+  "lng": 11.25
+},
   {
   "id": "tenuta-dell-ornellaia-ornellaia-2016",
   "producer": "Tenuta Dell'Ornellaia",
