@@ -1,5 +1,19 @@
 [
   {
+  "id": "chateau-montrose-la-dame-de-montrose-2015",
+  "producer": "Chateau Montrose",
+  "wine": "La Dame de Montrose",
+  "vintage": "2015",
+  "country": "France",
+  "region": "Bordeaux",
+  "grape": "Bordeaux Blend",
+  "color": "red",
+  "rating": 9.2,
+  "date_tasted": "2026-09-05",
+  "lat": 44.837,
+  "lng": -0.579
+},
+  {
   "id": "tenuta-di-fessina-il-musmeci-etna-rosso-2024",
   "producer": "Tenuta di Fessina",
   "wine": "Il Musmeci Etna Rosso",
